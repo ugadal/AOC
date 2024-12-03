@@ -1,0 +1,33 @@
+A B C D E IP
+0 1 2 3 4  5
+     0	seti 123 0 3		D=123
+     1	bani 3 456 3		D=D&456   (72)
+     2	eqri 3 72 3			if D==72 D=1 else D=0
+     3	addr 3 5 5			goto IP+D+1  break if D>26
+     4	seti 0 0 5			goto 1
+     5	seti 0 0 3			D=0
+=>   6	bori 3 65536 2		C=C|65536
+     7	seti 14070682 0 3	D=14070682
+=>   8	bani 2 255 1		B=C&255
+     9	addr 3 1 3			D=B+D
+    10	bani 3 16777215 3	D=D&16777215
+    11	muli 3 65899 3		D=D*65899
+    12	bani 3 16777215 3	D=D&16777215
+    13	gtir 256 2 1		B=1 if 256>C
+    14	addr 1 5 5			goto 15+B  break if B>15
+    15	addi 5 1 5			goto 17
+    16	seti 27 8 5			goto 28
+    17	seti 0 3 1			B=0
+=>  18	addi 1 1 4			D=A+1
+    19	muli 4 256 4		E=E*256
+    20	gtrr 4 2 4			E=1 if E>C else 0
+    21	addr 4 5 5			goto 22+E	break if E>8, if E=7
+    22	addi 5 1 5			goto 23+B	break if B>7, if B=6
+    23	seti 25 8 5			goto 26
+    24	addi 1 1 1			B=A+1
+    25	seti 17 9 5			goto 18
+=>  26	setr 1 4 2			C=A+E
+    27	seti 7 5 5			goto 8
+    28	eqrr 3 0 1			C=1 if D==A else 0
+    29	addr 1 5 5			goto 31 			BREAK
+    30	seti 5 4 5			goto 6

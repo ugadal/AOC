@@ -1,0 +1,24 @@
+b=57*100+100000
+h=0
+while True:
+	c=b+17000
+	f=1
+	while True:
+		d=e=2
+		while True:
+			g=d*e-b
+			if g==0:f=0
+			e-=1
+			g=e-b
+			print(f"loop 3 {b} {c} {d} {e} {f} {g} {h}")
+			if g==0:break
+		d-=1
+		g=d-b
+		if g==0:break
+		print(f"loop 2 {b} {c} {d} {e} {f} {g} {h}")
+	if f==0:h+=1
+	g=b-c
+	if g==0:break
+	b-=17
+	print(f"loop 1 {b} {c} {d} {e} {f} {g} {h}")
+print(f" main {b} {c} {d} {e} {f} {g} {h}")
