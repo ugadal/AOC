@@ -11,3 +11,9 @@ G.sort()
 D.sort()
 r=sum(abs(d-g) for g,d in zip(G,D))
 print(r)
+ttl=0
+for g in G:ttl+=g*D.count(g)
+print(ttl)
+print (len(set(G)))
+print (len(set(D)))
+
