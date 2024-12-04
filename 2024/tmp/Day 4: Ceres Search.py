@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d4.txt",1
+fn,part="d4.txt",0
 G=open(fn).read().split("\n\n")[part].splitlines()
 NR=len(G)
 NC=len(G[0])
@@ -28,3 +28,9 @@ for row in range(3,NR+3):
 print(res)
 dirs=[a+b for a,b in it.product((-1,1,0),(-1j,1j,0))][:-1]
 for d in dirs:print(d)
+G={}
+for r,line in enumerate(open(fn).read().split("\n\n")[part].splitlines()):
+	for c,s in enumerate(line):
+		G[c+r*1j]=s
+NR,NC=r+1,c+1
+print(NR,NC)
