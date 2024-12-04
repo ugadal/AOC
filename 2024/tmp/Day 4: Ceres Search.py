@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d4.txt",0
+fn,part="d4.txt",1
 G=open(fn).read().split("\n\n")[part].splitlines()
 NR=len(G)
 NC=len(G[0])
