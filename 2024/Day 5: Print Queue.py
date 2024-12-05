@@ -34,8 +34,7 @@ for update in updates.splitlines():
 	else:INVALID.append(update)
 
 print(sum(res))
-p2=[]
-
+# ~ part2
 def fixit(inv):
 	invalid=list(inv)
 	px=0
@@ -54,8 +53,7 @@ def fixit(inv):
 	v=getmid(invalid)
 	return v
 		
-import itertools as it
-
+p2=[]
 while INVALID:
 	invalid=INVALID.pop()
 	p2.append(fixit(invalid))
