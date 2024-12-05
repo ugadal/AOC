@@ -33,16 +33,14 @@ for update in updates.splitlines():
 	if validate(update):res.append(getmid(update))
 	else:INVALID.append(update)
 
-print(res,sum(res))
+print(sum(res))
 p2=[]
 
 def fixit(inv):
 	invalid=list(inv)
-	print(f"fixing {invalid}")
 	px=0
 	while px<len(invalid)-1:
 		x=invalid[px]
-		print(f"testing {x} at {px}")
 		py=px+1
 		while py<len(invalid):
 			y=invalid[py]
@@ -50,14 +48,10 @@ def fixit(inv):
 				py+=1
 				continue
 			else:
-				print(f"problem with {x} at {px} with {y} at {py}")
-				print(f"swapping {px} {py}")
 				invalid[px],invalid[py]=invalid[py],invalid[px]
-				print(invalid)
 				break
 		else:px+=1
 	v=getmid(invalid)
-	print(f"returning {v}")
 	return v
 		
 import itertools as it
@@ -65,4 +59,4 @@ import itertools as it
 while INVALID:
 	invalid=INVALID.pop()
 	p2.append(fixit(invalid))
-print(p2,sum(p2))
+print(sum(p2))
