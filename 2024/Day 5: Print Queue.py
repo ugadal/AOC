@@ -14,7 +14,6 @@ for rule in rules.splitlines():
 	a,b=rule.split("|")
 	R.append(rulegen(a,b))
 res=[]
-INVALID=[]
 def validate(update):
 	tocompare=[]
 	for p,x in enumerate(update[:-1]):
@@ -28,6 +27,7 @@ def getmid(update):
 	pos=(len(update)-1)//2
 	v=int(update[pos])
 	return v
+INVALID=[]
 for update in updates.splitlines():
 	update=update.split(",")
 	if validate(update):res.append(getmid(update))
