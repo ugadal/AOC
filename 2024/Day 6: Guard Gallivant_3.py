@@ -28,11 +28,9 @@ def loops(rock):
 			case "#":
 				d*=1j
 				continue
-			case "-":
-				return False,V
+			case "-":return False,V
 			case ".":
-				if (npos,d) in V:
-					return True,V
+				if (npos,d) in V:return True,V
 				V.add((npos,d))
 				pos=npos
 res2=0
