@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d6.txt",1
-data=open(fn).read().split("\n\n")[part].splitlines()
+fn,part="d6.txt",0
+data=open(fn).read().split(sep)[part].splitlines()
 G={}
 for r,line in enumerate(data):
 	for c,s in enumerate(line):
@@ -18,8 +18,7 @@ def loops(rock):
 	V=set()
 	V.add((spos,d))
 	pos=spos
-	NG={}
-	for k,v in G.items():NG[k]=v
+	NG=dict(G)
 	NG[rock]="#"
 	while True:
 		npos=pos+d
@@ -40,6 +39,6 @@ for row in range(NR):
 	for col in range(NC):
 		p=col+row*1j
 		if p==spos:continue
-		if G.get(p)=="#":continue
+		if G.get(p)!=".":continue
 		if loops(p):res2+=1
 print(res2)
