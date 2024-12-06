@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d6.txt",0
+fn,part="d6.txt",1
+from progress.bar import Bar
 data=open(fn).read().split(sep)[part].splitlines()
 G={}
 for r,line in enumerate(data):
@@ -35,10 +36,13 @@ def loops(rock):
 				V.add((npos,d))
 				pos=npos
 res2=0
+bar=Bar("testing",max=NR*NC)
 for row in range(NR):
 	for col in range(NC):
+		bar.next()
 		p=col+row*1j
 		if p==spos:continue
 		if G.get(p)!=".":continue
 		if loops(p):res2+=1
+print()
 print(res2)
