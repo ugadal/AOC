@@ -29,20 +29,19 @@ def loops(rock):
 				d*=1j
 				continue
 			case "-":
-				return False
+				return False,V
 			case ".":
 				if (npos,d) in V:
-					return True
+					return True,V
 				V.add((npos,d))
 				pos=npos
 res2=0
-bar=Bar("testing",max=NR*NC)
-for row in range(NR):
-	for col in range(NC):
-		bar.next()
-		p=col+row*1j
-		if p==spos:continue
-		if G.get(p)!=".":continue
-		if loops(p):res2+=1
+_,path=loops(-NC-NR*1j)
+path=set([rock for rock,d in path])
+bar=Bar("testing",max=len(path))
+for rock in path:
+	bar.next()
+	if rock==spos:continue
+	if loops(rock)[0]:res2+=1
 bar.finish()
 print(res2)
