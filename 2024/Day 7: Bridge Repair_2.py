@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d7.txt",0
+fn,part="d7.txt",1
 data=open(fn).read().split(sep)[part].splitlines()
 
 def possible(target,status,elements):
