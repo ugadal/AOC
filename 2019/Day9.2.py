@@ -1,10 +1,8 @@
 class intCodeComputer:
     def __init__(self,programCode,id =0, relBase=0,indx=0,emptySpace=1000,inptArr=[]):
         self.relativeBase =0
-        self.memory =[]
         self.memory = programCode.copy()
-        for i in range(emptySpace):
-            self.memory.append(0)
+        for i in range(emptySpace):self.memory.append(0)
         self.index=indx
         self.inputArray=inptArr.copy()
         self.outputArray=[]
@@ -18,59 +16,32 @@ class intCodeComputer:
                 print(self.memory[311])
             #formatting OPCODE
 
-            TempLen = len(str(self.memory[self.index]))
-            StringToAdd = ""
-            for i in range(5 - TempLen):
-                StringToAdd += "0"
-            self.memory[self.index] = StringToAdd + str(self.memory[self.index])
-            #print(self.memory[self.index])
+            self.memory[self.index] = str(self.memory[self.index]).zfill(5)
 
-
-            #reading parameters according to the given parameter modes ----------------------
             parameters = []
-            parameterMode = str(self.memory[self.index][:3])
-            #print(self.memory[self.index], parameterMode)
-            #print(parameterMode)
-            OpCode = str(self.memory[self.index])[-2:]
+            parameterMode = self.memory[self.index][:3]
+            OpCode = self.memory[self.index][-2:]
+
             self.memory[self.index]=int(self.memory[self.index])
-            if (parameterMode[2] == "0"):
-                parameters.append(int(self.memory[self.index + 1]))
-            elif (parameterMode[2] == "1"):
-                parameters.append(self.index + 1)
-            else:#paramMode 2
-                parameters.append(int(self.memory[self.index + 1]) +self.relativeBase)
-
-            if (parameterMode[1] == "0"):
-                parameters.append(int(self.memory[self.index + 2]))
-            elif (parameterMode[1] == "1"):
-                parameters.append(self.index + 2)
-            else:#paramMode 2
-                parameters.append(self.memory[self.index + 2] + self.relativeBase)
-
-
-            if (parameterMode[0] == "0"):
-                parameters.append(int(self.memory[self.index + 3]))
-            elif (parameterMode[0] == "1"):
-                parameters.append(self.index + 3)
-            else:#paramMode 2
-                parameters.append(int(self.memory[self.index + 3]) + self.relativeBase)
-            #param read end -----------------------------------------
-            #strr=""
-            #for i in range(4):
-            #    strr += str(self.memory[self.index + i ] ) +"/"
-            #print(self.index,strr,OpCode)
-            #strr2 =""
-            #for i in range(3):
-                #strr2 += str(self.memory[parameters[i]] ) +"/"
-            #print(strr2)
-            #print("opcode:" + str(OpCode) + "  parameters: " + str(self.memory[parameters[0]]) +"/"+ str(
-                #self.memory[parameters[1]]) +"/"+ str(self.memory[parameters[2]]))
-
-            #reacting according to the OP CODE-----------------------------------------
+            
+            if (parameterMode[2] == "0"):parameters.append(int(self.memory[self.index + 1]))
+            elif (parameterMode[2] == "1"):parameters.append(self.index + 1)
+            else:parameters.append(int(self.memory[self.index + 1]) +self.relativeBase)
+            
+            if (parameterMode[1] == "0"):parameters.append(int(self.memory[self.index + 2]))
+            elif (parameterMode[1] == "1"):parameters.append(self.index + 2)
+            else:parameters.append(self.memory[self.index + 2] + self.relativeBase)
+            
+            if (parameterMode[0] == "0"):parameters.append(int(self.memory[self.index + 3]))
+            elif (parameterMode[0] == "1"):parameters.append(self.index + 3)
+            else:parameters.append(int(self.memory[self.index + 3]) + self.relativeBase)
+            print("debug",parameterMode+OpCode,parameters,self.memory[self.index:self.index+4],self.index)
             if(OpCode=="01"):
+                print(f"put at address {parameters[2]} the sum of what is at adresses {parameters[0]}:{self.memory[parameters[0]]} and {parameters[1]}:{self.memory[parameters[1]]}")
                 self.memory[parameters[2]] = int(self.memory[parameters[0]]) + int(self.memory[parameters[1]])
                 self.index +=4
             elif(OpCode=="02"):
+                print(f"put at address {parameters[2]} the product of what is at adresses {parameters[0]}:{self.memory[parameters[0]]} and {parameters[1]}:{self.memory[parameters[1]]}")
                 self.memory[parameters[2]] = int(self.memory[parameters[0]]) * int(self.memory[parameters[1]])
                 self.index += 4
             elif(OpCode=="03"):
@@ -78,6 +49,7 @@ class intCodeComputer:
                     self.memory[parameters[0]]=self.inputArray[0]
                     self.index+=2
                     self.inputArray.pop(0)
+                    print(f"inputed to address {parameters[0]} the value:{self.memory[parameters[0]]}")
                 else:
                     print("waiting input")
                     break
@@ -90,6 +62,7 @@ class intCodeComputer:
                     self.index = int(self.memory[parameters[1]])
                 else:
                     self.index+=3
+                print(f"jumped if not zero {self.memory[parameters[0]]} to {self.index}")
             elif(OpCode=="06"):
                # print("went here")
                 if (self.memory[parameters[0]] == 0):
@@ -102,6 +75,7 @@ class intCodeComputer:
                 else:
                     self.memory[parameters[2]]=0
                 self.index+=4
+                print(f"stored to address {parameters[2]} the inferiority test of:{self.memory[parameters[0]]} with {self.memory[parameters[1]]}")
             elif(OpCode=="08"):
                 if (self.memory[parameters[0]] == self.memory[parameters[1]]):
                     self.memory[parameters[2]] = 1
@@ -111,7 +85,7 @@ class intCodeComputer:
             elif(OpCode=="09"):
                 self.relativeBase += self.memory[parameters[0]]
                 self.index+=2
-                #print("relative base has been changed")
+                print(f"changed rb by {self.memory[parameters[0]]} from address {parameters[0]}")
             elif(OpCode=="99"):
                 print(str(self.id)+ ". computer has finished")
                 self.finished = True
@@ -124,5 +98,5 @@ for i in range(len(data)):
     data[i]=int(data[i])
 
 print(data)
-comp1 = intCodeComputer(data,inptArr=[2])
+comp1 = intCodeComputer(data,inptArr=[1])
 comp1.compute()

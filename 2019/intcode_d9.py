@@ -13,99 +13,88 @@ class computer():
 		self.flow=self.run()
 		self.inp=[]
 		self.rb=0
-	def fixa(self,pos,ia):
+	def fixr(self,pos,f):
 		pa=self.OV[pos]
-		if ia==0:return self.OV[pa]
-		if ia==2:return self.OV[pa-self.rb]
-		return pa
+		if f==0:return self.OV.get(pa,0)
+		if f==2:return self.OV.get(pa+self.rb,0)
+		# ~ if f==2:return self.OV.get(pa,0)+self.rb
+		return pa #1
+	def fixw(self,pos,f): #target cell
+		pa=self.OV[pos]
+		if f==0:return pa
+		if f==2:return pa+self.rb
+		return pa 
 	def run(self):
 		while True:
 			cmd=str(self.OV[self.pos]).zfill(5)
-			# ~ print(cmd,self.pos)
 			opcode=int(cmd[-2:])
 			ic,ib,ia=map(int,cmd[:3])
-			# ~ 0 indirect pa=OV[OV[pos]]
-			# ~ 1 direct pa=OV[pos]
 			match opcode:
-				# ~ Parameters that an instruction writes to will 
-				# ~ never be in immediate mode
 				case 1: #add
-					pa,pb,pc=self.OV[self.pos+1],self.OV[self.pos+2],self.OV[self.pos+3]
-					if ia==0:pa=self.OV[pa]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
-					if ib==0:pb=self.OV[pb]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
-					s=pa+pb
-					self.OV[pc]=s
+					va=self.fixr(self.pos+1,ia)
+					vb=self.fixr(self.pos+2,ib)
+					tc=self.fixw(self.pos+3,ic)
+					self.OV[tc]=va+vb
 					self.pos+=4
 				case 2: #mult
-					pa,pb,pc=self.OV[self.pos+1],self.OV[self.pos+2],self.OV[self.pos+3]
-					if ia==0:pa=self.OV[pa]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
-					if ib==0:pb=self.OV[pb]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
-					s=pa*pb
-					self.OV[pc]=s
+					va=self.fixr(self.pos+1,ia)
+					vb=self.fixr(self.pos+2,ib)
+					tc=self.fixw(self.pos+3,ic)
+					self.OV[tc]=va*vb
 					self.pos+=4
 				case 3:
-					pa=self.OV[self.pos+1]
-					# ~ if ia==0:pa=self.OV[pa]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
+					pa=self.fixw(self.pos+1,ia)
 					self.OV[pa]=self.inp.pop(0)
 					self.pos+=2
 				case 4:
-					pa=self.OV[self.pos+1]
-					if ia==0:pa=self.OV[pa]# ~ s=self.fix(ia,pa) + self.fix(ib,pb)
-					# ~ pa=self.OV[pa]
-					# ~ pa=self.fix(ia,pa) 
-					yield pa
+					va=self.fixr(self.pos+1,ia)
+					yield va
 					self.pos+=2
 				case 5: # jump if non zero param1
-					pa=self.OV[self.pos+1]
-					if ia==0:pa=self.OV[pa]
-					if pa:
-						pb=self.OV[self.pos+2]
-						if ib==0:pb=self.OV[pb]
-						self.pos=pb
+					pa=self.fixr(self.pos+1,ia)
+					pb=self.fixr(self.pos+2,ib)
+					if pa:self.pos=pb
 					else:self.pos+=3
 				case 6: # jump if zero param1
-					pa=self.OV[self.pos+1]
-					if ia==0:pa=self.OV[pa]
-					if pa==0:
-						pb=self.OV[self.pos+2]
-						if ib==0:pb=self.OV[pb]
-						self.pos=pb
+					pa=self.fixr(self.pos+1,ia)
+					pb=self.fixr(self.pos+2,ib)
+					if pa==0:self.pos=pb
 					else:self.pos+=3
 				case 7: #pa lesser pb than
-					pa=self.OV[self.pos+1]
-					pb=self.OV[self.pos+2]
-					pc=self.OV[self.pos+3]
-					if ia==0:pa=self.OV[pa]
-					if ib==0:pb=self.OV[pb]
-					# ~ pc=self.fix3(ic,pc)
-					if pa<pb:self.OV[pc]=1
-					else:self.OV[pc]=0
+					pa=self.fixr(self.pos+1,ia)
+					pb=self.fixr(self.pos+2,ib)
+					tc=self.fixw(self.pos+3,ic)
+					if pa<pb:self.OV[tc]=1
+					else:self.OV[tc]=0
 					self.pos+=4
-					# ~ if pc!=self.pos:self.pos+=4
 				case 8:#pa==pb
-					pa=self.OV[self.pos+1]
-					pb=self.OV[self.pos+2]
-					pc=self.OV[self.pos+3]
-					if ia==0:pa=self.OV[pa]
-					if ib==0:pb=self.OV[pb]
-					# ~ pc=self.fix3(ic,pc)
-					if pa==pb:self.OV[pc]=1
-					else:self.OV[pc]=0
+					pa=self.fixr(self.pos+1,ia)
+					pb=self.fixr(self.pos+2,ib)
+					tc=self.fixw(self.pos+3,ic)
+					if pa==pb:self.OV[tc]=1
+					else:self.OV[tc]=0
 					self.pos+=4
-					# ~ if pc!=self.pos:self.pos+=4
 				case 9:
-					pa=self.OV[self.pos+1]
-					if ia==0:pa=self.OV[pa]
-					if ia==2:pa=self.OV[pa-self.rb]
-					assert pa==self.fixa(self.pos+1,ia)
-					# ~ pa=self.fix(ia,pa)
+					pa=self.fixr(self.pos+1,ia)
 					self.rb+=pa
 					self.pos+=2
 				case 99:
-					# ~ print (self.OV.values())
-					# ~ print("finishing")
-					yield self.OV[0]
+					yield f"end {self.OV[0]}"
 					return
-d=(109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99)
-c=computer(*d)
+# ~ d=(109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99)
+# ~ c=computer(*d)
+# ~ for v in c.flow:print(v,end=", ")
+# ~ print()
+# ~ d=(1102,34915192,34915192,7,4,7,99,0)
+# ~ c=computer(*d)
+# ~ for v in c.flow:print(v,end=", ")
+# ~ d=(104,1125899906842624,99)
+# ~ print()
+# ~ c=computer(*d)
+# ~ for v in c.flow:print(v,end=", ")
+# ~ print("====")
+d=open("d9.txt").readline().strip()
+c=computer(d)
+c.inp.append(2)
 for v in c.flow:print(v,end=", ")
+# ~ expected 3335138414
