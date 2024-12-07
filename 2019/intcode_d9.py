@@ -17,7 +17,6 @@ class computer():
 		pa=self.OV[pos]
 		if f==0:return self.OV.get(pa,0)
 		if f==2:return self.OV.get(pa+self.rb,0)
-		# ~ if f==2:return self.OV.get(pa,0)+self.rb
 		return pa #1
 	def fixw(self,pos,f): #target cell
 		pa=self.OV[pos]
@@ -43,7 +42,7 @@ class computer():
 					self.OV[tc]=va*vb
 					self.pos+=4
 				case 3:
-					pa=self.fixw(self.pos+1,ia)
+					pa=self.fixw(self.pos+1,ia)   #!!!
 					self.OV[pa]=self.inp.pop(0)
 					self.pos+=2
 				case 4:
