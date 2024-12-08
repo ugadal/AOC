@@ -92,8 +92,19 @@ class computer():
 # ~ c=computer(*d)
 # ~ for v in c.flow:print(v,end=", ")
 # ~ print("====")
-d=open("d9.txt").readline().strip()
-c=computer(d)
-c.inp.append(2)
-for v in c.flow:print(v,end=", ")
-# ~ expected 3335138414
+
+import sys
+
+
+def main(args):
+    return 0
+
+
+if __name__ == '__main__':
+
+	d=open("d9.txt").readline().strip()
+	c=computer(d)
+	c.inp.append(2)
+	for v in c.flow:print(v,end=", ")
+	# ~ expected 3335138414
+	
