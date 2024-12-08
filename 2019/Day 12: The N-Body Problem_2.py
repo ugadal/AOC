@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d12.txt",1
+fn,part="d12.txt",2
 sep="\n\n"
 data=open(fn).read().split(sep)[part].splitlines()
 class moon():
@@ -59,7 +59,7 @@ while True:
 	for moon in Moons:moon.move()
 # ~ for moon in Moons:print(moon)
 	tte=sum(m.E for m in Moons)
-	print(cyc,tte)
+	if cyc%100000==0:print(cyc,tte)
 	if tte not in V:V[tte]=[]
 	hashmoons="".join([m.__str__() for m in Moons])
 	if hashmoons in V[tte]:
