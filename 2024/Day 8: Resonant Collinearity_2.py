@@ -34,12 +34,3 @@ for at in AT:
 				spc+=dc
 			print(source,target,spr+dr,spc+dc,dr,dc)
 			print(len(AN))
-			# ~ exit()
-			# ~ AN.add((2*sr-tr,2*sc-tc))
-			# ~ AN.add((2*tr-sr,2*tc-sc))
-exit()
-IM=[]
-for r,c in AN:
-	if 0<=r<NR and 0<=c<NC:IM.append((r,c))
-print(len(IM))
-			
