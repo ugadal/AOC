@@ -1,0 +1,1538 @@
+WEBVTT
+
+1
+00:00:26.800 --> 00:00:28.789
+stein.aerts@vib.be: Good morning. Everyone on Zoom. We're just getting set up here.
+
+2
+00:03:51.910 --> 00:03:56.429
+stein.aerts@vib.be: Share screen screen. 2.
+
+3
+00:03:58.330 --> 00:03:59.070
+stein.aerts@vib.be: Good.
+
+4
+00:04:00.220 --> 00:04:01.860
+stein.aerts@vib.be: Okay. Good morning.
+
+5
+00:04:02.190 --> 00:04:03.260
+stein.aerts@vib.be: Morning.
+
+6
+00:04:07.010 --> 00:04:08.510
+stein.aerts@vib.be: I'll ignore that for a second.
+
+7
+00:04:09.320 --> 00:04:10.270
+stein.aerts@vib.be: Good morning.
+
+8
+00:04:10.410 --> 00:04:21.839
+stein.aerts@vib.be: Thank you. Everybody for joining today for the second in this semester's bioinformatics and AI seminars. We've got 3 speakers today. We'll have 2 local one remote in the middle.
+
+9
+00:04:22.170 --> 00:04:23.030
+stein.aerts@vib.be: and
+
+10
+00:04:23.390 --> 00:04:31.159
+stein.aerts@vib.be: I don't have much else to say this this month. So with that I will hand directly over to Antoine, who is going to talk about cell-free? DNA.
+
+11
+00:04:32.970 --> 00:04:33.960
+stein.aerts@vib.be: Thank you.
+
+12
+00:04:34.090 --> 00:04:37.519
+stein.aerts@vib.be: So good morning. Everyone.
+
+13
+00:04:38.252 --> 00:04:47.219
+stein.aerts@vib.be: My name is Anton. Pass me. It's my second time presenting in this series actually. But this time, as part of the team of Joris Vermez.
+
+14
+00:04:47.630 --> 00:04:54.389
+stein.aerts@vib.be: And today I will try to briefly summarize my Phd research on multimodal analysis of cell-free. DNA,
+
+15
+00:04:54.990 --> 00:04:59.319
+stein.aerts@vib.be: how do I switch to the next slide? Arrows
+
+16
+00:04:59.510 --> 00:05:01.289
+stein.aerts@vib.be: laptop this one? Sorry.
+
+17
+00:05:03.700 --> 00:05:07.040
+stein.aerts@vib.be: Do I need to focus on that? Yeah, yeah.
+
+18
+00:05:07.150 --> 00:05:07.860
+stein.aerts@vib.be: Sure.
+
+19
+00:05:08.850 --> 00:05:10.060
+stein.aerts@vib.be: Okay. So
+
+20
+00:05:10.665 --> 00:05:14.570
+stein.aerts@vib.be: the the original aim of the project was to design a
+
+21
+00:05:14.730 --> 00:05:21.589
+stein.aerts@vib.be: a tool for cost efficient and pre-symptomatic cancer detection based on liquid biopsies.
+
+22
+00:05:21.730 --> 00:05:26.660
+stein.aerts@vib.be: And to do so. We focused on cyphary DNA in the blood plasma.
+
+23
+00:05:26.830 --> 00:05:47.530
+stein.aerts@vib.be: which consists of the collection of DNA fragments released by blood cells due to apoptosis, necrosis, or active release of DNA, and it's relevant for the detection of many pathologies, including cancer, autoimmune disorders, transplant rejection and fetal aneuploidy.
+
+24
+00:05:50.200 --> 00:06:11.719
+stein.aerts@vib.be: regarding fetal antiploidy there is already a well-established pipeline for detection, called non-invasive prenatal testing. That you might know already which is based on whole genome sequencing, followed by read counting. And the idea is to look at the coverage profiles, to look for chromosome-wide amplifications or deletions.
+
+25
+00:06:11.760 --> 00:06:21.080
+stein.aerts@vib.be: And actually, it's also relevant for cancer, because in cancer, of course, undeployd is not normal in the fetus, but in cancer. It's pretty frequent, due to chromosomal
+
+26
+00:06:21.810 --> 00:06:25.890
+stein.aerts@vib.be: instability and chromosome missegregation during mitosis.
+
+27
+00:06:26.660 --> 00:06:41.090
+stein.aerts@vib.be: And so I started with this during my early Phd. And then we started looking at methylation analysis. And more recently we started looking at a new type of biomarkers called fragmentomics.
+
+28
+00:06:41.270 --> 00:06:43.939
+stein.aerts@vib.be: But the idea of fragmentomics is that
+
+29
+00:06:44.510 --> 00:06:50.450
+stein.aerts@vib.be: there are different mechanisms by which DNA or release is being released into the bloodstream.
+
+30
+00:06:50.490 --> 00:06:59.769
+stein.aerts@vib.be: and the most prominent one is apoptosis, where Gaspase. 3 will translocate to the nucleus where it will activate
+
+31
+00:06:59.860 --> 00:07:05.900
+stein.aerts@vib.be: cads which stands for Gaspase activated Dnas, which will cleave DNA. In short, in long fragments.
+
+32
+00:07:06.170 --> 00:07:20.899
+stein.aerts@vib.be: and these fragments will be further degraded into even shorter fragments after phagocytosis. So even outside the cell, the fragmentation goes on. And it's actually like a two-stage fragmentation model
+
+33
+00:07:21.210 --> 00:07:22.430
+stein.aerts@vib.be: process.
+
+34
+00:07:22.620 --> 00:07:45.930
+stein.aerts@vib.be: And the most prominent nucleus is Dns one l. 3, which is able to translocate to the nucleus so it can be found everywhere. But it's also capable of cleaving DNA that is protected by nucleosomes. And it's responsible for this periodicity. You see, in the right figure, that is, of size, 10 base pairs. It actually corresponds to the to one turn of the double helix.
+
+35
+00:07:46.030 --> 00:07:51.430
+stein.aerts@vib.be: and it's called apoptotic ladder, because tns one l. 3 is prominent in apoptosis.
+
+36
+00:07:51.550 --> 00:08:06.840
+stein.aerts@vib.be: and the model value of this distribution of fragment length is 166 bp. Because it corresponds to the size of the chromatosome, which shows that it's easier to cleave Linker DNA compared to nucleosome protected DNA.
+
+37
+00:08:08.980 --> 00:08:26.280
+stein.aerts@vib.be: And another hint that fragmentation is non-random is by looking at the distribution of en motifs. So typically random fragmentation of the genome would be like in a figure B, where you see that distribution is roughly uniform.
+
+38
+00:08:26.320 --> 00:08:35.050
+stein.aerts@vib.be: But in cell-free DNA. That's not the case, you see, an enrichment in cytosines, especially sequences contain the CC. Motif
+
+39
+00:08:35.914 --> 00:08:38.089
+stein.aerts@vib.be: for the comparison in
+
+40
+00:08:38.179 --> 00:08:50.490
+stein.aerts@vib.be: with DNA is one has a preference for timines, while Dffb which encodes for Caspase activated. Dnas has a preference for adenines and guanines.
+
+41
+00:08:51.930 --> 00:08:58.310
+stein.aerts@vib.be: Another hint that DNA fragmentation is not random is by looking at the nucleosome patterning.
+
+42
+00:08:59.220 --> 00:09:10.959
+stein.aerts@vib.be: So I devised a very simple score to measure how how consistent a sample is compared to a reference nucleosome map. The score is designed to be equal to 0 point 5 when it's random
+
+43
+00:09:11.030 --> 00:09:13.530
+stein.aerts@vib.be: and consistent when it's higher.
+
+44
+00:09:13.630 --> 00:09:23.660
+stein.aerts@vib.be: So you see by the blue curve that distribution of nucleosome scores in healthy controls is biased towards higher values higher than 0 point 5,
+
+45
+00:09:23.690 --> 00:09:27.160
+stein.aerts@vib.be: because it's non-random. It's massively increased
+
+46
+00:09:27.210 --> 00:09:52.829
+stein.aerts@vib.be: when looking at nucleosomes around Ctcf binding sites. And indeed, Ctcf sites are known to be involved in chromatin loop formation and gene regulation, but also they act as nucleosome anchors. So nucleosomes are very well positioned and very consistent across samples. So we see that here, even at very low coverage, we can highlight that consistency.
+
+47
+00:09:54.740 --> 00:10:07.519
+stein.aerts@vib.be: So there is one more aspect of cell free DNA, which is that it's double stranded, and the fragmentation is non-symmetric between the 2 strands. It's said to be. The ends are said to be jagged.
+
+48
+00:10:07.730 --> 00:10:19.939
+stein.aerts@vib.be: and there is a simple way to measure that by doing methylation sequencing. So normally, we fill the gaps with unmetrylated DNA, followed by enzymatic cytosine conversion and sequencing.
+
+49
+00:10:20.010 --> 00:10:22.779
+stein.aerts@vib.be: and because the fragments are
+
+50
+00:10:23.020 --> 00:10:29.489
+stein.aerts@vib.be: generally longer than the reads. Then we see a disequilibrium between the fermentation profiles of the read one and read 2.
+
+51
+00:10:29.710 --> 00:10:36.069
+stein.aerts@vib.be: And typically in the right figure. You see that there is a big drop in the read 2, because it's located on the 3 prime ends.
+
+52
+00:10:36.230 --> 00:10:43.950
+stein.aerts@vib.be: And actually, we can look at the difference between. Read one and read 2 to quantify the jaggedness of the sample.
+
+53
+00:10:43.990 --> 00:10:55.679
+stein.aerts@vib.be: So from the perspective of methylation analysis, that's obviously a technical bias, because this drop in methylation doesn't exist in vivo. So we trim the ends to account for this bias. But
+
+54
+00:10:55.830 --> 00:11:01.419
+stein.aerts@vib.be: for fragmentomic analysis we actually use it for jaggedness assessments.
+
+55
+00:11:02.700 --> 00:11:03.620
+stein.aerts@vib.be: So
+
+56
+00:11:04.710 --> 00:11:23.650
+stein.aerts@vib.be: my approach is not multiomic. I know it's a trendy word, but we use the same technology to extract all the source of information. So in a sense, it's single Omic. But it's multimodal. So we have multiple properties of surface DNA that we extract from the same technology which is
+
+57
+00:11:23.830 --> 00:11:24.170
+stein.aerts@vib.be: yeah.
+
+58
+00:11:24.850 --> 00:11:29.670
+stein.aerts@vib.be: double double-ended whole genome mutation, sequencing simply.
+
+59
+00:11:29.850 --> 00:11:38.609
+stein.aerts@vib.be: and the idea is to combine all these properties into a single model for enhanced cancer detection. So there is one more ingredient to the model I haven't mentioned which is
+
+60
+00:11:38.660 --> 00:11:40.830
+stein.aerts@vib.be: the deconvolution. So
+
+61
+00:11:41.450 --> 00:11:53.530
+stein.aerts@vib.be: we use medicode, which is a tool we've recently published, which is based on methylation and is simply a deconvolutional algorithm to estimate the contribution of each cell type to a bulk sample.
+
+62
+00:11:54.360 --> 00:12:05.290
+stein.aerts@vib.be: And I'm currently extending this approach to be able to perform multimodal deconvolution in a semi-supervised fashion by adding fragment length information.
+
+63
+00:12:06.690 --> 00:12:21.450
+stein.aerts@vib.be: So let's have a look at the raw data. So here I'm comparing controls with corrected cancer cases, and you can see massive disruptions in with respect to many modalities. For example, we see decreased.
+
+64
+00:12:21.560 --> 00:12:32.800
+stein.aerts@vib.be: fragment, length, genome wide, that that you can see on the left. We also see unemployed. A few samples are unemployed. We see some changes in copy number profiles.
+
+65
+00:12:32.870 --> 00:12:39.279
+stein.aerts@vib.be: We see subtle decrease in methylation in differentially methylated regions.
+
+66
+00:12:39.570 --> 00:12:58.430
+stein.aerts@vib.be: There is also a downward shift in the distribution of nucleosome positioning scores which can be explained by a combination of factors, for example, aberrant gene expression, but also massive, nucleosome repositioning, or maybe an increased activity of DNA is one.
+
+67
+00:12:58.860 --> 00:13:06.630
+stein.aerts@vib.be: We see different motive frequencies. We see for very few samples. We see a decrease in jaggedness.
+
+68
+00:13:06.650 --> 00:13:07.930
+stein.aerts@vib.be: And finally.
+
+69
+00:13:08.020 --> 00:13:26.990
+stein.aerts@vib.be: here, at the very right, we see for many samples increased estimated proportion of CD. 4 and CD. 8 t. Cells which could be due to immune response. For example, an increased proportion of colon adenocarcinoma reference tissue which is expected in colorectal cancer.
+
+70
+00:13:29.790 --> 00:13:30.500
+stein.aerts@vib.be: So
+
+71
+00:13:30.730 --> 00:13:43.799
+stein.aerts@vib.be: these modalities seem to complement each other, but, on the other hand, they also seem to correlate quite a lot. So a natural question would be, Is there any confounder? And if so, is it technical or biological?
+
+72
+00:13:43.870 --> 00:13:54.590
+stein.aerts@vib.be: So it's impossible to prove the the absence of of a bias. But what can be said is that there is obviously a biological bias which is again nucleus activity.
+
+73
+00:13:54.760 --> 00:13:59.450
+stein.aerts@vib.be: So from based on knockout experiments from the literature we already know
+
+74
+00:13:59.940 --> 00:14:05.260
+stein.aerts@vib.be: the causal relationships between each nucleus and each modality.
+
+75
+00:14:05.390 --> 00:14:21.709
+stein.aerts@vib.be: and assuming there is no other confounder in the model, we can deduce the sign of the correlation between each pair of modalities. So, as an example, if we consider the Ffb. It has a preference for adenines and guanines, and it tends to produce longer fragments.
+
+76
+00:14:21.750 --> 00:14:27.649
+stein.aerts@vib.be: And indeed, when we measure the the frequency of oligo, nucleosomal fragments and the frequency of
+
+77
+00:14:27.760 --> 00:14:34.060
+stein.aerts@vib.be: A and G ending motifs, we see that they positively and significantly correlate.
+
+78
+00:14:34.160 --> 00:14:44.069
+stein.aerts@vib.be: And this goes also for all other pairs of modalities in this model on the right, which shows that the data is consistent with known nucleus biology.
+
+79
+00:14:44.170 --> 00:14:45.250
+stein.aerts@vib.be: So the next
+
+80
+00:14:45.320 --> 00:14:50.550
+stein.aerts@vib.be: logical step is, can we estimate nucleus activity from this data.
+
+81
+00:14:50.590 --> 00:14:59.520
+stein.aerts@vib.be: So obviously, the answer is, yes. What is less obvious is, can we validate it? So at the moment we don't have the validation to confirm these results.
+
+82
+00:14:59.590 --> 00:15:01.549
+stein.aerts@vib.be: What we can do is simple
+
+83
+00:15:01.750 --> 00:15:05.129
+stein.aerts@vib.be: sanity checks. So what I did here is on the left.
+
+84
+00:15:05.280 --> 00:15:08.679
+stein.aerts@vib.be: You have control samples in green.
+
+85
+00:15:09.030 --> 00:15:14.519
+stein.aerts@vib.be: and the same control samples, but with a focus on promoter regions that's in purple.
+
+86
+00:15:14.830 --> 00:15:18.549
+stein.aerts@vib.be: So we see a massive increase in dns, one
+
+87
+00:15:18.620 --> 00:15:31.469
+stein.aerts@vib.be: estimated dnase one activity which would be reasonably expected, because in regulatory regions we have a lot of DNA. s. 1 hypersensitive sites. So by definition, we expect higher dnase one activity.
+
+88
+00:15:32.180 --> 00:15:37.979
+stein.aerts@vib.be: So I also compared one set of controls with the breast cancer, and
+
+89
+00:15:38.540 --> 00:16:00.329
+stein.aerts@vib.be: I get a decrease activity of Dnas one l. 3 and an increase of DNA. s. 1 for colorectal cancer. So the way that the estimated proportions changes is not exactly the same in the 2 cancer types which suggests that there are different DNA release mechanisms involved over there.
+
+90
+00:16:00.380 --> 00:16:06.200
+stein.aerts@vib.be: So if you allow me to speculate a bit, I could say that, for example, in colorectal cancer we have
+
+91
+00:16:06.450 --> 00:16:09.430
+stein.aerts@vib.be: more cells that die of
+
+92
+00:16:09.600 --> 00:16:10.680
+stein.aerts@vib.be: that release
+
+93
+00:16:10.700 --> 00:16:13.680
+stein.aerts@vib.be: DNA in a non-apoptotic manner, because.
+
+94
+00:16:13.770 --> 00:16:19.250
+stein.aerts@vib.be: Dnase one is active more outside the cell. So it has an extracellular activity
+
+95
+00:16:19.270 --> 00:16:23.069
+stein.aerts@vib.be: which is which could be related to necrosis, for example.
+
+96
+00:16:24.560 --> 00:16:40.620
+stein.aerts@vib.be: jumping to the, to the supervised learning for cancer detection. So machine learning is very simple and basic. So 1st we do in silico, sampling down sampling of all the samples to bring them all to the same total coverage.
+
+97
+00:16:40.940 --> 00:16:57.409
+stein.aerts@vib.be: But this is still not sufficient to stabilize the variance, because we have no guarantee that the coverage would be the same for each feature in each marker region. So we use probabilistic modeling to smooth the data and the correlates it even further from the sequencing depth.
+
+98
+00:16:58.150 --> 00:17:06.559
+stein.aerts@vib.be: Then for each modality we compute a kernel function that depends on the modality itself. For example, for N motifs
+
+99
+00:17:06.790 --> 00:17:12.769
+stein.aerts@vib.be: and motifs are compositional data. So we use key, square kernel, which is suited for that
+
+100
+00:17:13.010 --> 00:17:15.020
+stein.aerts@vib.be: and so on.
+
+101
+00:17:16.619 --> 00:17:28.280
+stein.aerts@vib.be: And then we combine all the modalities into a single kernel matrix using multiple kernel learning. But contrary to the state of the art, we don't perform convex linear combination.
+
+102
+00:17:28.569 --> 00:17:41.260
+stein.aerts@vib.be: but convex linear combination in the log space, because this is otherwise, it's not possible to model the nonlinear interactions between the modality. So we lose the whole point of doing nonlinear modeling.
+
+103
+00:17:42.500 --> 00:17:56.150
+stein.aerts@vib.be: And then we use custom variants of support vector, machines which can integrate side information about cancer like to cancer stage. So the idea is to perform like an extreme version of regularization, based on these side information
+
+104
+00:17:56.270 --> 00:17:58.569
+stein.aerts@vib.be: kind of similar to multitask learning.
+
+105
+00:17:59.280 --> 00:18:03.580
+stein.aerts@vib.be: And I think I will skip that for time's sake.
+
+106
+00:18:03.880 --> 00:18:13.229
+stein.aerts@vib.be: and jumping, jumping to performance. So here I'm reporting the are we under the rock and Pr curves for each modality on the breast cancer data set?
+
+107
+00:18:13.880 --> 00:18:15.550
+stein.aerts@vib.be: And I.
+
+108
+00:18:15.710 --> 00:18:21.390
+stein.aerts@vib.be: The the dense black line depicts the combination of all them. So the multimodal approach.
+
+109
+00:18:21.780 --> 00:18:28.450
+stein.aerts@vib.be: And you can see that multimodal approach outperforms the best individual modality which is jaggedness
+
+110
+00:18:28.560 --> 00:18:30.776
+stein.aerts@vib.be: quite impressively, actually, with
+
+111
+00:18:31.800 --> 00:18:33.260
+stein.aerts@vib.be: kind of 11
+
+112
+00:18:33.650 --> 00:18:35.739
+stein.aerts@vib.be: percent increase in a upr
+
+113
+00:18:36.020 --> 00:18:47.560
+stein.aerts@vib.be: and around 3% in Iraq. So you see that the model is benefiting from the the complementarity and the synergy between these modalities. So it actually adds up.
+
+114
+00:18:48.590 --> 00:18:52.260
+stein.aerts@vib.be: this is not the case on the correct or cancer data set. Actually.
+
+115
+00:18:52.570 --> 00:18:57.250
+stein.aerts@vib.be: it's interesting to see that all the fragmentomic modalities kind of
+
+116
+00:18:57.420 --> 00:19:00.719
+stein.aerts@vib.be: bring the same performance. They have very, very similar curves.
+
+117
+00:19:01.110 --> 00:19:09.839
+stein.aerts@vib.be: On the other hand, the coverage profiles and the metaliation information is not providing good performance. So I'm suspecting that it might be
+
+118
+00:19:09.930 --> 00:19:19.899
+stein.aerts@vib.be: harming the multimodal approach because of the lack of complementarity because of the redundancy and the low performance of coverage information.
+
+119
+00:19:21.850 --> 00:19:34.260
+stein.aerts@vib.be: And finally, for multiple Miloma data sets. Actually, we only with fragment length information, we get pretty much perfect performance. So so asked the multimodal approach.
+
+120
+00:19:36.965 --> 00:19:43.684
+stein.aerts@vib.be: So I compared with previous work, including recent work from another Phd student from Joris Vermese lab,
+
+121
+00:19:44.130 --> 00:19:50.469
+stein.aerts@vib.be: and it actually outperforms this method by 20% on the colorectal cancer. It's
+
+122
+00:19:50.550 --> 00:19:56.910
+stein.aerts@vib.be: similar data sets, but different cross validation approach. That's why the numbers are not exactly the same
+
+123
+00:19:57.160 --> 00:20:07.419
+stein.aerts@vib.be: outperforms, also by 1% on the breast cancer data set and 7% roughly on vertical myeloma. So it's quite a big improvement. But.
+
+124
+00:20:07.650 --> 00:20:17.240
+stein.aerts@vib.be: on the other hand, these approaches are a single modality based so either on coverage or nucleosome information, such as window protection scores
+
+125
+00:20:17.420 --> 00:20:19.599
+stein.aerts@vib.be: so that might play a role.
+
+126
+00:20:20.090 --> 00:20:23.129
+stein.aerts@vib.be: and I will skip this also for time's sake.
+
+127
+00:20:24.230 --> 00:20:34.829
+stein.aerts@vib.be: So, to conclude, so separate DNA, provide us with complementary sources of information as can be seen at least from the breast cancer data sets.
+
+128
+00:20:35.680 --> 00:20:44.249
+stein.aerts@vib.be: but it also carries redundant signal at least due to the the underlying activity of
+
+129
+00:20:44.420 --> 00:20:46.359
+stein.aerts@vib.be: of nucleases.
+
+130
+00:20:47.270 --> 00:21:01.000
+stein.aerts@vib.be: And yeah, I skipped the results. But essentially problem specific regularization using custom Svms that model the cancer stage and the tumor fraction can actually boost a bit the performance by
+
+131
+00:21:01.440 --> 00:21:17.389
+stein.aerts@vib.be: by really like, except instead of doing legit like general purpose regularization using like L 2, regularization. For example, we use, we enforce the Svm to learn a meaningful direction for the hyperplane by guiding it with the
+
+132
+00:21:17.610 --> 00:21:30.559
+stein.aerts@vib.be: with the, for example, by enforcing all the the hyperplanes to be parallel, to to actually be able to separate the different cancer stages in a multitask fashion, for example. So that's the kind of things we can do.
+
+133
+00:21:31.550 --> 00:21:45.400
+stein.aerts@vib.be: One thing I didn't mention, which is very important is that fragmentomics are very powerful, but also very fragile. They are very sensitive to wet lab considerations, like centrifugation, or the collection tube.
+
+134
+00:21:45.700 --> 00:21:50.989
+stein.aerts@vib.be: or even the use of bisulfide conversion, which is very damaging for DNA.
+
+135
+00:21:51.950 --> 00:21:54.380
+stein.aerts@vib.be: And yeah, future reach
+
+136
+00:21:54.490 --> 00:22:17.350
+stein.aerts@vib.be: future directions for research. Not for me, but probably the next Phd. Would be to adapt and extend these approaches towards, for example, Nanopore sequencing where we, because we know that in South Africa very long fragments, so above 10 k. 10 kb. 20 kb. Are very well associated with cancer, and would be interesting to be able to
+
+137
+00:22:17.560 --> 00:22:23.590
+stein.aerts@vib.be: sequence these reads, because at the moment we use illumina. So we can generate only to up to a certain size.
+
+138
+00:22:23.770 --> 00:22:35.099
+stein.aerts@vib.be: and would be also nice to be able to type, to do the cancer typing based on these long fragments. So that would be that has the potential to increase the sensitivity. Quite quite a bit.
+
+139
+00:22:35.810 --> 00:22:39.209
+stein.aerts@vib.be: So that's all I have for today. Thanks for your attention.
+
+140
+00:22:39.490 --> 00:22:41.469
+stein.aerts@vib.be: and I will take any questions
+
+141
+00:22:43.690 --> 00:22:44.620
+stein.aerts@vib.be: that one.
+
+142
+00:22:45.700 --> 00:22:52.479
+stein.aerts@vib.be: Thank you very much. Do we have any questions here in the audience or on zoom. Yeah, we'll start with Jonas.
+
+143
+00:22:54.010 --> 00:23:11.719
+stein.aerts@vib.be: Cool. Thanks. That's really nice work. One of the crucial points of having an assay that works on liquid biopsies and detects cancer, etc. Is sensitivity right? So what I was kind of missing is what the fractions of cancer
+
+144
+00:23:11.940 --> 00:23:19.509
+stein.aerts@vib.be: cell DNA are in the samples that you're working on. For instance, the colorectal or the breast, or even the multiple myeloma data set?
+
+145
+00:23:20.210 --> 00:23:30.639
+stein.aerts@vib.be: Is this 10%? Is this lower? Is this higher? How low can you go. So the thing is, can you hear me? Yes, so the thing is, tumor fraction depends a lot.
+
+146
+00:23:30.860 --> 00:23:31.710
+stein.aerts@vib.be: I mean.
+
+147
+00:23:31.920 --> 00:23:52.340
+stein.aerts@vib.be: tumor fraction depends a lot on the method that you use to to estimate it right? So there is a ground truth, typically right? I don't know whether you can get those from these samples, but you can generate the ground truth by mixing samples, etc. As well. Right? Yeah, that is true. But yeah, typically, as you can see here. So in the right figure. You have it here for the corrector in breast cancer
+
+148
+00:23:52.420 --> 00:23:56.399
+stein.aerts@vib.be: data set. Yeah, it's centered around yeah, 1, 2%.
+
+149
+00:23:56.440 --> 00:24:00.020
+stein.aerts@vib.be: But it's based on Icro Cna. So only on the coverage profiles.
+
+150
+00:24:00.230 --> 00:24:15.020
+stein.aerts@vib.be: So I don't know if we can actually take it as a ground truth. But ideally we want to estimate it, using multimodel approaches. There is one effort in that direction which is called Umac, which is based both on coverage and methylation.
+
+151
+00:24:15.140 --> 00:24:21.970
+stein.aerts@vib.be: But yeah, it miserably failed. I tried it. But yeah, it doesn't work with such a low coverage.
+
+152
+00:24:22.060 --> 00:24:28.329
+stein.aerts@vib.be: So how low do you think you would be able to go? Because ideally, we go to like one part in a million. Right? Something like that.
+
+153
+00:24:29.678 --> 00:24:34.520
+stein.aerts@vib.be: Yes, yes. Yeah. At the moment I don't
+
+154
+00:24:34.760 --> 00:24:42.259
+stein.aerts@vib.be: don't have the answer, because I cannot really trust Icon, because it has a lot of pitfalls. So yeah, it's a very tough question, actually
+
+155
+00:24:42.800 --> 00:24:43.550
+stein.aerts@vib.be: cheers
+
+156
+00:24:45.910 --> 00:24:51.669
+stein.aerts@vib.be: any more questions in the room or on Zoom feel free to speak up there. He is
+
+157
+00:24:52.670 --> 00:25:09.970
+stein.aerts@vib.be: one in chat from Maxine Tarabachi. Do you include the detection of telomere fusions in your feature? Space which is very specific to different types of cancers. Do you include the detection of telomere fusions in your feature? Space at all?
+
+158
+00:25:10.730 --> 00:25:13.040
+stein.aerts@vib.be: T. What sorry, telomere fusions!
+
+159
+00:25:15.350 --> 00:25:18.850
+stein.aerts@vib.be: maybe reading the question will make more sense.
+
+160
+00:25:19.660 --> 00:25:23.569
+stein.aerts@vib.be: The telomere of the telomere. Yeah, no, no, no.
+
+161
+00:25:24.010 --> 00:25:25.825
+stein.aerts@vib.be: yeah. Sorry. Nope.
+
+162
+00:25:26.530 --> 00:25:44.489
+stein.aerts@vib.be: so no, that's an idea I had in mind. But I think it would require changing the pipeline quite a lot. Not an expert to answer the question. But yeah, I think we would have to redo the alignment. And so on. So, yeah, totally different pipeline. Essentially, yeah, exactly. I'm working more downstream of the pipeline, I would say. So.
+
+163
+00:25:44.510 --> 00:25:46.149
+stein.aerts@vib.be: That's an idea we had. Yes.
+
+164
+00:25:48.190 --> 00:25:50.310
+stein.aerts@vib.be: okay. Oh, yeah. One more
+
+165
+00:25:50.510 --> 00:25:51.659
+stein.aerts@vib.be: before we move on.
+
+166
+00:25:53.450 --> 00:26:09.939
+stein.aerts@vib.be: A very interesting talk, and maybe a very general, maybe some naive question, how big was the variance between the individuals like the feature of the individuals. And how can you, if it was big? How can you mitigate that by maybe normalizing or doing some kind of
+
+167
+00:26:10.490 --> 00:26:11.340
+stein.aerts@vib.be: I don't know.
+
+168
+00:26:13.120 --> 00:26:31.569
+stein.aerts@vib.be: So by that, you mean the yeah, this one. Yeah, because because I see that for some people there was like very, very bright stripes for others it was rather sparse, but features should be more or less the same, but maybe it could also affect the the detection.
+
+169
+00:26:31.820 --> 00:26:42.939
+stein.aerts@vib.be: So if you mean the variance across the samples, yeah, across the samples. I mean, it's totally related to the strength of the signal. So, of course, if it's early
+
+170
+00:26:43.070 --> 00:27:00.890
+stein.aerts@vib.be: early stage, or if the tumor fraction is very low, then of course, you would expect to would expect a sample to look like exactly like the controls, right? Not the opposite. So I mean, if the signal is not there, there is no way to, I mean, but in the, for example, in the stage 3 right
+
+171
+00:27:00.890 --> 00:27:16.509
+stein.aerts@vib.be: there could be like completely white stripes and very, very bright stripes. That is true, but the thing is that in in practice the the tumor fraction is not completely correlated with the cancer stage. That's also something we need to to
+
+172
+00:27:16.780 --> 00:27:22.070
+stein.aerts@vib.be: to to take care of. So again, I said that our Cna is not the ground truth, but
+
+173
+00:27:22.760 --> 00:27:24.609
+stein.aerts@vib.be: if you look at the
+
+174
+00:27:24.790 --> 00:27:26.470
+stein.aerts@vib.be: yeah, the right figure again.
+
+175
+00:27:26.490 --> 00:27:32.150
+stein.aerts@vib.be: I'm reporting the tumor fraction per cancer stage. And you can see that the correlation is not super trivial.
+
+176
+00:27:32.230 --> 00:27:44.819
+stein.aerts@vib.be: You can see that for late stage. So stage 4, you have a few with very, very high tumor fraction. But I mean, for the rest, they all look the same. Essentially. It's kind of the correlated. Yeah, all right, thanks.
+
+177
+00:27:45.020 --> 00:27:45.870
+stein.aerts@vib.be: Welcome.
+
+178
+00:27:46.220 --> 00:27:52.469
+stein.aerts@vib.be: Okay, and with that I think we will move on to our next speaker. So thank you. Again, Antoine, for presenting.
+
+179
+00:28:00.060 --> 00:28:05.650
+stein.aerts@vib.be: okay. Our second speaker is seena from.
+
+180
+00:28:05.710 --> 00:28:09.859
+stein.aerts@vib.be: and the Wow bit remu lab in New Antwerp, who, I see.
+
+181
+00:28:10.380 --> 00:28:16.040
+stein.aerts@vib.be: has got their microphone, etc. On. I will give you should have permission to share now
+
+182
+00:28:19.310 --> 00:28:21.780
+stein.aerts@vib.be: which we can now see. Well, I can see.
+
+183
+00:28:23.120 --> 00:28:25.969
+UAntwerp office: Okay. I hope you can also hear me. Fine.
+
+184
+00:28:26.720 --> 00:28:28.753
+stein.aerts@vib.be: Very well.
+
+185
+00:28:29.990 --> 00:28:54.009
+UAntwerp office: Okay, perfect. So indeed, I'm sailor from the lab in Antwerp. And today I will give you a bit of information about some things we have done with machine learning for produce. So the goal is to identify or know which
+
+186
+00:28:54.010 --> 00:29:00.859
+UAntwerp office: proteins are in a sample. It's going to be a blood sample tissue sample, or any other fluid
+
+187
+00:29:01.775 --> 00:29:02.690
+UAntwerp office: and
+
+188
+00:29:02.990 --> 00:29:29.979
+UAntwerp office: and of course we don't want to know just one protein with all of them in them, and I think most of. You know we can represent proteins by these sequences that all have a long bit of aggregation. So we use mass spectrometry for this. What is usually done is proteins are cut into small pieces called peptides, and then we use the mass spectrometer
+
+189
+00:29:29.980 --> 00:29:33.190
+UAntwerp office: to measure the Peptides in the sample
+
+190
+00:29:33.400 --> 00:29:59.530
+UAntwerp office: ideally. You would know the minus sequences of the Peptides then, but unfortunately, the mass spectrometer, the small output that immediately it outputs this specta. So the spectra is our range of moles of charge values with a measured intensity. And then we would like
+
+191
+00:29:59.590 --> 00:30:06.180
+UAntwerp office: to know which pelotones generated all these specta.
+
+192
+00:30:06.610 --> 00:30:29.080
+UAntwerp office: So that is what was in the previous slide. Each unknown peptide results in a spectrum, and then, traditionally, database search is used to identify the specta. So we have a database with all the sequences that we expect might have been in the experiment, depending on the organism and the lab techniques used
+
+193
+00:30:29.080 --> 00:30:38.520
+UAntwerp office: on the sample. And from all of these sequences in the database we can compute a theoretical spectrum.
+
+194
+00:30:38.520 --> 00:31:03.420
+UAntwerp office: and what we then do is we compare all the theoretical spectra with the experimental spectrum and the one with the highest similarity will be the Peptide spectrum match and the Peptide we identified in the sample. Unfortunately, this database search methods
+
+195
+00:31:03.420 --> 00:31:21.590
+UAntwerp office: is only good for a very small number of Peptides, and there will still remain a lot of spectra that are not identified. So what we do to improve these identifications, we use machine learning
+
+196
+00:31:21.590 --> 00:31:33.560
+UAntwerp office: that gets a peptide sequences, input and then output a property of these Peptides. The properties are
+
+197
+00:31:33.990 --> 00:31:56.890
+UAntwerp office: predicted from or the properties that we predict are also output along the steps of the mass spectrometry. So first, st usually there is a liquid chromatography phase that will separate peptides and outputs a retention time. And then, if we do, ion mobility, mass, spectrometry, this will also output the collisional cross section.
+
+198
+00:31:56.890 --> 00:32:20.759
+UAntwerp office: So if we can predict these prototype properties with machine learning. Then we can use this information to add to the database search and get an improved scoring of all the candidate spectra, and this will eventually lead to a higher identification rate at a high confidence as well.
+
+199
+00:32:23.900 --> 00:32:42.668
+UAntwerp office: so what I did in this project is, look at these property prediction models. Look! What is the influence of the data set size of their performance. And are there some things we can do to improve the performance.
+
+200
+00:32:43.750 --> 00:33:09.809
+UAntwerp office: So 1st of all, we see that the size of the data set is actually quite important. So this gives the error. So lower is better. And, for example, for the retention, time, prediction. We clearly see that adding more data reduces the error, and we can also assume that more data will be even better.
+
+201
+00:33:11.580 --> 00:33:35.719
+UAntwerp office: Then one of the things we tried to improve the models is pre-training. So for this we use actually the architecture of large language models and large language models are usually pre-trained, using the masked language model. It's called. So. We will mask part of the input minor assets
+
+202
+00:33:35.720 --> 00:33:55.520
+UAntwerp office: and then teach the model to learn this based on the rest of the sequence. And this, then, will actually improve the predictions. That is also what we saw for our model, the retention, time, prediction. So on the left, this model was just
+
+203
+00:33:56.404 --> 00:34:04.500
+UAntwerp office: trained on the retention time of data. Immediately, without pre training in the middle, we pre trained it on the
+
+204
+00:34:04.520 --> 00:34:33.339
+UAntwerp office: the retention data itself and the model on the right was pre trained on a large protein data set. So here we see that just using our own data is already a big improvement and lowers the error quite a lot. But using a large general protein data set for pre training gives an even better model.
+
+205
+00:34:35.495 --> 00:34:54.240
+UAntwerp office: So the second thing we tried to improve these prediction models is multitask learning. So here we will actually combine the data of multiple tasks. And as you see, I'm sure you can see. My.
+
+206
+00:34:54.409 --> 00:34:56.139
+UAntwerp office: So the data will
+
+207
+00:34:56.330 --> 00:35:25.310
+UAntwerp office: 1st go to the same place, and only at the end. There will be 2 different prediction. That's that actually predict the retention time and the collisional cross section in this case separately. So the goal is that we have now more data for this 1st part, and that this will make that the model can learn a better and general representation of the of the data.
+
+208
+00:35:25.937 --> 00:35:37.649
+UAntwerp office: But in practice we did not see this improvement for this case. So here, for the retention time, the single task learning model is
+
+209
+00:35:37.650 --> 00:36:00.560
+UAntwerp office: a little bit better. So here again it's ever so lower, is better. But for the Ccs project prediction, the single task model is a lot better than the multitask learning model. So we think that the problem might be that the data on the of the Ccs predictions
+
+210
+00:36:00.570 --> 00:36:16.379
+UAntwerp office: is a bit too different compared to the retention time data, it really has less variability. So adding the more variable attention. Time data does not really help for the Ccs predictions.
+
+211
+00:36:18.573 --> 00:36:19.316
+UAntwerp office: So
+
+212
+00:36:20.300 --> 00:36:43.449
+UAntwerp office: in general, we see that when tackling a new problem or trying to improve performance on an existing model that a lot of people will start by using very complex machine learning models. While we actually think that you need to focus 1st on high quality benchmark data sets.
+
+213
+00:36:43.450 --> 00:36:52.470
+UAntwerp office: because at the moment there is not really a good way to properly evaluate all these very complex machine learning models.
+
+214
+00:36:54.090 --> 00:36:58.858
+UAntwerp office: So then, in the next part, we
+
+215
+00:36:59.830 --> 00:37:21.969
+UAntwerp office: wanted to focus more on modifications. So these Peptide property prediction models were actually pretty well on unmodified Peptides. But once you give them modified Peptides, things get different. Because, yeah, these machine learning models never saw these modifications.
+
+216
+00:37:22.350 --> 00:37:38.090
+UAntwerp office: So to solve this, we developed a new architecture that starts by encoding each minoacid, together with its modification as the molecular structure.
+
+217
+00:37:38.210 --> 00:37:53.989
+UAntwerp office: And then these sequences of molecular structures will be the input of a machine learning model that can then predict the Peptide property. This has 2 advantages. First, st
+
+218
+00:37:54.793 --> 00:38:03.489
+UAntwerp office: we can use this model on any modification, even on those that were not singularly trained.
+
+219
+00:38:03.740 --> 00:38:22.289
+UAntwerp office: And second, we hope that in this way the model has a much richer information about the input instead of just the letters of the Amyloses. It has the full molecular structure, and you can also find patterns in similar amyloses.
+
+220
+00:38:25.610 --> 00:38:35.690
+UAntwerp office: to even improve this model. We made a 2 step prediction model as well. So here, in the 1st step, the
+
+221
+00:38:36.000 --> 00:38:46.390
+UAntwerp office: Peptide property of the unmodified Peptide is predicted, because we know that this is a rather simple task, and
+
+222
+00:38:47.300 --> 00:38:53.310
+UAntwerp office: has a very good security, and that the prediction of 1st step
+
+223
+00:38:53.380 --> 00:39:19.339
+UAntwerp office: is added to the input of the second step, and then the molecular structure transformers. I explained in the previous slide will be used to make the prediction of the final retention time. It will actually predict the difference between the predicted retention time of the unmodified Peptide, and what it thinks is the real retention time.
+
+224
+00:39:19.990 --> 00:39:44.639
+UAntwerp office: If we then look at the results of these models, so in green on the left is an existing model. You will see in the middle we have our one step, molecular structure, transformer in purple, and on the right, in orange. The 2 step approach. So in the left world, this is just a
+
+225
+00:39:45.520 --> 00:39:49.329
+UAntwerp office: the errors in general over the full test data set.
+
+226
+00:39:50.130 --> 00:40:01.089
+UAntwerp office: But important to know is that all test samples had modifications that were never seen before during training. So it's a rather difficult task.
+
+227
+00:40:01.090 --> 00:40:24.869
+UAntwerp office: and you will see that detail. C and our one step model have a similar performance. But 2 step model really makes a difference, and then on the right, we 1st average the errors per modification of to estimate how well the different models do across different modifications.
+
+228
+00:40:24.990 --> 00:40:31.929
+UAntwerp office: And you again see, the 2 step model can do quite a lot better.
+
+229
+00:40:34.583 --> 00:40:46.029
+UAntwerp office: So I just want to end by thanking people in Canada that provided some of the data and the people in network that I work together with
+
+230
+00:40:54.090 --> 00:40:54.575
+UAntwerp office: command.
+
+231
+00:40:55.800 --> 00:40:56.360
+UAntwerp office: Thank you.
+
+232
+00:40:56.360 --> 00:41:04.330
+stein.aerts@vib.be: Thank you very much. Do we have any questions in the audience here, or on Zoom? Feel free to either speak up or throw it in the chat.
+
+233
+00:41:05.580 --> 00:41:07.180
+stein.aerts@vib.be: Yep, one here.
+
+234
+00:41:07.595 --> 00:41:08.010
+UAntwerp office: Oh!
+
+235
+00:41:10.120 --> 00:41:16.130
+stein.aerts@vib.be: Very nice work. I had a question on the on the pre-training. You do with the protein language model.
+
+236
+00:41:17.470 --> 00:41:25.669
+stein.aerts@vib.be: Do you train it specifically on triptych Peptides, or some other kind of Peptides? Is there a specific length? Or do you just take random bits of whole proteins.
+
+237
+00:41:26.870 --> 00:41:42.819
+UAntwerp office: So when we did the Pre training ourselves, we just use the same data as we use for the attention time prediction. So this is a mix of tripty and non trips. But yeah, they are. They are all
+
+238
+00:41:43.170 --> 00:41:57.850
+UAntwerp office: yeah, in the-, the data sets, for example, or the traditional cross section data set. And then we also use the A model that was all pre trained on a large protein data set. We did not do that ourselves.
+
+239
+00:41:57.950 --> 00:42:00.930
+UAntwerp office: So that was just a pre trained protein model.
+
+240
+00:42:01.220 --> 00:42:08.590
+stein.aerts@vib.be: And do you know that pre-trained protein model? Does that start from random sequences in the protein, or are they also triptych peptides, etc?
+
+241
+00:42:09.530 --> 00:42:20.750
+UAntwerp office: Think it uses protein domains. So it's not-. It's not on short peptides. It's on yeah, larger pieces of proteins.
+
+242
+00:42:21.880 --> 00:42:25.890
+UAntwerp office: But yeah, from from- from multiple mechanisms.
+
+243
+00:42:26.350 --> 00:42:35.609
+UAntwerp office: So we keep our existing protein domains, not just criminal sequences. Because, yeah, the free training would not be that useful
+
+244
+00:42:37.790 --> 00:42:45.459
+stein.aerts@vib.be: Okay. But that's that's interesting already that actually, the the pre-training doesn't require to see Peptides. It just needs to understand protein language.
+
+245
+00:42:45.970 --> 00:42:58.659
+UAntwerp office: Yes, yeah. The main goal of the pre training is to just give the model of which the minorities often occurs together, and that kind of stuff. So yeah.
+
+246
+00:42:58.990 --> 00:43:00.010
+stein.aerts@vib.be: Okay, thanks.
+
+247
+00:43:01.980 --> 00:43:21.120
+stein.aerts@vib.be: I don't see any more in here or on Zoom. I have one more naive question. I'm not in proteomics, but I am in single cell, and there's a bit of a push to get high throughput proteomics going. How performant is your method that? Can it be processed on many samples very quickly, or are we looking a long time like a very long time for processing to get your results out.
+
+248
+00:43:21.980 --> 00:43:25.180
+UAntwerp office: Oh, yeah, the methods. Are you involved? Or
+
+249
+00:43:25.720 --> 00:43:37.910
+UAntwerp office: don't think that long. I think the- the lab work will take the longest by far. Yeah, not an expert in the lab work. But yeah.
+
+250
+00:43:37.950 --> 00:43:43.929
+UAntwerp office: the post processing with all the the machine learning models. That doesn't take that long.
+
+251
+00:43:44.430 --> 00:43:51.670
+stein.aerts@vib.be: Okay, cool. Okay, thank you again, Sita. And with that we'll move on to our 3rd speaker of the day.
+
+252
+00:43:53.610 --> 00:43:56.220
+stein.aerts@vib.be: Bear with me while I move everything around again.
+
+253
+00:44:21.890 --> 00:44:22.920
+stein.aerts@vib.be: I wouldn't.
+
+254
+00:44:24.570 --> 00:44:35.460
+stein.aerts@vib.be: And you can introduce yourself. Okay. And with that we have our 3rd speaker, which is, I need to share this on zoom before I forget, otherwise
+
+255
+00:44:36.040 --> 00:44:37.740
+stein.aerts@vib.be: I will, and
+
+256
+00:44:40.670 --> 00:44:41.420
+stein.aerts@vib.be: check
+
+257
+00:44:42.280 --> 00:44:43.250
+stein.aerts@vib.be: screen 2.
+
+258
+00:44:43.500 --> 00:44:44.330
+stein.aerts@vib.be: There we go.
+
+259
+00:44:44.630 --> 00:44:51.329
+stein.aerts@vib.be: Our second speaker is our 3rd speaker. Sorry is Dan from the lab of Bartislopa. He's going to talk about microglia.
+
+260
+00:44:52.630 --> 00:45:01.599
+stein.aerts@vib.be: Yes, hey? Very happy to be here I am indeed, Dan. Our lab mostly works on Alzheimer's disease, and today I'm going to be talking a little bit about our work
+
+261
+00:45:01.940 --> 00:45:05.490
+stein.aerts@vib.be: on deciphering the role of genetics in ad pathology.
+
+262
+00:45:11.790 --> 00:45:13.366
+stein.aerts@vib.be: There we go. So
+
+263
+00:45:13.960 --> 00:45:19.919
+stein.aerts@vib.be: and maybe for some of you a quick little primer on Alzheimer's disease if I can quickly bring up my
+
+264
+00:45:20.070 --> 00:45:21.190
+stein.aerts@vib.be: pointer.
+
+265
+00:45:23.720 --> 00:45:25.564
+stein.aerts@vib.be: Oh, okay, nice.
+
+266
+00:45:26.260 --> 00:45:38.820
+stein.aerts@vib.be: all right. So ad is a neurodegenerative disorder hallmarked by the accumulation of amyloid beta outside of the cells, Tau inside of the cells, and eventually, of course, neuronal loss and death as a cascade.
+
+267
+00:45:38.970 --> 00:45:47.709
+stein.aerts@vib.be: This pathogenic process takes decades to unfold, and therefore this is quite a difficult disease to study in. In humans.
+
+268
+00:45:47.740 --> 00:45:51.720
+stein.aerts@vib.be: also, whether you will develop Alzheimer's disease or not
+
+269
+00:45:51.780 --> 00:46:10.950
+stein.aerts@vib.be: is about 70%. Heritable and many snps have already been discovered and described, and the information that is in all these Snps can, of course, be combined into one big score that describes your personalized risk of developing Ad. We call this a Prs score right? The so-called Polygenic risk score score
+
+270
+00:46:11.150 --> 00:46:12.900
+stein.aerts@vib.be: also of note
+
+271
+00:46:13.050 --> 00:46:15.687
+stein.aerts@vib.be: is that there is a large portion of this
+
+272
+00:46:16.500 --> 00:46:19.210
+stein.aerts@vib.be: genetic variability that is still unexplained.
+
+273
+00:46:21.540 --> 00:46:33.179
+stein.aerts@vib.be: so our lab has developed a very interesting hybrid human mouse model to study the development of ad specifically the interaction between amyloid clocks and microglia. So what we do
+
+274
+00:46:33.440 --> 00:46:46.610
+stein.aerts@vib.be: is we take Ipscs derived from various human donors, turn them into human microglia precursor cells, then we xenograft these cells into humanized control, mice
+
+275
+00:46:46.800 --> 00:46:53.709
+stein.aerts@vib.be: or ad model disease type, mice. After clearing all of the merine microglia.
+
+276
+00:46:54.480 --> 00:47:02.729
+stein.aerts@vib.be: and then, after 6 months, these cells can be recovered and sequenced to study how they behaved when they were exposed to these amyloid beta plaques.
+
+277
+00:47:02.930 --> 00:47:14.709
+stein.aerts@vib.be: And we don't just graph one cell line per mouse. We actually graph 10 to 12, which is nice for the web lab, because it gives them a much higher throughput in terms of work and time needed. But it's also nice for us in the dry lab.
+
+278
+00:47:14.730 --> 00:47:30.010
+stein.aerts@vib.be: because it results in a much more nicely controlled experiment, where all of the microglia are exposed to exactly the same environment, because, of course, even cloned mice are still individuals which will vary significantly in terms of disease, progression and other potential confounders.
+
+279
+00:47:30.100 --> 00:47:41.230
+stein.aerts@vib.be: So using this methodology, then, we generate single cell sequencing data for 235,000 microglia for 3 villages, consisting of 29 genetically diverse cell lines.
+
+280
+00:47:41.260 --> 00:47:49.160
+stein.aerts@vib.be: with each cell line being present in 4 to 6 mice. So in these bar plots. You see how many microglia we got off the Qc. Per mouse.
+
+281
+00:47:49.250 --> 00:48:06.809
+stein.aerts@vib.be: And 2 things are indeed striking. There's a large variation in the number of cells that we can retrieve per line, and the number of cells that we retrieve per line per mouse is quite stable between mice, and we believe that this is likely the result of competition between these lines to colonize the brain.
+
+282
+00:48:06.900 --> 00:48:11.379
+stein.aerts@vib.be: Another really nice and important feature in our experimental design
+
+283
+00:48:11.570 --> 00:48:25.119
+stein.aerts@vib.be: are the lines Burp, one cof. 2 and l. 26, which are brown, gray, and cyan, which are present in all of the 3 villages in all of the mice, and these will help us computationally account for any batch effects
+
+284
+00:48:25.280 --> 00:48:26.710
+stein.aerts@vib.be: that we run into.
+
+285
+00:48:27.260 --> 00:48:39.940
+stein.aerts@vib.be: So to get a broad idea of what these microglia are doing, we ran Wcgna right weighted gene, co-expression, network analysis. And we visualized the results on the umap of ourselves. Right? We have a nice blobby umap.
+
+286
+00:48:40.260 --> 00:48:49.449
+stein.aerts@vib.be: We retrieve meaningful gene expression modules which can be conveniently understood in terms of existing knowledge. Microglia cell states, as we call them.
+
+287
+00:48:49.530 --> 00:48:58.800
+stein.aerts@vib.be: For example, blue here consists of interferon signaling genes. Magenta. Here consists of major histocompatibility complex 2
+
+288
+00:48:58.830 --> 00:49:00.670
+stein.aerts@vib.be: and CD. 74.
+
+289
+00:49:00.810 --> 00:49:12.690
+stein.aerts@vib.be: And then brown is the very typical disease-related damp state, with genes like Apoe and Apoc. And then we have in green and green yellow kind of the more normal, happy, homeostatic microglium.
+
+290
+00:49:13.440 --> 00:49:20.720
+stein.aerts@vib.be: also of interest is that these co-expression modules can be used to reconstruct the differences between previously described cell states.
+
+291
+00:49:21.040 --> 00:49:25.620
+stein.aerts@vib.be: So if we then look at the distribution of these 29 cell lines across this umap.
+
+292
+00:49:25.960 --> 00:49:31.769
+stein.aerts@vib.be: darker colors here indicate a more densely populated part of the umap.
+
+293
+00:49:31.920 --> 00:49:46.099
+stein.aerts@vib.be: and it's immediately obvious that microglia, derived from diverse donors produce diverse stealth state distributions. For example, if you look at Burp one here. 1st row, 3rd column. This one is very much clustered around this green and green yellow
+
+294
+00:49:46.320 --> 00:49:47.869
+stein.aerts@vib.be: part of the Umap.
+
+295
+00:49:47.960 --> 00:49:51.780
+stein.aerts@vib.be: whereas if you look at someone like L. 20 c. Right.
+
+296
+00:49:52.190 --> 00:50:12.899
+stein.aerts@vib.be: This guy clusters around the magenta and dam part of the umap, suggesting that these macroglia are even under baseline conditions without any pathogenic challenge of amyloid plaques, already quite different both in terms of homeostatic states, activated states, and even the States that we typically understand
+
+297
+00:50:13.000 --> 00:50:15.460
+stein.aerts@vib.be: as being disease related more than anything.
+
+298
+00:50:15.920 --> 00:50:19.320
+stein.aerts@vib.be: We can show this in a different way here. So in this middle panel.
+
+299
+00:50:19.520 --> 00:50:26.549
+stein.aerts@vib.be: this shows the lock to fall change of a line compared to the average of all of the lines for that module.
+
+300
+00:50:28.100 --> 00:50:47.490
+stein.aerts@vib.be: So, for example, Burbon, again, is higher on the homeostatic axis of green and green, yellow, and we can also cluster all of these lines in the panel to the right, which reveals 3 or 4 big clusters. So cluster 0, for example, is very high in all of the homeostatic modules, whereas cluster 2 here
+
+301
+00:50:48.510 --> 00:50:54.250
+stein.aerts@vib.be: is very high in the magenta, Mhc. 2. Cluster.
+
+302
+00:50:54.890 --> 00:51:08.449
+stein.aerts@vib.be: So Wgcna is nice in that. It gives us a broad overview of what these cells are doing. But I have to say that it doesn't really do justice to the amount of genetic and transcriptomic variation that we see.
+
+303
+00:51:09.170 --> 00:51:16.789
+stein.aerts@vib.be: If we look at the single gene level, we see that for each one of these lines, when you compare to the average microglia there are thousands
+
+304
+00:51:17.050 --> 00:51:26.660
+stein.aerts@vib.be: of differentially expressed genes, often not sharing a single common function, but really just spread across the entire transcriptome.
+
+305
+00:51:28.660 --> 00:51:34.840
+stein.aerts@vib.be: So to be able to make confident assertions, then, on the number and kind of degree of differential gene expression
+
+306
+00:51:34.940 --> 00:51:59.539
+stein.aerts@vib.be: that we see here. We used a negative binomial, generalized mixed effects model right mouthful. We believe that this model has a lot of kind of theoretical benefits compared to most of the other models that are out there. Some of these are that it works on raw counts, which means that it will also respect the power differences between high and low expressors. It accounts for a natural variation between biological replicates, right mice in this case, because again, they are individuals and will have differences.
+
+307
+00:51:59.880 --> 00:52:03.720
+stein.aerts@vib.be: And with the right experimental design, it's also great for batch correction.
+
+308
+00:52:03.880 --> 00:52:13.260
+stein.aerts@vib.be: We fit this using an our package called Gllmdmb, which is built on the C plus plus auto differentiation engine, and we use the Vsc. To parallelize this work.
+
+309
+00:52:13.955 --> 00:52:18.799
+stein.aerts@vib.be: Because the main downside of doing things this way is that it is very compute power, heavy
+
+310
+00:52:19.050 --> 00:52:26.379
+stein.aerts@vib.be: doing it on running this on 10,000 genes, took us 4,800 core hours.
+
+311
+00:52:26.500 --> 00:52:36.429
+stein.aerts@vib.be: which we, which would be about half a year if we just run it on a single core. But, thanks to the Vsc. And given good queue times, we run it in about half a day.
+
+312
+00:52:37.460 --> 00:52:53.920
+stein.aerts@vib.be: It is kind of widely understood that single cell. Gene expression is negatively binomial distributed. Some people would say, with some 0 inflation as well. So what we can do is we can model a negative binomial distribution to it. And then using a local ink function, we can
+
+313
+00:52:54.230 --> 00:52:56.090
+stein.aerts@vib.be: fit a linear model
+
+314
+00:52:56.220 --> 00:52:59.220
+stein.aerts@vib.be: to this rate parameter of the negative binomial.
+
+315
+00:52:59.610 --> 00:53:03.930
+stein.aerts@vib.be: And in that linear model. Right? The 1st 3
+
+316
+00:53:04.090 --> 00:53:06.979
+stein.aerts@vib.be: variables that we have here are the most important ones.
+
+317
+00:53:07.190 --> 00:53:14.110
+stein.aerts@vib.be: We have the effect of the donor. So how different are microchlea from each other in just kind of their their normal baseline states.
+
+318
+00:53:14.300 --> 00:53:17.100
+stein.aerts@vib.be: And then how do microglia differ
+
+319
+00:53:17.110 --> 00:53:21.050
+stein.aerts@vib.be: on average, when they are exposed to amyloid beta plugs.
+
+320
+00:53:21.720 --> 00:53:33.390
+stein.aerts@vib.be: And then, of course, how our microglia and our most interesting one is this interaction effect which shows us how microglia are uniquely responding to amyloid betaplex right. How do they differ from this average response?
+
+321
+00:53:34.730 --> 00:53:37.490
+stein.aerts@vib.be: And then, on top of that.
+
+322
+00:53:37.990 --> 00:53:48.730
+stein.aerts@vib.be: we have some confounders to account for in this case being the mouse's cell is from the sequencing batch a cell is from, and the sequencing depth of that cell.
+
+323
+00:53:49.060 --> 00:53:57.119
+stein.aerts@vib.be: and then mouse in this case is operationalized as a random effect to alleviate some co-linearities with strain and sequencing batch.
+
+324
+00:53:57.950 --> 00:54:17.759
+stein.aerts@vib.be: So now, to convince ourselves and you as well, that this is a really good way of analyzing our single cell data. We did a little test to see how this, how likely this model was to produce false positives, because that is a big problem in single cell sequencing analysis. And to do that, we randomized our data, sets to create kind of a Spoof data set that only contains false negatives
+
+325
+00:54:17.950 --> 00:54:36.399
+stein.aerts@vib.be: while respecting the structure of our data in terms of the mouse and library of origin for a cell, and the original number of cells for a combination of library, mouse and donor. So when we do our de analysis on this randomized data ideally, we should find no differential expression because there are no structural differences.
+
+326
+00:54:36.750 --> 00:54:45.370
+stein.aerts@vib.be: So on the following plot we ran 3D. Models. The 1st on the very left is the mixed effects model on the randomized data in blue, and, as we hoped.
+
+327
+00:54:45.490 --> 00:54:51.509
+stein.aerts@vib.be: it produces little to no false positives at all in the single digits per line.
+
+328
+00:54:51.720 --> 00:55:03.999
+stein.aerts@vib.be: which is great, then, when we look at the mixed effects model on the real data. Right? Again, we see thousands of the E genes, and as a quick comparison, we also ran it on the ever popular Wilcoxon model
+
+329
+00:55:04.200 --> 00:55:08.630
+stein.aerts@vib.be: on the randomized data, and that one produces a a ton of
+
+330
+00:55:10.306 --> 00:55:11.179
+stein.aerts@vib.be: False positives
+
+331
+00:55:12.320 --> 00:55:16.609
+stein.aerts@vib.be: so hopefully. This lends some credence to the size of our te results.
+
+332
+00:55:16.850 --> 00:55:28.719
+stein.aerts@vib.be: So then, continuing with our main questions, the 1st one was, How are microglia different from each other on a baseline? And then how do they kind of, on average commonly respond to Emily. Better pathology when they see it.
+
+333
+00:55:29.060 --> 00:55:31.630
+stein.aerts@vib.be: So when they see Emily better pathology.
+
+334
+00:55:31.740 --> 00:55:49.309
+stein.aerts@vib.be: we see upregulations of dam and Mhe. Class 2 genes in the modules with magenta and brown, but also on the single gene level, where we see genes like CD. 9 apoe and Apoe. c. 1 for the dam response and a bunch of Hla genes for the Mhc. Class. 2 response.
+
+335
+00:55:49.740 --> 00:56:03.910
+stein.aerts@vib.be: But we have a lot more differentially expressed genes. So we run a quick Gsca, and we find kind of what we expect to see. Ribosome, Lysosome, a bunch of lipid processing. And then, of course, this is the one Alzheimer's disease itself.
+
+336
+00:56:04.390 --> 00:56:22.010
+stein.aerts@vib.be: So this is a nice clean de that largely just matches what we already know, what we see in literature. That's great for us, because this will serve as a baseline for our 3rd variable, which is how each individual microglia, or each individual donor kind of deviates from this response.
+
+337
+00:56:22.820 --> 00:56:39.380
+stein.aerts@vib.be: So in this plot the color represents kind of the local change difference from the average amyloid response. So, for example, a red cell for Ros. 3 in the magenta means that this line has a much stronger response than average when it sees amyloid beta plaques
+
+338
+00:56:40.580 --> 00:56:50.570
+stein.aerts@vib.be: out of all of the Wcgna modules that we have here the Mhclose 2 magenta module is by far the one with the largest effect sizes, and when we go to cluster the lines
+
+339
+00:56:50.940 --> 00:56:56.899
+stein.aerts@vib.be: we can see that this clustering is entirely driven by this magenta module.
+
+340
+00:56:58.940 --> 00:57:14.479
+stein.aerts@vib.be: So seeing as this Mhc. Class 2 module is the main driver of the personalized amyloid response, we took these scores, and we compared them to some outcome measures, and I should emphasize that these next results are very exciting, but also
+
+341
+00:57:14.610 --> 00:57:18.980
+stein.aerts@vib.be: still quite fresh and somewhat subject to change and review in the future.
+
+342
+00:57:20.310 --> 00:57:43.569
+stein.aerts@vib.be: But when we compare these Mhc. To amyloid response scores per line to the Prs. Scores that were generated by some of our collaborators. So again, these Prs scores represent the genetic risk that you inherently carry, we see a relatively good and large correlation that is significant. And similarly, if we check the disease status of these patients, we see that patients with a higher
+
+343
+00:57:43.850 --> 00:57:50.910
+stein.aerts@vib.be: Mhc. Class 2 response to seeing amyloid blocks were more likely to develop ad than those who didn't.
+
+344
+00:57:51.020 --> 00:57:56.619
+stein.aerts@vib.be: And also in this poll, you see that we are, we do miss data for some of our patients. That is correct.
+
+345
+00:57:57.390 --> 00:58:10.500
+stein.aerts@vib.be: then, finally, this relationship holds both. When we generate Brs scores with and without Poe, which for some of you will be a very important gene. As it is the largest non-causal genetic risk factor for developing Alzheimer's disease.
+
+346
+00:58:10.800 --> 00:58:27.120
+stein.aerts@vib.be: So some concluding remarks, we believe that these human microglia villages provide a unique platform to disentangle genetic diversity in baseline conditions and genetic diversity in response to amyloid pathology, or really any other challenge that you can set up in a mouse.
+
+347
+00:58:27.300 --> 00:58:46.130
+stein.aerts@vib.be: We believe that these human microglia are transcriptionally as unique as their donor, which was very cool to see. We then describe the average response that a microglia has to seeing amyloid beta. We show that individual donors respond differently to seeing amyloid beta.
+
+348
+00:58:46.740 --> 00:58:54.899
+stein.aerts@vib.be: and then we also identify the donor's magnitude of Mhc. Plus 2 response to amyloid beta. As a specific correlate of Brs score and ad disease outcome.
+
+349
+00:58:55.150 --> 00:59:13.239
+stein.aerts@vib.be: We still have some work to do here in determining the functional impact of these diverse transcriptomes, potentially seeing what else can modify, ad risk and why? And of course, we also want to try to predict from the genome what is causing these changes in the transcriptome?
+
+350
+00:59:13.530 --> 00:59:19.370
+stein.aerts@vib.be: So with that, I want to acknowledge all of these wonderful people that worked on the project with me
+
+351
+00:59:19.480 --> 00:59:20.560
+stein.aerts@vib.be: and
+
+352
+00:59:20.780 --> 00:59:22.500
+stein.aerts@vib.be: open the floor to some questions.
+
+353
+00:59:28.450 --> 00:59:31.176
+stein.aerts@vib.be: Thank you very much, Dan. Do we? Yeah.
+
+354
+00:59:31.790 --> 00:59:33.500
+stein.aerts@vib.be: Didn't even finish my sentence.
+
+355
+00:59:37.100 --> 01:00:02.729
+stein.aerts@vib.be: Thanks for the interesting presentation. I was wondering, maybe more general. Like, if the transcriptional responses are different across donors. Is there a way to like generalize it? Because I mean, yeah, of course, it's not so easy to have like a lot of donors. But could you like group them in a way to like generalize the findings a bit more also towards treatments or so on.
+
+356
+01:00:06.006 --> 01:00:17.210
+stein.aerts@vib.be: Maybe I don't entirely understand the question. What do you mean by generalize? Well, so if you have like donors, and like each donor has a transcriptional different response.
+
+357
+01:00:17.400 --> 01:00:18.560
+stein.aerts@vib.be: And
+
+358
+01:00:18.730 --> 01:00:23.380
+stein.aerts@vib.be: wouldn't that make it difficult to like generalize findings?
+
+359
+01:00:24.417 --> 01:00:32.162
+stein.aerts@vib.be: Indeed! So you can, for example, think in in terms of if you are developing a drug or something.
+
+360
+01:00:33.700 --> 01:00:46.520
+stein.aerts@vib.be: this finding that microglia react differently to to seeing amyloid, Beta would complicate that process because you you now have to take into account that different microglia might respond differently to your drug.
+
+361
+01:00:48.240 --> 01:01:04.620
+stein.aerts@vib.be: in terms of generalization. I suppose the the easiest way to do that would be if we can understand what's in the genetics is driving this change in transcriptomics. And then you could, I guess, donate some blood and and predict how well the reaction would be. Okay, cool thanks.
+
+362
+01:01:05.910 --> 01:01:10.690
+stein.aerts@vib.be: Is that a question on Zoom? I'm predicting, based on an unmuted microphone?
+
+363
+01:01:13.290 --> 01:01:14.316
+stein.aerts@vib.be: Maybe not
+
+364
+01:01:14.870 --> 01:01:16.939
+stein.aerts@vib.be: anymore in the audience.
+
+365
+01:01:17.000 --> 01:01:18.370
+stein.aerts@vib.be: Yes, Jonas.
+
+366
+01:01:23.085 --> 01:01:25.304
+stein.aerts@vib.be: you know. Thanks.
+
+367
+01:01:26.660 --> 01:01:33.419
+stein.aerts@vib.be: So so you see, differences in the response. Amyloid Beta depending on the the Mhc. Locus. Right? That's
+
+368
+01:01:33.720 --> 01:01:54.010
+stein.aerts@vib.be: that's in part what you see right? Not on the Mhc. Locus on the amount of. So when a microglia sees amyloid beta, it upregulates Mhc. Class 2 genes, and if you do that we find that if you, as a donor, do that more, you end up being more likely to develop Alzheimer's disease, whereas if you do it less, you're less likely to develop Alzheimer's disease.
+
+369
+01:01:54.010 --> 01:02:08.180
+stein.aerts@vib.be: So my question is, then, does that up regulation, or that difference in the up regulation? Does that depend on the genetic composition of that Mhc. Locus, because to some extent I know, or I assume, that Mhc. Close to the locus is a Gwas hit for Alzheimer's.
+
+370
+01:02:08.180 --> 01:02:15.200
+stein.aerts@vib.be: Yes, at least part of it. Yeah. So is is that not just what you're seeing? What you're recapitulating? Can you look at the
+
+371
+01:02:15.330 --> 01:02:22.509
+stein.aerts@vib.be: the loci and the alleles that these different lines have, and and see that effect like the ones that indeed respond worse. They
+
+372
+01:02:22.880 --> 01:02:36.728
+stein.aerts@vib.be: have the risk, allele, or whatever. No, I agree, and that's something that we are in the process of doing. Of course it won't just be the the low side for dri itself. Dra itself could be other ones right? But it could just be that locus and nothing else. Yeah,
+
+373
+01:02:37.040 --> 01:02:42.960
+stein.aerts@vib.be: I would imagine that just on that one locus correlating.
+
+374
+01:02:44.450 --> 01:02:49.310
+stein.aerts@vib.be: what was it? 65. Right there, a correlation of 56.
+
+375
+01:02:49.830 --> 01:02:54.460
+stein.aerts@vib.be: So that's I guess, 30 or so percent of explained variance. I find that
+
+376
+01:02:54.510 --> 01:03:06.859
+stein.aerts@vib.be: quite unlikely that just that locus would drive the Prs score to that degree, and and we never realized that before, like even Poe itself, only drives, which is the most important locus drives the Prs score only by
+
+377
+01:03:06.910 --> 01:03:19.000
+stein.aerts@vib.be: 7% or so. So I find that quite unlikely. But we do have Hla haplotyping going, and we're waiting on those results, and that is something that we will indeed check. Of course, be nice. Thanks.
+
+378
+01:03:19.980 --> 01:03:27.460
+stein.aerts@vib.be: Okay, I have one quick one, and then I think we'll wrap it up. You showed that in your villages some of the donors don't.
+
+379
+01:03:27.500 --> 01:03:49.180
+stein.aerts@vib.be: They're not represented very well, and you kind of hypothesize that this might be due to out competition or something. Have you looked at the donors which are outcompeted, and see if there's any grouped transcriptional changes between them to see why, for example, they might be outcompeted compared to the others. So we have. There's nothing that is immediately striking. We looked at the number of proliferating cells, for example.
+
+380
+01:03:49.587 --> 01:03:58.969
+stein.aerts@vib.be: There is some previous work that we did on generating these human microglia progenitors that suggest that some of these donors just produce
+
+381
+01:03:59.140 --> 01:04:08.019
+stein.aerts@vib.be: more active progenitor cells. We don't quite know why that happens. It is a genomic difference, but we don't know what exactly drives it.
+
+382
+01:04:09.370 --> 01:04:14.630
+stein.aerts@vib.be: Okay, I think with that we will thank all 3 of our speakers again quickly.
+
+383
+01:04:19.430 --> 01:04:30.059
+stein.aerts@vib.be: Thank you for everybody, both in person and online, for joining, and we hope we will see you again next month for the people that are here. There will be coffee and biscuits in the corridor.
+
+384
+01:04:30.070 --> 01:04:31.860
+stein.aerts@vib.be: People on Zoom see you next month.
+

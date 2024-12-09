@@ -1,0 +1,2 @@
+00:24:40	Maxime Tarabichi:	Very nice presentation! Do you include the detection of telomere fusions in your feature space, which seems to be very specific of cancer (sorry if I missed it)?
+00:25:50	Maxime Tarabichi:	Thanks! Makes sense
