@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d9.txt",0
+fn,part="d9.txt",1
 data=open(fn).read().split(sep)[part].strip()
 data=[c for c in data]
 caseid=0
@@ -45,43 +45,81 @@ endp=case()
 endp.left=nc
 nc.right=endp
 c=startp
-while c.right:
-	print(c)
-	c=c.right
-print(c)
-exit()
-cf=endp.left
-while True: #break after file 0
-	print("starting loop")
-	print(cf)
-	print()
-	while cf.file=="space":
-		cf=cf.left
-		print("searching left",cf)
-	print("cf:",cf)
-	cs=startp
-	while cs.file!="space" or cs.l<cf.l:
-		print("searching right",cs)
-		cs=cs.right
-		if cs==None:
-			cf=cf.left
-			print("no valid space found")
-			break
-	else:
-		print("current space",cs)
-		a=cs.left
-		c=cf.left
-		d=cf.right
-		cf.left=a
-		a.right=cf
-		cf.right=cs
-		cs.left=cf
-		cs.l-=cf.l
-		c.right=d
-		d.left=c
-		print("updated space",cs)
-		print("updated cf",cf)
-		cf=c
-		if cf.file=="root":break
-		# ~ exit()
+# ~ while c.right:
+	# ~ print(c)
+	# ~ c=c.right
+# ~ print(c)
+
+def canmove(case):
+	# ~ print("in test movable :",case)
+	AS=[]
+	cp=case.left
+	while cp.case!=0:
+		# ~ print("testing :",cp)
+		if cp.t!="space":
+			cp=cp.left
+			continue
+		if cp.l>=case.l:
+			AS.append(cp)
+		cp=cp.left
+	return AS
+		
 	
+
+cp=endp
+while cp.left.case!=0: 
+	# ~ print("current right pointer",cp)
+	if cp.left.t!="file":
+		cp=cp.left
+		continue
+	s=cp.left
+	AS=canmove(s)
+	if AS:
+		# ~ for avs in AS:print(avs)
+		t=AS.pop()
+		a=t.left
+		c=s.left
+		ns=space(s.l)
+		# ~ print("A:",a)
+		# ~ print("S:",s)
+		# ~ print("T:",t)
+		# ~ print("C:",c)
+		# ~ print("CP:",cp)
+		a.right=s
+		s.left=a
+		s.right=t
+		t.left=s
+		t.l-=s.l
+		c.right=ns
+		cp.left=ns
+		ns.left=c
+		ns.right=cp
+		if t.l==0:
+			t.left.right,t.right.left=t.right,t.left
+		# ~ print("A:",a)
+		# ~ print("S:",s)
+		# ~ print("T:",t)
+		# ~ print("C:",c)
+		# ~ print("CP:",cp)
+	else:cp=cp.left
+	# ~ exit() 
+	# ~ break
+print("done")
+c=startp
+# ~ while c.right:
+	# ~ print(c)
+	# ~ c=c.right
+# ~ print(c)
+def ss(a,b):return (b**2-a**2+b+a)/2
+c=startp
+pos=0
+total=0
+while c.right:
+	cc=c.right
+	if cc.t=="file":
+		total+=ss(pos,pos+cc.l-1)*cc.fid
+		print(total)
+	pos+=cc.l
+	c=cc
+print(total)
+exit()
