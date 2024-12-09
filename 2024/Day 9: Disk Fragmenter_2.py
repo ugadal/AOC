@@ -45,13 +45,13 @@ endp=case()
 endp.left=nc
 nc.right=endp
 c=startp
-# ~ while c.right:
-	# ~ print(c)
-	# ~ c=c.right
-# ~ print(c)
+while c.right:
+	print(c)
+	c=c.right
+print(c)
 
 def canmove(case):
-	# ~ print("in test movable :",case)
+	print("in test movable :",case)
 	AS=[]
 	cp=case.left
 	while cp.case!=0:
@@ -75,16 +75,10 @@ while cp.left.case!=0:
 	s=cp.left
 	AS=canmove(s)
 	if AS:
-		# ~ for avs in AS:print(avs)
 		t=AS.pop()
 		a=t.left
 		c=s.left
 		ns=space(s.l)
-		# ~ print("A:",a)
-		# ~ print("S:",s)
-		# ~ print("T:",t)
-		# ~ print("C:",c)
-		# ~ print("CP:",cp)
 		a.right=s
 		s.left=a
 		s.right=t
@@ -94,22 +88,14 @@ while cp.left.case!=0:
 		cp.left=ns
 		ns.left=c
 		ns.right=cp
-		if t.l==0:
-			t.left.right,t.right.left=t.right,t.left
-		# ~ print("A:",a)
-		# ~ print("S:",s)
-		# ~ print("T:",t)
-		# ~ print("C:",c)
-		# ~ print("CP:",cp)
+		if t.l==0:t.left.right,t.right.left=t.right,t.left
 	else:cp=cp.left
-	# ~ exit() 
-	# ~ break
 print("done")
 c=startp
-# ~ while c.right:
-	# ~ print(c)
-	# ~ c=c.right
-# ~ print(c)
+while c.right:
+	print(c)
+	c=c.right
+print(c)
 def ss(a,b):return (b**2-a**2+b+a)/2
 c=startp
 pos=0
@@ -118,7 +104,7 @@ while c.right:
 	cc=c.right
 	if cc.t=="file":
 		total+=ss(pos,pos+cc.l-1)*cc.fid
-		print(total)
+		print(total)	
 	pos+=cc.l
 	c=cc
 print(total)
