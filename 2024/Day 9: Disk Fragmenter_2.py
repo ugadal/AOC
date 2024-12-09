@@ -6,34 +6,42 @@ data=open(fn).read().split(sep)[part].strip()
 data=[c for c in data]
 caseid=0
 class case():
-	def __init__(self,fid,l):
+	def __init__(self):
 		global caseid
 		self.case=caseid
-		self.file=fid
-		self.l=l
 		self.left=None
 		self.right=None
 		caseid+=1
-	def __str__(self):
-		txt=""
-		if self.left:txt+=f"{self.left.case} <-"
-		txt+=f" case#: {self.case} t:{self.file} l:{self.l}"
-		if self.right:txt+=f" -> {self.right.case}"
-		return txt
-startp=case("root",0)
+	def __str__(self):return f"{self.left.case if self.left else "Void"} -> {self.case} -> {self.right.case if self.right else "Void"} "
+class file(case):
+	def __init__(self,l):
+		global fid
+		super().__init__()
+		self.t="file"
+		self.l=l
+		self.fid=fid
+		fid+=1
+	def __str__(self):return f"{self.left.case} -> ({self.case}) fichier:{self.fid} {self.l} -> {self.right.case} "
+class space(case):
+	def __init__(self,l):
+		super().__init__()
+		self.t="space"
+		self.l=l
+	def __str__(self):return f"{self.left.case} -> ({self.case}) Space {self.l} -> {self.right.case} "
+startp=case()
 previous=startp
 isfile=True
 fid=0
 while data:
 	nv=int(data.pop(0))
-	nc=case(fid if isfile else "space",nv)
+	if isfile:nc=file(nv)
+	else:nc=space(nv)
 	previous.right=nc
 	nc.left=previous
-	if isfile:
-		fid+=1
 	isfile=not isfile
 	previous=nc
-endp=case("end",0)
+
+endp=case()
 endp.left=nc
 nc.right=endp
 c=startp
@@ -41,6 +49,7 @@ while c.right:
 	print(c)
 	c=c.right
 print(c)
+exit()
 cf=endp.left
 while True: #break after file 0
 	print("starting loop")
