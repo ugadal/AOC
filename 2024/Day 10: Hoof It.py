@@ -4,7 +4,8 @@ sep="\n\n"
 fn,part="d10.txt",1
 data=open(fn).read().split(sep)[part].splitlines()
 G={}
-D=[-1j,1,1j,-1]
+def around(p):
+	for d in [-1j,1,1j,-1]:	yield p+d
 for row, line in enumerate(data):
 	for col,v in enumerate(line):
 		G[col+row*1j]=int(v)
@@ -13,7 +14,7 @@ def reachable(cp,cv=0):
 	if cv==9:
 		yield cp
 	else:
-		for t in [cp+d for d in D if G.get(cp+d,-1)==cv+1]:
+		for t in [p for p in around(cp) if G.get(p,-1)==cv+1]:
 			for v in reachable(t,cv+1):yield v
 def countreached(sp):
 	R=list(reachable(sp))
