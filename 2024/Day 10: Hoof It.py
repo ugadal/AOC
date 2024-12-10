@@ -17,7 +17,6 @@ def reachable(cp,cv=0):
 			for v in reachable(t,cv+1):yield v
 def countreached(sp):
 	R=list(reachable(sp))
-	print(R)
 	return len(set(R))
 r=sum(countreached(zero) for zero in zeroes)
 print(r)
