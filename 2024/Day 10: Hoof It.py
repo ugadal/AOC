@@ -5,7 +5,7 @@ fn,part="d10.txt",1
 data=open(fn).read().split(sep)[part].splitlines()
 G={}
 def around(p):
-	for d in [-1j,1,1j,-1]:	yield p+d
+	for d in [-1j,1,1j,-1]:yield p+d
 for row, line in enumerate(data):
 	for col,v in enumerate(line):
 		G[col+row*1j]=int(v)
