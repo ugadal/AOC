@@ -11,8 +11,7 @@ for row, line in enumerate(data):
 		G[col+row*1j]=int(v)
 zeroes=[k for k,v in G.items() if v==0]
 def reachable(cp,cv=0):
-	if cv==9:
-		yield cp
+	if cv==9:yield cp
 	else:
 		for t in [p for p in around(cp) if G.get(p,-1)==cv+1]:
 			for v in reachable(t,cv+1):yield v
