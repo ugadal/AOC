@@ -29,6 +29,4 @@ def blink(v,bn):
 		lv=len(v)
 		if lv%2==0:return blink(str(int(v[:lv//2])),bn-1)+blink(str(int(v[lv//2:])),bn-1)
 		return blink(str(int(v)*2024),bn-1)
-print(blink("125",4))
-print(blink("17",4))
 print(sum(blink(x,75) for x in data))
