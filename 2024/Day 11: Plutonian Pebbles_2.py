@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 #
-from collections import deque
 from functools import wraps
 def memoize(func):
     cache = {}
