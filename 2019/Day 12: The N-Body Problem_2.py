@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d12.txt",3
+fn,part="d12.txt",1
 sep="\n\n"
 data=open(fn).read().split(sep)[part].splitlines()
 class moon():
@@ -14,19 +14,27 @@ class moon():
 		self.dy=0
 		self.dz=0
 		self.E=0
+		self.pote=0
+		self.kine=0
 	def __str__(self):
 		return f"{self.x},{self.y},{self.z},'==',{self.dx},{self.dy},{self.dz} [{self.E}]"
 	def move(self):
 		self.x+=self.dx
 		self.y+=self.dy
 		self.z+=self.dz
-		self.energ()
+		# ~ self.energ()
+		self.rp()
+		self.kin()
+	def rp(self):
+		self.pote=abs(self.x)+abs(self.y)+abs(self.z)
+	def kin(self):
+		self.kine=abs(self.dx)+abs(self.dy)+abs(self.dz)
 	def energ(self):
-		pot=abs(self.x)+abs(self.y)+abs(self.z)
-		kin=abs(self.dx)+abs(self.dy)+abs(self.dz)
+		pote=abs(self.x)+abs(self.y)+abs(self.z)
+		kine=abs(self.dx)+abs(self.dy)+abs(self.dz)
 		self.E=pot*kin
 Moons=[moon(line) for line in data]
-cyc=0
+cyc=1
 # ~ V={}
 # ~ hashmoons="".join([m.__str__() for m in Moons])
 # ~ tte=sum(m.E for m in Moons)
@@ -58,7 +66,7 @@ while True:
 				mb.dz+=1
 	# ~ for moon in Moons:print(moon)
 	for moon in Moons:moon.move()
-	if moona.E==0:
+	if moona.pote==0:
 		print(cyc,cyc-pcyc)
 		pcyc=cyc
 		# ~ exit()

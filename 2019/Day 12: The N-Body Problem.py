@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d12.txt",2
+fn,part="d12.txt",3
 sep="\n\n"
 data=open(fn).read().split(sep)[part].splitlines()
 class moon():
