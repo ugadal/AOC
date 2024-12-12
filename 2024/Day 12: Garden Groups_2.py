@@ -35,7 +35,7 @@ def group(p):
 def nfence(p):
 	res=sum(1 if G.get(x,"")!=G[p] else 0 for x in around(p))
 	return res
-def ofence(S,d,s):
+def ofence(S,d,s): #oriented fence
 	F=set()
 	for c in S:
 		if G.get(c+d,"")!=G[c]:F.add(c)
