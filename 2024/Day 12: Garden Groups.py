@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d12.txt",3
+fn,part="d12.txt",5
 data=open(fn).read().split(sep)[part].splitlines()
 # ~ from functools import cache
 G={}
@@ -22,7 +22,7 @@ def group(p):
 			if G.get(np,"")==G[p]:todo.append(np)
 		Visited.add(p)
 	return Visited
-# ~ def interior(S,s):
+# ~ def interior(S,s): pick theorem un-applyable today because of interior polygons
 	# ~ mic=min(x.real for x in S)
 	# ~ mac=max(x.real for x in S)
 	# ~ mir=min(x.imag for x in S)
@@ -39,11 +39,6 @@ def price(S,s):
 	area=len(S)
 	perimeter=sum(nfence(p) for p in S)
 	print(f"symbol: {s} area {area} perimeter {perimeter}")
-	# ~ pick
-	# ~ A=i+b/2 -1
-	# ~ b=2*(A+1-i)
-	# ~ intpoint=interior(S,s)
-	# ~ perimeter=2*(area+1-intpoint)
 	price=area*perimeter
 	return price
 todo=set(G.keys())
