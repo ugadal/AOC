@@ -7,8 +7,6 @@ data=open(fn).read().split(sep)[part].splitlines()
 G={}
 for row,line in enumerate(data):
 	for col,s in enumerate(line):G[col+row*1j]=s
-NR=row+1
-NC=col+1
 def around(p):
 	for d in [1,1j,-1,-1j]:
 		yield p+d
@@ -35,18 +33,18 @@ def group(p):
 def nfence(p):
 	res=sum(1 if G.get(x,"")!=G[p] else 0 for x in around(p))
 	return res
-def ofence(S,d,s): #oriented fence
-	F=set()
+def ofence(S,d,s): #oriented fence, d: direction n,s,e,w s:symbol=current crop
+	F=set() # fences in direction d
 	for c in S:
 		if G.get(c+d,"")!=G[c]:F.add(c)
 	tc=list(F)
 	for c in tc:
 		if c+s in F:F.remove(c+s)
 	return len(F)
-def price(S,s):
-	area=len(S)
-	perimeter=sum(nfence(p) for p in S)
-	print(f"symbol: {s} area {area} perimeter {perimeter}")
+# ~ def price(S,s):
+	# ~ area=len(S)
+	# ~ perimeter=sum(nfence(p) for p in S)
+	# ~ print(f"symbol: {s} area {area} perimeter {perimeter}")
 	# ~ pick
 	# ~ A=i+b/2 -1
 	# ~ b=2*(A+1-i)

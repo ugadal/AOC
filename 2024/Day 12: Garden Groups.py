@@ -7,8 +7,6 @@ data=open(fn).read().split(sep)[part].splitlines()
 G={}
 for row,line in enumerate(data):
 	for col,s in enumerate(line):G[col+row*1j]=s
-NR=row+1
-NC=col+1
 def around(p):
 	for d in [1,1j,-1,-1j]:
 		yield p+d
@@ -45,11 +43,11 @@ todo=set(G.keys())
 cost=0
 while todo:
 	p=todo.pop()
-	todo.add(p)
+	todo.add(p) #wish I knew a way of picking one element of a set without popping it out
 	g=group(p)
 	currs=G[p]
 	pr=price(g,currs)
 	print(currs,pr)
 	cost+=pr
-	for p in g:todo.remove(p)
+	for p in g:todo.remove(p) #remove cells in group from todo
 print(cost)
