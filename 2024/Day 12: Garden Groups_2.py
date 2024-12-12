@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d12.txt",3
+fn,part="d12.txt",5
 data=open(fn).read().split(sep)[part].splitlines()
 # ~ from functools import cache
 G={}
@@ -35,6 +35,14 @@ def group(p):
 def nfence(p):
 	res=sum(1 if G.get(x,"")!=G[p] else 0 for x in around(p))
 	return res
+def ofence(S,d,s):
+	F=set()
+	for c in S:
+		if G.get(c+d,"")!=G[c]:F.add(c)
+	tc=list(F)
+	for c in tc:
+		if c+s in F:F.remove(c+s)
+	return len(F)
 def price(S,s):
 	area=len(S)
 	perimeter=sum(nfence(p) for p in S)
@@ -53,8 +61,12 @@ while todo:
 	todo.add(p)
 	g=group(p)
 	currs=G[p]
-	pr=price(g,currs)
-	print(currs,pr)
-	cost+=pr
+	area=len(g)
+	nf=ofence(g,-1j,1)
+	sf=ofence(g,1j,1)
+	ef=ofence(g,1,1j)
+	wf=ofence(g,-1,1j)
+	fe=nf+sf+ef+wf
+	cost+=area*fe
 	for p in g:todo.remove(p)
 print(cost)
