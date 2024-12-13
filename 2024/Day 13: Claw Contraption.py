@@ -8,6 +8,8 @@ import re
 bp=re.compile(r"Button\s\S: X\+(\d+), Y\+(\d+)")
 pp=re.compile(r"Prize:\sX=(\d+),\sY=(\d+)")
 def treat(a,b,c,d,e,f):
+	c+=10000000000000
+	f+=10000000000000
 	y=(a*f-d*c)/(a*e-d*b)
 	x=(c-b*y)/a
 	if int(x)==x and int(y)==y:return x,y
