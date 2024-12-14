@@ -13,6 +13,7 @@ R=[]
 for line in data:
 	V=list(map(int,de.findall(line)))
 	R.append(robot(*V))
+#part 2
 NC=101
 NR=103
 t=0
