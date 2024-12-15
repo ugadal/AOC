@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 sep="\n\n"
-fn,part="d15.txt",2
+fn,part="d15.txt",0
 grid,moves=open(fn).read().split(sep)[part:part+2]
 moves="".join(moves.splitlines())
 DM={'^':-1j,">":1,"<":-1,"v":1j}
@@ -19,7 +19,7 @@ for row,line in enumerate(grid.splitlines()):
 			G[p]=s
 			G[p+1]=s
 NR=row+1
-NC=2*col+1
+NC=2*col+2
 def getnextempty(cpos,dm):
 	tpos=cpos+dm
 	while True:
