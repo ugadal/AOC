@@ -20,17 +20,14 @@ for row,line in enumerate(grid.splitlines()):
 			G[p+1]=s
 NR=row+1
 NC=2*col+2
+cpos=sp
 def connecteddirH(pos,dm):
 	if G[pos]=="]":pos-=1
 	good=set()
-	good.add(pos)
-	todo=[pos]
-	while todo:
-		cpo=todo.pop()
-		npo=cpo+2*dm
-		if G[npo]=="[":
-			good.add(npo)
-			todo.append(npo)
+	npos=pos
+	while G[npos]=="[":
+		good.add(npos)
+		npos+=2*dm
 	return good			
 def connecteddirV(pos,dm):
 	if G[pos]=="]":pos-=1
@@ -51,26 +48,10 @@ def connecteddirV(pos,dm):
 			good.add(npo)
 			todo.append(npo)
 	return good			
-
 def connecteddir(pos,dm):
 	if dm.real:return connecteddirH(pos,dm)
 	else:return connecteddirV(pos,dm)
-			
-cpos=sp
-print(sp)
-
-def draw(cpos,s="@"):
-	for row in range(NR):
-		t=[]
-		for col in range(NC):
-			tp=col+row*1j
-			if tp==cpos:t.append(s)
-			else:t.append(G[tp])
-		print("".join(t) )
-# ~ input("resize window then enter")
-# ~ draw(cpos)
-
-for dnum,d in enumerate(moves):
+for d in moves:
 	dm=DM[d]
 	nc=cpos+dm
 	if G.get(nc,".")==".":
@@ -78,14 +59,13 @@ for dnum,d in enumerate(moves):
 		continue
 	if G.get(nc,".")=="#":continue
 	B=connecteddir(nc,dm)
-	if any(G.get(pos+dm)=="#" or G.get(pos+dm+1)=="#" for pos in B):pass
-	else:
-		for pos in B:
-			G[pos]="."
-			G[pos+1]="."
-		for pos in B:
-			G[pos+dm]="["
-			G[pos+dm+1]="]"
-		cpos=nc
-# ~ draw(cpos)
-print(sum(100*p.imag+p.real for p,v in G.items() if v=="["))
+	if any(G.get(pos+dm)=="#" or G.get(pos+dm+1)=="#" for pos in B):continue
+	for pos in B:
+		G[pos]="."
+		G[pos+1]="."
+	for pos in B:
+		G[pos+dm]="["
+		G[pos+dm+1]="]"
+	cpos=nc
+res=sum(100*p.imag+p.real for p,v in G.items() if v=="[")
+print(int(res))
