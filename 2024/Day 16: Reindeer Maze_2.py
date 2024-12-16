@@ -2,10 +2,10 @@
 #
 sep="\n\n"
 fn,part="d16.txt",2
-grid=open(fn).read().split(sep)[part]
+grid=open(fn).read().split(sep)[part].splitlines()
 G={}
-for row,line in enumerate(grid.splitlines()):
-	for col,s in enumerate(line.strip()):
+for row,line in enumerate(grid):
+	for col,s in enumerate(line):
 		p=col+row*1j
 		G[p]=s
 NR=row+1
@@ -35,11 +35,8 @@ while todo:
 		if cs==record:
 			for p in path:inpath.add(p)
 			continue
-		
 	if G[cp+cd]!="#":todo.append((cp+cd,cd,cs+1,path+[cp]))
 	todo.append((cp,cd*1j,cs+1000,path))
 	todo.append((cp,cd*(-1j),cs+1000,path))
 	V[(cp,cd)]=cs
-# ~ 124428 too high
-# ~ 102504 ok
 print(record,len(inpath)+1)
