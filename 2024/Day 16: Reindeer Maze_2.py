@@ -20,20 +20,26 @@ print(sp,ep)
 cpos=sp
 sco=0
 V={}
-todo=[(sp,1,0)]
+todo=[(sp,1,0,[])]
 record=float("inf")
+inpath=set()
 while todo:
-	cp,cd,cs=todo.pop(0)
+	cp,cd,cs,path=todo.pop(0)
 	# ~ print(f"pos {cp}, dir {cd}, cs {cs}")
 	if cs>record:continue
 	if (cp,cd) in V and V[(cp,cd)]<cs:continue
 	if cp==ep:
-		print (cs)
-		record=cs
-		continue
-	if G[cp+cd]!="#":todo.append((cp+cd,cd,cs+1))
-	todo.append((cp,cd*1j,cs+1000))
-	todo.append((cp,cd*(-1j),cs+1000))
+		if cs<record:
+			inpath=set()
+			record=cs
+		if cs==record:
+			for p in path:inpath.add(p)
+			continue
+		
+	if G[cp+cd]!="#":todo.append((cp+cd,cd,cs+1,path+[cp]))
+	todo.append((cp,cd*1j,cs+1000,path))
+	todo.append((cp,cd*(-1j),cs+1000,path))
 	V[(cp,cd)]=cs
 # ~ 124428 too high
 # ~ 102504 ok
+print(record,len(inpath)+1)
