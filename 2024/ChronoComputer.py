@@ -3,6 +3,11 @@
 class computer():
 	def __init__(self,inst,a,b,c):
 		self.inst=inst
+		v=0
+		for x in reversed(self.inst):
+			v+=x
+			v*=8
+		print(v)
 		self.reg=[a,b,c]
 		# ~ self.rb=b
 		# ~ self.rc=c
@@ -67,6 +72,9 @@ def main(args):
 
 
 if __name__ == '__main__':
-	cc=computer((1,7),4,29,9)
-	print(",".join(map(str,(cc.flow))))
+	# ~ cc=computer((2,4,1,3,7,5,0,3,1,5,4,4,5,5,3,0),130606920348432,0,0)
+	cc=computer((2,4,1,3,7,5,0,3,1,5,4,4,5,5,3,0),35184372088833,0,0)
+	r=",".join(map(str,(cc.flow)))
+	print(len(r))
+	print(r)
 	print(cc.reg)
