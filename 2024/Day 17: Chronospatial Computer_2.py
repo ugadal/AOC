@@ -28,4 +28,5 @@ for p in range(1,1+len(target)):
 			break
 		a+=1
 	a*=8
+	print(a)
 	

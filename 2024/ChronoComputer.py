@@ -4,31 +4,16 @@ class computer():
 	def __init__(self,inst,a,b,c):
 		self.inst=inst
 		v=0
-		for x in reversed(self.inst):
-			v+=x
-			v*=8
 		print(v)
 		self.reg=[a,b,c]
-		# ~ self.rb=b
-		# ~ self.rc=c
 		self.pos=0
 		self.flow=self.run()
 		self.inp=[]
 		self.rb=0
-	# ~ def fixr(self,pos,f):
-		# ~ pa=self.OV[pos]
-		# ~ if f==0:return self.OV.get(pa,0)
-		# ~ if f==2:return self.OV.get(pa+self.rb,0)
-		# ~ return pa #1
 	def fixop(self,op):
 		if op==7:return 7
 		if op&4:return self.reg[op&3]
 		return op
-	# ~ def fixw(self,pos,f): #target cell
-		# ~ pa=self.OV[pos]
-		# ~ if f==0:return pa
-		# ~ if f==2:return pa+self.rb
-		# ~ return pa 
 	def run(self):
 		while True:
 			try:
