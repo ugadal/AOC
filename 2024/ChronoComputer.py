@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+class computer():
+	def __init__(self,inst,a,b,c):
+		self.inst=inst
+		self.reg=[a,b,c]
+		# ~ self.rb=b
+		# ~ self.rc=c
+		self.pos=0
+		self.flow=self.run()
+		self.inp=[]
+		self.rb=0
+	# ~ def fixr(self,pos,f):
+		# ~ pa=self.OV[pos]
+		# ~ if f==0:return self.OV.get(pa,0)
+		# ~ if f==2:return self.OV.get(pa+self.rb,0)
+		# ~ return pa #1
+	def fixop(self,op):
+		if op==7:return 7
+		if op&4:return self.reg[op&3]
+		return op
+	# ~ def fixw(self,pos,f): #target cell
+		# ~ pa=self.OV[pos]
+		# ~ if f==0:return pa
+		# ~ if f==2:return pa+self.rb
+		# ~ return pa 
+	def run(self):
+		while True:
+			try:
+				cmd=self.inst[self.pos]
+				operand=self.inst[self.pos+1]
+			except:cmd=99
+			combo=self.fixop(operand)
+			match cmd:
+				case 0: #div A//op >A
+					self.reg[0]//=2**combo
+					self.pos+=2
+				case 1: #B xor op >B
+					self.reg[1]^=operand
+					self.pos+=2
+				case 2: 
+					self.reg[1]=combo%8
+					self.pos+=2
+				case 3:
+					if self.reg[0]:self.pos=operand
+					else:self.pos+=2
+				case 4: 
+					self.reg[1]^=self.reg[2]
+					self.pos+=2
+				case 5:
+					yield combo%8
+					self.pos+=2
+				case 6:
+					self.reg[1]=self.reg[0]//2**combo
+					self.pos+=2
+				case 7:
+					self.reg[2]=self.reg[0]//2**combo
+					self.pos+=2
+				case 99:
+					# ~ yield f"end"
+					return
+import sys
+
+
+def main(args):
+    return 0
+
+
+if __name__ == '__main__':
+	cc=computer((1,7),4,29,9)
+	print(",".join(map(str,(cc.flow))))
+	print(cc.reg)
