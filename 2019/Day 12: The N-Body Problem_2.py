@@ -13,15 +13,27 @@ class moon():
 		self.dx=0
 		self.dy=0
 		self.dz=0
+		self.cx=0
+		self.cy=0
+		self.cz=0
 		self.E=0
 		self.pote=0
 		self.kine=0
+		self.offset=0
 	def __str__(self):
 		return f"{self.x},{self.y},{self.z},'==',{self.dx},{self.dy},{self.dz} [{self.E}]"
+	def recenter(self,x,y,z):
+		self.offset=(x,y,z)
+		self.x-=x
+		self.y-=y
+		self.z-=z
 	def move(self):
 		self.x+=self.dx
 		self.y+=self.dy
 		self.z+=self.dz
+		self.cx+=self.dx
+		self.cy+=self.dy
+		self.cz+=self.dz
 		# ~ self.energ()
 		self.rp()
 		self.kin()
@@ -34,6 +46,13 @@ class moon():
 		kine=abs(self.dx)+abs(self.dy)+abs(self.dz)
 		self.E=pot*kin
 Moons=[moon(line) for line in data]
+nbm=len(Moons)
+xcg=sum(m.x for m in Moons)/nbm
+ycg=sum(m.y for m in Moons)/nbm
+zcg=sum(m.z for m in Moons)/nbm
+print(xcg,ycg,zcg)
+for moon in Moons:moon.recenter(xcg,ycg,zcg)
+exit()
 cyc=1
 # ~ V={}
 # ~ hashmoons="".join([m.__str__() for m in Moons])
