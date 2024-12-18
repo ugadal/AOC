@@ -57,7 +57,7 @@ for rock in rocks[1024:]:
 		print (rock,d)
 		break
 	else:print(rock,d)
-draw()
+# ~ draw()
 exit()
 sp=next(p for p,v in G.items() if v=="S")
 ep=next(p for p,v in G.items() if v=="E")
