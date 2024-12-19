@@ -9,4 +9,5 @@ wanted=open(fn).read().split(sep)[part+1].splitlines()
 def possible(target):
 	if not target:return 1
 	return sum(possible(target[len(p):]) for p in parts if target.startswith(p))
-print (sum(possible(s) for s in wanted))
+print ("part 1 :",sum(1 if possible(s) else 0 for s in wanted))
+print ("part 2 :",sum(possible(s) for s in wanted))
