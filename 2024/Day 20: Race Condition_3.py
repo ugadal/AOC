@@ -96,5 +96,5 @@ for nsp,ds in rfs.items():
 			tt=ds+efs[np]+cd
 			if nocheat-tt>=100:
 				res+=1
-				print(f"{tt} position {nsp} reachable in {ds} steps connects {np} at {efs[np]} steps from end using a cheat jump of {cd}")
+				# ~ print(f"{tt} position {nsp} reachable in {ds} steps connects {np} at {efs[np]} steps from end using a cheat jump of {cd}")
 print (res)
