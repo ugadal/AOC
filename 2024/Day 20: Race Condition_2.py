@@ -61,11 +61,8 @@ def walk(sp,std,cc,rec=float("inf")):
 nocheat=next(walk(sp,0,True))
 print("using nocheat",nocheat)
 count=0
-for rock in rocks:
-	G[rock]="."
-	d=next(walk(sp,0,nocheat-100))
+for d in walk(sp,0,nocheat-100):
 	if nocheat-d>=100:
 		count+=1
 		print("okpath gain:",count,nocheat-d)
-	G[rock]="#"
 print(count)
