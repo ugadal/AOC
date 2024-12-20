@@ -83,8 +83,8 @@ def walk(sp,std,cc,rec=float("inf")):
 # ~ 285 expectted for case 1
 nocheat=next(walk(sp,0,True))[0]
 print("using nocheat",nocheat)
-rfs=reachable(sp,nocheat-50)
-efs=reachable(ep,nocheat-50)
+rfs=reachable(sp,nocheat-100)
+efs=reachable(ep,nocheat-100)
 print(len(rfs))
 print(len(efs))
 res=0
