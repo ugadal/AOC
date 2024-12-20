@@ -27,7 +27,7 @@ def aroundc(p):
 def aroundr(p):
 	for d in range(2,21):
 		for dc in range(d+1):
-			dr=d-dr
+			dr=d-dc
 			yield p+complex(dc,dr),d
 			yield p+complex(dc,-dr),d
 			yield p+complex(-dc,dr),d
@@ -38,31 +38,37 @@ ep=next(p for p,v in G.items() if v=="E")
 print(sp,ep)
 G[sp]="."
 G[ep]="."
+nocheatpath={}
 rocks=[p for p,v in G.items() if v=="#"]
 def walk(sp,std,cc,rec=float("inf")):
 	V=set()
 	todo=deque([(sp,0,cc)])
 	while todo:
 		cp,std,cc=todo.popleft()
+		if std>rec:continue
+		if not cc:nocheatpath[cp]=std
+		elif nocheatpath.get(cp,"-1")==std:continue
 		if (cp,cc) in V:continue
 		if cp==ep:
-			yield std
+			yield std,cc
 			continue
 		for np in around(cp):
 			if G.get(np,"#")=="#":continue
-			todo.append((np,std+1,cc))
+			if std+1<=rec:todo.append((np,std+1,cc))
 		if not cc:
 			for np,d in aroundr(cp):
+				# ~ print("testing",np,d)
 				if G.get(np,"#")==".":
-					todo.append((np,std+d,(cp,np)))
+					if std+d<=rec:todo.append((np,std+d,(cp,np)))
 		V.add((cp,cc))
-	yield rec+1
-		
-nocheat=next(walk(sp,0,True))
+	yield float("inf"),()
+# ~ 285 expectted for case 1
+nocheat=next(walk(sp,0,True))[0]
 print("using nocheat",nocheat)
-count=0
-for d in walk(sp,0,nocheat-100):
-	if nocheat-d>=100:
-		count+=1
-		print("okpath gain:",count,nocheat-d)
-print(count)
+count=set()
+g=100
+for d,cc in walk(sp,0,(),nocheat-g):
+	if nocheat-d>=g:
+		count.add(cc)
+		print("okpath gain:",nocheat-d,cc)
+print(len(count))
