@@ -81,8 +81,6 @@ def walk(sp,std,cc,rec=float("inf")):
 		V.add((cp,cc))
 	yield float("inf"),()
 # ~ 285 expectted for case 1
-allar=list(aroundr(sp))
-print(len(allar))
 nocheat=next(walk(sp,0,True))[0]
 print("using nocheat",nocheat)
 rfs=reachable(sp,nocheat-50)
