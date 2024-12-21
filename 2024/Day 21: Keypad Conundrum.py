@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 #
-# ~ from functools import cache
+from functools import cache
 from collections import deque
+import itertools as it
 sep="\n\n"
 fn,part="d21.txt",0
 
@@ -16,6 +17,72 @@ fn,part="d21.txt",0
     # ~ +---+---+
 tbt=[complex(col,-row) for row in range(4) for col in range(3)]
 kp={s:k for s,k in zip(list("X0A123456789"),tbt)}
+kpkp={}
+for sk in list("0A235689"):
+	for tk in list("0A235689"):
+		sp=kp[sk]
+		tp=kp[tk]
+		pool=[]
+		vd=int(tp.imag-sp.imag)
+		sym="v" if vd>0 else "^"
+		pool.extend([sym]*abs(vd))
+		vc=int(tp.real-sp.real)
+		sym=">" if vc>0 else "<"
+		pool.extend([sym]*abs(vc))
+		if len(pool)==1:v=set(pool)
+		else:v=set("".join(k) for k in it.permutations(pool))
+		kpkp[sk,tk]=v
+for sk in list("235689"):
+	for tk in list("741"):
+		sp=kp[sk]
+		tp=kp[tk]
+		pool=[]
+		vd=int(tp.imag-sp.imag)
+		sym="v" if vd>0 else "^"
+		pool.extend([sym]*abs(vd))
+		vc=int(tp.real-sp.real)
+		sym=">" if vc>0 else "<"
+		pool.extend([sym]*abs(vc))
+		if len(pool)==1:v=set(pool)
+		else:v=set("".join(k) for k in it.permutations(pool))
+		kpkp[sk,tk]=v
+for sk in list("741"):
+	for tk in list("235689"):
+		sp=kp[sk]
+		tp=kp[tk]
+		pool=[]
+		vd=int(tp.imag-sp.imag)
+		sym="v" if vd>0 else "^"
+		pool.extend([sym]*abs(vd))
+		vc=int(tp.real-sp.real)
+		sym=">" if vc>0 else "<"
+		pool.extend([sym]*abs(vc))
+		if len(pool)==1:
+			v=set(pool)
+		else:
+			v=set("".join(k) for k in it.permutations(pool))
+		kpkp[sk,tk]=v
+# ~ for k,p in kpkp.items():
+	# ~ print(k,p)
+# ~ print(kpkp["2","0"])
+kpkp["1","0"]=set(">"+k for k in kpkp["2","0"])
+kpkp["1","A"]=set(">"+k for k in kpkp["2","A"])
+kpkp["4","0"]=set(">"+k for k in kpkp["5","0"])|set("v"+k for k in kpkp["1","0"])
+kpkp["4","A"]=set(">"+k for k in kpkp["5","A"])|set("v"+k for k in kpkp["1","A"])
+kpkp["7","0"]=set(">"+k for k in kpkp["8","0"])|set("v"+k for k in kpkp["4","0"])
+kpkp["7","A"]=set(">"+k for k in kpkp["8","A"])|set("v"+k for k in kpkp["4","A"])
+kpkp["0","1"]=set("^"+k for k in kpkp["2","1"])
+kpkp["0","4"]=set("^"+k for k in kpkp["2","4"])
+kpkp["0","7"]=set("^"+k for k in kpkp["2","7"])
+kpkp["A","1"]=set("^"+k for k in kpkp["3","1"])|set("<"+k for k in kpkp["0","1"])
+kpkp["A","4"]=set("^"+k for k in kpkp["3","4"])|set("<"+k for k in kpkp["0","4"])
+kpkp["A","7"]=set("^"+k for k in kpkp["3","7"])|set("<"+k for k in kpkp["0","7"])
+for k,p in kpkp.items():
+	print(k,p)
+
+
+# ~ print(kpkp)
+exit()
 print(kp)
 tbt=[complex(col,-row) for row in range(2) for col in range(3)]
 dip={s:k for s,k in zip(list("<v>X^A"),tbt)}
