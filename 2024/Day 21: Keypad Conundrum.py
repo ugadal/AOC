@@ -116,3 +116,11 @@ print(s)
 # ~ <A  >A  v<<AA >^AA >A vAA ^A <vAAA >^A
 # ~ ^   A   <<    ^^   A  >>  A  vvv   A
 # ~ 3       7             9            A  
+# ~ ^A^^<<A>>AvvvA
+# ~ ^A<<^^A>>AvvvA
+
+# ~ <A>A<AAv<AA>>^AvAA^Av<AAA^>A
+# ~ <A>Av<<AA>^AA>AvAA^A<vAAA>^A ! better to reencode
+
+# ~ v<<A>>^AvA^Av<<A>>^AAv<A<A>>^AAvAA^<A>Av<A^>AA<A>Av<A<A>>^AAA<Av>A^A
+# ~ <v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
