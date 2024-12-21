@@ -97,14 +97,22 @@ def gendippath(code):
 		sp=tk
 	res="".join(fc)
 	return res
-
-# ~ for p in ["029A","980A","179A","456A","379A"]:
 s=0
-for p in open(fn).read().splitlines():
+for p in ["029A","980A","179A","456A","379A"]:
+# ~ for p in open(fn).read().splitlines():
 	f=int(p[:-1])
 	p=genkppath(p)
+	print(len(p),p)
 	p=gendippath(p)
+	print(len(p),p)
 	p=gendippath(p)
+	print(len(p),p)
 	s+=len(p)*f
+	print()
 print(s)
 # ~ 179982 too high 
+# ~ <v<A >>^A vA ^A <vA <AA >>^AA vA <^A >AA vA ^A <vA >^AA <A >A <v<A >A >^AAA vA <^A >A
+# ~ <    A    >  A  v   <<  AA    >  ^   AA  >  A  v   AA   ^  A  <    v  AAA   >  ^   A
+# ~ <A  >A  v<<AA >^AA >A vAA ^A <vAAA >^A
+# ~ ^   A   <<    ^^   A  >>  A  vvv   A
+# ~ 3       7             9            A  
