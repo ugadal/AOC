@@ -18,6 +18,10 @@ fn,part="d21.txt",0
 tbt=[complex(col,-row) for row in range(4) for col in range(3)]
 kp={s:k for s,k in zip(list("X0A123456789"),tbt)}
 kpkp={}
+def kpab(a,b):
+	if a=="1" and b=="0":return [">v"]
+	if a=="0" and b=="1":return ["^<"]
+	
 for sk in list("0A235689"):
 	for tk in list("0A235689"):
 		sp=kp[sk]
@@ -79,9 +83,6 @@ kpkp["A","4"]=set("^"+k for k in kpkp["3","4"])|set("<"+k for k in kpkp["0","4"]
 kpkp["A","7"]=set("^"+k for k in kpkp["3","7"])|set("<"+k for k in kpkp["0","7"])
 for k,p in kpkp.items():
 	print(k,p)
-
-
-# ~ print(kpkp)
 exit()
 print(kp)
 tbt=[complex(col,-row) for row in range(2) for col in range(3)]
