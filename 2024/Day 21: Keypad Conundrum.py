@@ -17,58 +17,31 @@ fn,part="d21.txt",0
     # ~ +---+---+
 tbt=[complex(col,-row) for row in range(4) for col in range(3)]
 kp={s:k for s,k in zip(list("X0A123456789"),tbt)}
+tbt=[complex(col,-row) for row in range(2) for col in range(3)]
+dip={s:k for s,k in zip(list("X^A<v>"),tbt)}
 kpkp={}
-def kpab(a,b):
-	if a=="1" and b=="0":return [">v"]
-	if a=="0" and b=="1":return ["^<"]
-	
-for sk in list("0A235689"):
-	for tk in list("0A235689"):
-		sp=kp[sk]
-		tp=kp[tk]
+def alterkpkp(a,b):
+	sa=list("789456123")
+	sb=list("8956230A")
+	if (a in sa and b in sa) or (a in sb and b in sb):
+		sp=kp[a]
+		tp=kp[b]
 		pool=[]
 		vd=int(tp.imag-sp.imag)
-		sym="v" if vd>0 else "^"
-		pool.extend([sym]*abs(vd))
+		if vd:
+			sym="v" if vd>0 else "^"
+			pool.extend([sym]*abs(vd))
 		vc=int(tp.real-sp.real)
-		sym=">" if vc>0 else "<"
-		pool.extend([sym]*abs(vc))
+		if vc:
+			sym=">" if vc>0 else "<"
+			pool.extend([sym]*abs(vc))
 		if len(pool)==1:v=set(pool)
 		else:v=set("".join(k) for k in it.permutations(pool))
 		kpkp[sk,tk]=v
-for sk in list("235689"):
-	for tk in list("741"):
-		sp=kp[sk]
-		tp=kp[tk]
-		pool=[]
-		vd=int(tp.imag-sp.imag)
-		sym="v" if vd>0 else "^"
-		pool.extend([sym]*abs(vd))
-		vc=int(tp.real-sp.real)
-		sym=">" if vc>0 else "<"
-		pool.extend([sym]*abs(vc))
-		if len(pool)==1:v=set(pool)
-		else:v=set("".join(k) for k in it.permutations(pool))
-		kpkp[sk,tk]=v
-for sk in list("741"):
-	for tk in list("235689"):
-		sp=kp[sk]
-		tp=kp[tk]
-		pool=[]
-		vd=int(tp.imag-sp.imag)
-		sym="v" if vd>0 else "^"
-		pool.extend([sym]*abs(vd))
-		vc=int(tp.real-sp.real)
-		sym=">" if vc>0 else "<"
-		pool.extend([sym]*abs(vc))
-		if len(pool)==1:
-			v=set(pool)
-		else:
-			v=set("".join(k) for k in it.permutations(pool))
-		kpkp[sk,tk]=v
-# ~ for k,p in kpkp.items():
-	# ~ print(k,p)
-# ~ print(kpkp["2","0"])
+		# ~ if a==b:kpkp[sk,tk]=["A"]
+for sk in list("0A123456789"):
+	for tk in list("0A123456789"):
+		alterkpkp(sk,tk)
 kpkp["1","0"]=set(">"+k for k in kpkp["2","0"])
 kpkp["1","A"]=set(">"+k for k in kpkp["2","A"])
 kpkp["4","0"]=set(">"+k for k in kpkp["5","0"])|set("v"+k for k in kpkp["1","0"])
@@ -81,102 +54,88 @@ kpkp["0","7"]=set("^"+k for k in kpkp["2","7"])
 kpkp["A","1"]=set("^"+k for k in kpkp["3","1"])|set("<"+k for k in kpkp["0","1"])
 kpkp["A","4"]=set("^"+k for k in kpkp["3","4"])|set("<"+k for k in kpkp["0","4"])
 kpkp["A","7"]=set("^"+k for k in kpkp["3","7"])|set("<"+k for k in kpkp["0","7"])
-for k,p in kpkp.items():
-	print(k,p)
-exit()
-print(kp)
-tbt=[complex(col,-row) for row in range(2) for col in range(3)]
-dip={s:k for s,k in zip(list("<v>X^A"),tbt)}
-print(dip)
-def genkppath(code):
-	fc=[]
-	sp=kp["A"]
-	for t in code:
-		tk=kp[t]
-		if sp.real==0:
-			vc=tk.real-sp.real
-			if vc:
-				s=">"# if vc>0 else "<"
-				fc.extend([s]*int(abs(vc)))		
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-		elif tk.real==0:
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-			vc=tk.real-sp.real
-			if vc:
-				s=">" if vc>0 else "<"
-				fc.extend([s]*int(abs(vc)))		
-		else:
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-			vc=tk.real-sp.real
-			if vc:
-				s=">" if vc>0 else "<"
-				fc.extend([s]*int(abs(vc)))		
-		fc.append("A")
-		sp=tk
-	res="".join(fc)
-	return res
+# ~ for k,v in kpkp.items():print(k,v)
+# ~ exit()
+dipdip={}
     # ~ +---+---+
     # ~ | ^ | A |
 # ~ +---+---+---+
 # ~ | < | v | > |
 # ~ +---+---+---+
-def gendippath(code):
+def alterdp(a,b):
+	sa=list("^Av>")
+	sb=list("<v>")
+	sp=dip[a]
+	tp=dip[b]
+	if (a in sa and b in sa) or (a in sb and b in sb):
+		pool=[]
+		vd=int(tp.imag-sp.imag)
+		sym="v" if vd<0 else "^"
+		pool.extend([sym]*abs(vd))
+		vc=int(tp.real-sp.real)
+		sym=">" if vc>0 else "<"
+		pool.extend([sym]*abs(vc))
+		if len(pool)==1:v=set(pool)
+		else:v=set("".join(k) for k in it.permutations(pool))
+		dipdip[sk,tk]=v
+for sk in list("^A<v>"):
+	for tk in list("^A<v>"):
+		alterdp(sk,tk)
+dipdip["^","<"]=set("v"+k for k in dipdip["v","<"])
+dipdip["A","<"]=set("<"+k for k in dipdip["^","<"])|set("v"+k for k in dipdip[">","<"])
+dipdip["<","^"]=set(">"+k for k in dipdip["v","^"])
+dipdip["<","A"]=set(">"+k for k in dipdip["v","A"])
+# ~ for k,v in dipdip.items():print(k,v)
+def genkppath(code):
 	fc=[]
-	sp=dip["A"]
+	sp="A"
 	for t in code:
-		tk=dip[t]
-		if sp.real==0:
-			vc=tk.real-sp.real
-			# ~ if vc:
-			s=">" # if vc>0 else "<"
-			if vc:fc.extend([s]*int(abs(vc)))		
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-		elif tk.real==0:
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-			vc=tk.real-sp.real
-			if vc:
-				s=">" if vc>0 else "<"
-				fc.extend([s]*int(abs(vc)))		
-		else:
-			vd=tk.imag-sp.imag
-			if vd:
-				s="^" if vd<0 else "v"
-				fc.extend([s]*int(abs(vd)))
-			vc=tk.real-sp.real
-			if vc:
-				s=">" if vc>0 else "<"
-				fc.extend([s]*int(abs(vc)))		
-		fc.append("A")
-		sp=tk
-	res="".join(fc)
-	return res
+		fc.append(kpkp[sp,t])
+		fc.append(["A"])
+		sp=t
+	return list("".join(p) for p in it.product(*fc))
+    # ~ +---+---+
+    # ~ | ^ | A |
+# ~ +---+---+---+
+# ~ | < | v | > |
+# ~ +---+---+---+
+print(genkppath("029A"))
+# ~ exit()
+def gendippath(path):
+	fc=[]
+	sp="A"
+	for t in path:
+		fc.append(dipdip[sp,t])
+		fc.append(["A"])
+		sp=t
+	return list("".join(p) for p in it.product(*fc))
+
+# ~ print(gendippath("<A>"))
+# ~ exit()
+
 s=0
-for p in ["029A","980A","179A","456A","379A"]:
-# ~ for p in open(fn).read().splitlines():
+# ~ for p in ["029A","980A","179A","456A","379A"]:
+for p in open(fn).read().splitlines():
 	f=int(p[:-1])
-	p=genkppath(p)
-	print(len(p),p)
-	p=gendippath(p)
-	print(len(p),p)
-	p=gendippath(p)
-	print(len(p),p)
-	s+=len(p)*f
-	print()
+	kp=genkppath(p)
+	# ~ print(len(kp),kp)
+	dp=set()
+	for p in kp: 
+		for z in gendippath(p):
+			dp.add(z)
+	# ~ print(dp)
+	ndp=set()
+	for p in dp: 
+		for z in gendippath(p):
+			ndp.add(z)
+	# ~ print(ndp)
+	rec=float("inf")
+	for p in ndp:
+		if len(p)<rec:
+			rec=len(p)
+	print(rec,p)
+	s+=f*rec
+	# ~ exit()
 print(s)
 # ~ 179982 too high 
 # ~ <v<A >>^A vA ^A <vA <AA >>^AA vA <^A >AA vA ^A <vA >^AA <A >A <v<A >A >^AAA vA <^A >A
@@ -186,10 +145,9 @@ print(s)
 # ~ 3       7             9            A  
 
 # ~ ^A^^<<A>>AvvvA
-# ~ ^A<<^^A>>AvvvA
-
 # ~ <A>A<AAv<AA>>^AvAA^Av<AAA^>A
-# ~ <A>Av<<AA>^AA>AvAA^A<vAAA>^A ! better to reencode
-
 # ~ v<<A>>^AvA^Av<<A>>^AAv<A<A>>^AAvAA^<A>Av<A^>AA<A>Av<A<A>>^AAA<Av>A^A
+
+# ~ ^A<<^^A>>AvvvA
+# ~ <A>Av<<AA>^AA>AvAA^A<vAAA>^A ! better to reencode
 # ~ <v<A>>^AvA^A<vA<AA>>^AAvA<^A>AAvA^A<vA>^AA<A>A<v<A>A>^AAAvA<^A>A
