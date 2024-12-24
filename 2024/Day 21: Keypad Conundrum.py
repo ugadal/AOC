@@ -119,18 +119,19 @@ for p in open(fn).read().splitlines():
 	f=int(p[:-1])
 	kp=genkppath(p)
 	# ~ print(len(kp),kp)
-	dp=set()
-	for p in kp: 
-		for z in gendippath(p):
-			dp.add(z)
-	# ~ print(dp)
-	ndp=set()
-	for p in dp: 
-		for z in gendippath(p):
-			ndp.add(z)
+	for doloop in range(2):
+		dp=set()
+		for p in kp: 
+			for z in gendippath(p):
+				dp.add(z)
+		kp=dp
+	# ~ ndp=set()
+	# ~ for p in dp: 
+		# ~ for z in gendippath(p):
+			# ~ ndp.add(z)
 	# ~ print(ndp)
 	rec=float("inf")
-	for p in ndp:
+	for p in kp:
 		if len(p)<rec:
 			rec=len(p)
 	print(rec,p)
