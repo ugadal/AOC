@@ -114,6 +114,7 @@ def gendippath(path):
 # ~ exit()
 
 s=0
+<<<<<<< HEAD
 for p in ["0","029A","980A","179A","456A","379A"]:
 # ~ for p in open(fn).read().splitlines():
 	# ~ f=int(p[:-1])
@@ -145,6 +146,19 @@ for p in ["0","029A","980A","179A","456A","379A"]:
 	print(rec,p)
 	# ~ s+=f*rec
 	exit()
+=======
+# ~ for p in ["029A","980A","179A","456A","379A"]:
+for p in open(fn).read().splitlines():
+	f=int(p[:-1])
+	p=genkppath(p)
+	print(len(p),p)
+	p=gendippath(p)
+	print(len(p),p)
+	p=gendippath(p)
+	print(len(p),p)
+	s+=len(p)*f
+	print()
+>>>>>>> 8c5cd9f (up)
 print(s)
 # ~ 179982 too high 
 # ~ <v<A >>^A vA ^A <vA <AA >>^AA vA <^A >AA vA ^A <vA >^AA <A >A <v<A >A >^AAA vA <^A >A
