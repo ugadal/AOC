@@ -80,7 +80,9 @@ dipdip["A","L"]=set("L"+k for k in dipdip["T","L"])|set("D"+k for k in dipdip["R
 dipdip["L","T"]=set("R"+k for k in dipdip["D","T"])
 dipdip["L","A"]=set("R"+k for k in dipdip["D","A"])
 
-
+for k,v in dipdip.items():
+	print(k,v)
+exit()
 def genkppath(code):
 	fc=[]
 	sp="A"
