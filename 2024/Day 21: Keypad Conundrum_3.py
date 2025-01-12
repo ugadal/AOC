@@ -92,8 +92,7 @@ def genkppath(code):
 @cache
 def solve(p,i=0):
 	if i==0:return len(p)
-	t=sum([min(solve(z,i-1) for z in dipdip[a,b]) for a,b in zip("A"+p,p)])
-	return(t)
+	return sum([min(solve(z,i-1) for z in dipdip[a,b]) for a,b in zip("A"+p,p)])
 tot=0
 # ~ for tt in ["029A","980A","179A","456A","379A"]:
 for tt in ["459A","671A","846A","285A","083A"]:
