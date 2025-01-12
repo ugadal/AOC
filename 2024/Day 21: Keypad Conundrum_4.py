@@ -33,7 +33,6 @@ def alterdp(a,b):
 			np=pool[0]+"A"
 			v=set([np])
 			print(v)
-			# ~ exit()
 		else:v=set("".join(k)+"A" for k in it.permutations(pool))
 		dipdip[sk,tk]=v
 for sk in list("TALDR"):
@@ -46,3 +45,17 @@ dipdip["L","A"]=set("R"+k for k in dipdip["D","A"])
 
 for k,v in dipdip.items():
 	print(k,v)
+@cache
+def solve(p,i=0):
+	space="   "*(5-i)
+	print(f"{space}entered {p},{i}")
+	if i==0:return len(k)
+	for a,b in zip("A"+p,p):
+		for p in dipdip[a,b]:
+			# ~ print(a,b,":",solve(p,i-1))
+			print(f"{space}calling {p} {i-1} for {a}->{b}")
+			solve(p,i-1)
+# ~ print(solve("AL",0))
+# ~ print(solve("AT",0))
+# ~ print(solve("T",1))
+print(solve("T",3))
