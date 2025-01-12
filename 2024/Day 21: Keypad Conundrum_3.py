@@ -69,11 +69,8 @@ def alterdp(a,b):
 		sym="R" if vc>0 else "L"
 		pool.extend([sym]*abs(vc))
 		if len(pool)==1:
-			# ~ print(pool,a,b)
-			# ~ print(pool[0]+"A")
 			np=pool[0]+"A"
 			v=set([np])
-			# ~ print(v)
 		else:v=set("".join(k)+"A" for k in it.permutations(pool))
 		dipdip[sk,tk]=v
 for sk in list("TALDR"):
@@ -84,9 +81,6 @@ dipdip["A","L"]=set("L"+k for k in dipdip["T","L"])|set("D"+k for k in dipdip["R
 dipdip["L","T"]=set("R"+k for k in dipdip["D","T"])
 dipdip["L","A"]=set("R"+k for k in dipdip["D","A"])
 
-# ~ for k,v in dipdip.items():
-	# ~ print(k,v)
-# ~ exit()
 def genkppath(code):
 	fc=[]
 	sp="A"
@@ -99,7 +93,6 @@ def genkppath(code):
 def solve(p,i=0):
 	if i==0:return len(p)
 	t=sum([min(solve(z,i-1) for z in dipdip[a,b]) for a,b in zip("A"+p,p)])
-	# ~ print(t)
 	return(t)
 tot=0
 # ~ for tt in ["029A","980A","179A","456A","379A"]:
@@ -107,9 +100,6 @@ for tt in ["459A","671A","846A","285A","083A"]:
 	tmi=min(solve(i,25) for i in genkppath(tt))
 	print(tt,tmi,tmi*int(tt[:-1]))
 	tot+=tmi*int(tt[:-1])
-		# ~ p=solve(i,2)
-		# ~ tt+=p*v
-		# ~ print(i,p)
 print(tot)
 print (solve.cache_info())
 # ~ 386161112405476 too high
