@@ -28,11 +28,11 @@ def alterdp(a,b):
 		sym="R" if vc>0 else "L"
 		pool.extend([sym]*abs(vc))
 		if len(pool)==1:
-			print(pool,a,b)
-			print(pool[0]+"A")
+			# ~ print(pool,a,b)
+			# ~ print(pool[0]+"A")
 			np=pool[0]+"A"
 			v=set([np])
-			print(v)
+			# ~ print(v)
 		else:v=set("".join(k)+"A" for k in it.permutations(pool))
 		dipdip[sk,tk]=v
 for sk in list("TALDR"):
@@ -43,19 +43,16 @@ dipdip["A","L"]=set("L"+k for k in dipdip["T","L"])|set("D"+k for k in dipdip["R
 dipdip["L","T"]=set("R"+k for k in dipdip["D","T"])
 dipdip["L","A"]=set("R"+k for k in dipdip["D","A"])
 
-for k,v in dipdip.items():
-	print(k,v)
+# ~ for k,v in dipdip.items():
+	# ~ print(k,v)
 @cache
 def solve(p,i=0):
-	space="   "*(5-i)
-	print(f"{space}entered {p},{i}")
-	if i==0:return len(k)
-	for a,b in zip("A"+p,p):
-		for p in dipdip[a,b]:
-			# ~ print(a,b,":",solve(p,i-1))
-			print(f"{space}calling {p} {i-1} for {a}->{b}")
-			solve(p,i-1)
+	if i==0:return len(p)
+	t=sum([min(solve(z,i-1) for z in dipdip[a,b]) for a,b in zip("A"+p,p)])
+	# ~ print(t)
+	return(t)
 # ~ print(solve("AL",0))
 # ~ print(solve("AT",0))
 # ~ print(solve("T",1))
-print(solve("T",3))
+print(solve("LARA",2))
+print (solve.cache_info())

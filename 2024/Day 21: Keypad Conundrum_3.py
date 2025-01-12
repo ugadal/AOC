@@ -47,7 +47,6 @@ NKpaths["A","1"]=set("T"+k for k in NKpaths["3","1"])|set("L"+k for k in NKpaths
 NKpaths["A","4"]=set("T"+k for k in NKpaths["3","4"])|set("L"+k for k in NKpaths["0","4"])
 NKpaths["A","7"]=set("T"+k for k in NKpaths["3","7"])|set("L"+k for k in NKpaths["0","7"])
 
-
 tbt=[complex(col,-row) for row in range(2) for col in range(3)]
 dip={s:k for s,k in zip(list("XTALDR"),tbt)}
 dipdip={}
@@ -69,8 +68,13 @@ def alterdp(a,b):
 		vc=int(tp.real-sp.real)
 		sym="R" if vc>0 else "L"
 		pool.extend([sym]*abs(vc))
-		if len(pool)==1:v=set(pool)
-		else:v=set("".join(k) for k in it.permutations(pool))
+		if len(pool)==1:
+			# ~ print(pool,a,b)
+			# ~ print(pool[0]+"A")
+			np=pool[0]+"A"
+			v=set([np])
+			# ~ print(v)
+		else:v=set("".join(k)+"A" for k in it.permutations(pool))
 		dipdip[sk,tk]=v
 for sk in list("TALDR"):
 	for tk in list("TALDR"):
@@ -80,9 +84,9 @@ dipdip["A","L"]=set("L"+k for k in dipdip["T","L"])|set("D"+k for k in dipdip["R
 dipdip["L","T"]=set("R"+k for k in dipdip["D","T"])
 dipdip["L","A"]=set("R"+k for k in dipdip["D","A"])
 
-for k,v in dipdip.items():
-	print(k,v)
-exit()
+# ~ for k,v in dipdip.items():
+	# ~ print(k,v)
+# ~ exit()
 def genkppath(code):
 	fc=[]
 	sp="A"
@@ -91,49 +95,12 @@ def genkppath(code):
 		fc.append(["A"])
 		sp=t
 	return list("".join(p) for p in it.product(*fc))
-    # ~ +---+---+
-    # ~ | ^ | A |
-# ~ +---+---+---+
-# ~ | < | v | > |
-# ~ +---+---+---+
-# ~ print(genkppath("083A"))
-
-
-# ~ exit()
-# ~ I=[("LATATTRADDDA",29),("TTTALADDDARA",980),("TLLATTARRADDDA",179),("TTLLARARADDA",456),("TALLTTARRADDDA",379)]
-# ~ I=[("TTLLARATRADDDA",459),("TTALLTADDARRDA",671),("LTTTADLARRADDA",846),("LTATTADARDA",285),("LATTTADDRADA",83)]
-d={}
-d[("AT")]="LA"
-d[("AR")]="DA"
-d[("AD")]="DLA"
-d[("AL")]="DLLA"
-d[("TA")]="RA"
-d[("TR")]="DRA"
-d[("TD")]="DA"
-d[("TL")]="DLA"
-d[("RA")]="TA"
-d[("RT")]="TLA"
-d[("RD")]="LA"
-d[("RL")]="LLA"
-d[("DA")]="TRA"
-d[("DT")]="TA"
-d[("DR")]="RA"
-d[("DL")]="LA"
-d[("LA")]="RRTA"
-d[("LT")]="RTA"
-d[("LR")]="RRA"
-d[("LD")]="RA"
-d[("LL")]="A"
-d[("TT")]="A"
-d[("RR")]="A"
-d[("AA")]="A"
-d[("DD")]="A"
 @cache
-def solve(path,inter):
-	if inter==0:return len(path)
-	T=[d[a+b] for a,b in zip("A"+path,path)]
-	return sum(solve(t,inter-1) for t in T)
-# ~ print(solve("LATATTRADDDA",2))
+def solve(p,i=0):
+	if i==0:return len(p)
+	t=sum([min(solve(z,i-1) for z in dipdip[a,b]) for a,b in zip("A"+p,p)])
+	# ~ print(t)
+	return(t)
 tot=0
 # ~ for tt in ["029A","980A","179A","456A","379A"]:
 for tt in ["459A","671A","846A","285A","083A"]:
