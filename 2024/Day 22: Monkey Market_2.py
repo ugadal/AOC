@@ -31,10 +31,8 @@ for x in M:
 	v=[next(g) for _ in range(2001)]
 	dv=[b-a for a,b in zip(v,v[1:])]
 	for a,b,c,d,x in zip(dv,dv[1:],dv[2:],dv[3:],v[4:]):
-		# ~ print (a,b,c,d,x)
 		if (a,b,c,d) in T:continue
 		T[a,b,c,d]=x
 	for k,v in T.items():
 		C[k]=C.get(k,0)+v
-print(C.get((-2,1,-1,3),None))
 print(max(C.values()))
