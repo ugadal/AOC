@@ -9,7 +9,7 @@ fn,part="d22.txt",0
 
 def sng(i):
 	while True:
-		yield i-10*(i//10)
+		yield i%10
 		i=i^(i<<6)
 		i=i%16777216
 		i=i^(i>>5)
