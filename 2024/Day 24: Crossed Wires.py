@@ -11,42 +11,30 @@ Known={}
 for l in K.splitlines():
 	k,v=l.split(": ")
 	Known[k]=True if int(v) else False
-print(Known)
+# ~ print(Known)
 todo= T.splitlines()
 while todo:
 	cl=todo.pop(0)
 	a,op,b,unused,target=cl.split()
-	print(len(todo),a,op,b,target)
-	if op=="OR":
-		# ~ input()
-		if any([Known.get(a,False),Known.get(b,False)]):
-			Known[target]=True
-		else:todo.append(cl)
-		continue
-	if op=="AND":
-		if a in Known and b in Known:
-			Known[target]=Known[a] and Known[b]
-			continue
-		if a in Known:
-			if Known[a]==False:
-				Known[target]=False
-				continue
-		if b in Known:
-			if Known[b]==False:
-				Known[target]=False
-				continue
+	# ~ print(len(todo),a,op,b,target)
+	if not (a in Known and b in Known):
+		# ~ print(a,a in Known,b,b in Known,"skipping")
 		todo.append(cl)
 		continue
-	if op=="XOR":
-		if target in Known:exit()
-	if not all([a in Known,b in Known]):
-		todo.append(cl)
-		continue
+	# ~ print(a,a in Known,b,b in Known,"going on")
 	a=Known[a]
 	b=Known[b]
+	# ~ print(a,op,b)
+	# ~ input()
 	match op:
-		case "XOR":
-			if target in Known:
-				input()
+		case 'OR':
+			Known[target]=a or b
+		case 'AND':
+			Known[target]=a and b
+		case 'XOR':
 			Known[target]=a ^ b
-	print(len(todo))
+nz=[k for k in Known.keys() if k.startswith("z") ]
+nz.sort()
+nz.reverse()
+bs="".join(["1" if Known[k] else "0" for k in nz])
+print(int(bs,2))
