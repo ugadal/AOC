@@ -27,6 +27,3 @@ while pos<len(enemies):
 	ttl+=extra+duet.count("B")+3*duet.count("C")+5*+duet.count("D")
 	pos+=3
 print(ttl)
-# ~ 22004
-# ~ 19302
-# ~ startswith 2 and is 5 symbol
