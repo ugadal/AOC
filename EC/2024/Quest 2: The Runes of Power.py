@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 import re
+print("part 1".center(60).title())
 fn="everybody_codes_e2024_q02_p1.txt"
 wd,txt=open(fn).read().split("\n\n")
 wd=wd.split(":")[1].split(",")
@@ -8,7 +9,10 @@ R=[re.compile(s) for s in wd]
 tt=0
 for r in R:
 	tt+=len(r.findall(txt))
-# ~ P2
+print(tt)
+
+print("part 2".center(60).title())
+
 fn="everybody_codes_e2024_q02_p2.txt"
 wd,txt=open(fn).read().split("\n\n")
 wd=wd.split(":")[1].split(",")
@@ -31,8 +35,8 @@ for l in txt.splitlines():
 			sr=r.search(l,pos)
 	tt+=len(s)
 print(tt)
-# ~ P3
-print("part3".center(60).title())
+
+print("part 3".center(60).title())
 fn="everybody_codes_e2024_q02_p3.txt"
 # ~ fn="t.txt"
 wd,txt=open(fn).read().split("\n\n")
@@ -51,41 +55,28 @@ G=[]
 for row in range(NR):G.append([False]*NC)
 tt=0
 for l,g in zip(txt,G):
-	s=set()
-	print(l)
 	for r in R:
-		print(r)
 		pos=0
 		ll=len(l)
 		lp=len(r.pattern)
 		tl=l+l[:lp-1]
-		print(tl)
 		sr=r.search(tl,pos)
 		while sr:
-			print(sr)
 			for x in range (sr.start(),sr.end()):g[x % ll]=True
 			pos=sr.start()+1
 			sr=r.search(tl,pos)
-	# ~ tt+=len(s)
-for row in G:print(row)
 txt=list(map(lambda x:"".join(x),zip(*txt)))
 G=list(map(list,zip(*G)))
 for l,g in zip(txt,G):
 	s=set()
-	print(l)
 	for r in R:
-		print(r)
 		pos=0
 		ll=len(l)
 		lp=len(r.pattern)
 		tl=l # +l[:lp-1]
-		# ~ print(tl)
 		sr=r.search(tl,pos)
 		while sr:
-			print(sr)
 			for x in range (sr.start(),sr.end()):g[x % ll]=True
 			pos=sr.start()+1
 			sr=r.search(tl,pos)
-G=list(map(list,zip(*G)))
-for row in G:print(row)
 print(sum(x.count(True) for x in G))
