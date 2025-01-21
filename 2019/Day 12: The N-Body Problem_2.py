@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d12.txt",1
+fn,part="d12.txt",3
 sep="\n\n"
 data=open(fn).read().split(sep)[part].splitlines()
 class moon():
@@ -41,6 +41,7 @@ class moon():
 		self.pote=abs(self.x)+abs(self.y)+abs(self.z)
 	def kin(self):
 		self.kine=abs(self.dx)+abs(self.dy)+abs(self.dz)
+		return self.kine
 	def energ(self):
 		pote=abs(self.x)+abs(self.y)+abs(self.z)
 		kine=abs(self.dx)+abs(self.dy)+abs(self.dz)
@@ -51,9 +52,9 @@ xcg=sum(m.x for m in Moons)/nbm
 ycg=sum(m.y for m in Moons)/nbm
 zcg=sum(m.z for m in Moons)/nbm
 print(xcg,ycg,zcg)
-for moon in Moons:moon.recenter(xcg,ycg,zcg)
-exit()
-cyc=1
+# ~ for moon in Moons:moon.recenter(xcg,ycg,zcg)
+# ~ exit()
+cyc=0
 # ~ V={}
 # ~ hashmoons="".join([m.__str__() for m in Moons])
 # ~ tte=sum(m.E for m in Moons)
@@ -61,6 +62,11 @@ cyc=1
 moona=Moons[0]
 V=[moona.__str__()]
 pcyc=0
+print(moona.kin())
+print([m.kin() for m in Moons])
+ttke=sum(m.kin() for m in Moons)
+print(ttke)
+# ~ exit()
 while True:
 	cyc+=1
 	for pa,ma in enumerate(Moons[:-1]):
@@ -85,25 +91,21 @@ while True:
 				mb.dz+=1
 	# ~ for moon in Moons:print(moon)
 	for moon in Moons:moon.move()
-	if moona.pote==0:
-		print(cyc,cyc-pcyc)
-		pcyc=cyc
+	ttke=sum(abs(m.dz) for m in Moons)
+	print(cyc,ttke)
+	# ~ if Moons[3].kin()==0:
+		# ~ print(cyc,cyc-pcyc)
+		# ~ pcyc=cyc
 		# ~ exit()
-# ~ for moon in Moons:print(moon)
-	# ~ tte=sum(m.E for m in Moons)
-	# ~ if cyc%100000==0:print(cyc,tte)
-	# ~ print(cyc,tte)
-	# ~ if tte not in V:V[tte]=[]
-	# ~ else:print("known energy")
-	# ~ hashmoons="".join([m.__str__() for m in Moons])
-	# ~ if hashmoons in V[tte]:
-		# ~ print(cyc)
-		# ~ for moon in Moons:print(moon)
-		# ~ exit()
-	# ~ V[tte].append(hashmoons)
-	# ~ scm=moona.__str__()
-	# ~ if scm in V:
-		# ~ print(scm,cyc,V.index(scm))
-		# ~ exit()
-	# ~ else:V.append(scm)
-	# ~ print(len(V))
+# ~ for moon in Moons:pr
+# ~ x:1014
+# ~ y: 2949
+# ~ z:2351
+# ~ 9 14 22
+# ~ ppcm 115807, 48118, 72312
+def pgcd(a,b):
+	while b:a,b=b,a%b
+	return a
+def ppcm(a,b):
+	return a*b/pgcd(a,b)
+print(ppcm(ppcm(115807,48118),72312))
