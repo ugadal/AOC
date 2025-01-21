@@ -104,7 +104,15 @@ if __name__ == '__main__':
 
 	d=open("d13.txt").readline().strip()
 	c=computer(d)
-	# ~ c.inp.append(2)
-	for v in c.flow:print(v,end=", ")
+	c.inp.append(2)
+	V=[v for v in c.flow]
+	print(len(V))
+	exit()
+	V.pop()
+	print(V[-5:])
+	V.pop()
 	# ~ expected 3335138414
-	
+	ttl=0
+	while V:
+		a,b,c=V.pop(0),V.pop(0),V.pop(0)
+		print(a,b,c)
