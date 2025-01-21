@@ -105,8 +105,8 @@ class computer():
 					print (self.OV.values())
 					yield self.OV[0]
 					return
-# ~ c=computer((1,9,10,3,2,3,11,0,99,30,40,50))
-# ~ assert(next(c.flow)==3500)
-c=computer((3,0,4,0,99))
-c.inp.append(3145)
-print(next(c.flow))
+c=computer((1,9,10,3,2,3,11,0,99,30,40,50))
+assert(next(c.flow)==3500)
+# ~ c=computer((3,0,4,0,99))
+# ~ c.inp.append(3145)
+# ~ print(next(c.flow))
