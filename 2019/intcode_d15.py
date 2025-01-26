@@ -154,9 +154,9 @@ if __name__ == '__main__':
 		# ~ print(cp,cd)
 		# ~ draw(cp)
 		# ~ input()
-	print("target",target)
-	input()
-	draw(complex(0,0))
+	# ~ print("target",target)
+	# ~ input()
+	# ~ draw(complex(0,0))
 	todo=[(complex(0,0),0)]
 	done={}
 	while True:
@@ -165,12 +165,10 @@ if __name__ == '__main__':
 		print(cp,sd)
 		if cp==target:
 			print(sd)
-			exit()
+			break
 		for cd in (-1,1,1j,-1j):
 			if M.get(cp+cd,"#")=="#":continue
 			if cp+cd in done:continue
 			todo.append((cp+cd,sd+1))
 			done[cp]=True
-			# ~ print(todo)
-			# ~ input()
 	
