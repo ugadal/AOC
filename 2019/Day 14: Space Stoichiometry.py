@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d14.txt",1
+fn,part="d14.txt",2
 sep="\n\n"
 data=open(fn).read().split(sep)[part]
 rules={}
@@ -19,18 +19,32 @@ for l in data.splitlines():
 	rules[t]=(int(q),I)
 print(rules)
 todo=[(1,"FUEL")]
-ore=[]
+ore={}
 while todo:
 	qt,t=todo.pop(0)# 1 fuel
-	if t=="ORE":
-		ore.append(qt)
-		continue
 	td,rec=rules[t] #td:1   rec:{a:7 , e:1]
 	print(td)
 	print(rec)
-	for x,y in rec.items():
-		todo.append((qt*y/td,x))
-	print(todo)
-	print(ore)
-	# ~ input()
+	if "ORE" in rec:
+		ore[t]=ore.get(t,0)+qt
+		continue
+	this={}
+	while qt>0:
+		for x,y in rec.items():
+			this[x]=this.get(x,0)+y
+		qt-=td
+	print(this)
+	for k,v in this.items():todo.append((v,k))
+	print("todo",todo)
+	# ~ print(ore)
+	input()
 print(ore)
+tt=0
+for k,needed in ore.items():
+	print(k,needed)
+	done,od=rules[k]
+	print(done,od)
+	while needed>0:
+		tt+=od["ORE"]
+		needed-=done
+print(tt)

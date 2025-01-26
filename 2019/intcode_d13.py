@@ -101,18 +101,30 @@ def main(args):
 
 
 if __name__ == '__main__':
-
+	jp=None
 	d=open("d13.txt").readline().strip()
 	c=computer(d)
 	c.inp.append(2)
-	V=[v for v in c.flow]
-	print(len(V))
-	exit()
-	V.pop()
-	print(V[-5:])
-	V.pop()
+	# ~ V=[v for v in c.flow]
+	# ~ print(V,len(V))
+	# ~ exit()
+	# ~ print(len(V))
+	# ~ exit()
+	# ~ V.pop()
+	# ~ print(V[-5:])
+	# ~ V.pop()
 	# ~ expected 3335138414
 	ttl=0
-	while V:
-		a,b,c=V.pop(0),V.pop(0),V.pop(0)
-		print(a,b,c)
+	while True:
+		a=next(c.flow)
+		b=next(c.flow)
+		d=next(c.flow)
+		print(a,b,d)
+		if jp:
+			if d==3:jp=a
+			if d==4:
+				bp=a
+				if jp==bp:c.inp.append(0)
+				if bp<jp:c.inp.append(-1)
+				if bp>jp:c.inp.append(1)
+	
