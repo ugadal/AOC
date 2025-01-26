@@ -79,21 +79,6 @@ class computer():
 					self.pos+=2
 				case 99:
 					yield f"end {self.OV[0]}"
-					# ~ return self.OV[0]
-					# ~ self.pos+=2
-# ~ d=(109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99)
-# ~ c=computer(*d)
-# ~ for v in c.flow:print(v,end=", ")
-# ~ print()
-# ~ d=(1102,34915192,34915192,7,4,7,99,0)
-# ~ c=computer(*d)
-# ~ for v in c.flow:print(v,end=", ")
-# ~ d=(104,1125899906842624,99)
-# ~ print()
-# ~ c=computer(*d)
-# ~ for v in c.flow:print(v,end=", ")
-# ~ print("====")
-
 import sys
 
 
@@ -130,7 +115,6 @@ if __name__ == '__main__':
 	c=computer(d)
 	ofound=0
 	while True:
-		# ~ print(cp,cd)
 		c.inp.append(DIRS[cd])
 		res=next(c.flow)
 		match res:
@@ -147,24 +131,14 @@ if __name__ == '__main__':
 				cd=RDIRS[cd]
 				ofound+=1
 				if ofound==3:break
-				# ~ print("oxygen found",cp+cd)
 				target=cp
-				# ~ go=input("continue")
-				# ~ if go=="no":break
-		# ~ print(cp,cd)
-		# ~ draw(cp)
-		# ~ input()
-	# ~ print("target",target)
-	# ~ input()
-	# ~ draw(complex(0,0))
 	todo=[(complex(0,0),0)]
 	done={}
 	while True:
 		cp,sd=todo.pop(0)
 		if cp in done:continue
-		# ~ print(cp,sd)
 		if cp==target:
-			print("part1",sd)
+			print("part 1:",sd)
 			break
 		for cd in (-1,1,1j,-1j):
 			if M.get(cp+cd,"#")=="#":continue
@@ -175,15 +149,12 @@ if __name__ == '__main__':
 	done={}
 	sd=0
 	while True:
-		# ~ draw(complex(0,0))
-		# ~ print(todo)
-		# ~ input()
 		newtodo=set()
 		for cp in todo:
 			M[cp]="O"
 			if cp in done:continue
 			if all(v!="." for v in M.values()):
-				print("part2",sd)
+				print("part 2:",sd)
 				exit()
 			for cd in (-1,1,1j,-1j):
 				if M.get(cp+cd)==".":
