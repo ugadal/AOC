@@ -111,7 +111,7 @@ def draw(cp):
 			pos=complex(c,r)
 			if pos==S:sym="S"
 			elif pos==cp:sym="D"
-			else:sym=M.get(pos," ")
+			else:sym=M.get(pos,"?")
 			R.append(sym)
 		print("".join(R))
 	print() 
@@ -162,13 +162,31 @@ if __name__ == '__main__':
 	while True:
 		cp,sd=todo.pop(0)
 		if cp in done:continue
-		print(cp,sd)
+		# ~ print(cp,sd)
 		if cp==target:
-			print(sd)
+			print("part1",sd)
 			break
 		for cd in (-1,1,1j,-1j):
 			if M.get(cp+cd,"#")=="#":continue
 			if cp+cd in done:continue
 			todo.append((cp+cd,sd+1))
 			done[cp]=True
-	
+	todo=[target]
+	done={}
+	sd=0
+	while True:
+		# ~ draw(complex(0,0))
+		# ~ print(todo)
+		# ~ input()
+		newtodo=set()
+		for cp in todo:
+			M[cp]="O"
+			if cp in done:continue
+			if all(v!="." for v in M.values()):
+				print("part2",sd)
+				exit()
+			for cd in (-1,1,1j,-1j):
+				if M.get(cp+cd)==".":
+					newtodo.add(cp+cd)
+		todo=newtodo
+		sd+=1
