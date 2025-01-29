@@ -78,6 +78,7 @@ class computer():
 					self.rb+=pa
 					self.pos+=2
 				case 99:
+					return
 					yield f"end {self.OV[0]}"
 if __name__ == '__main__':
 	d=open("d17.txt").readline().strip()
