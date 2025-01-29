@@ -1,0 +1,80 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+fn,part="d17.txt",0
+from intcodegen import computer
+pgm=open(fn).readline().strip()
+pgm="2"+pgm[1:]
+c=computer(pgm)
+M={}
+row=0
+col=0
+dirs={"^":-1j,"<":-1,"v":1j,">":1}
+tl=-1j
+tr=1j
+c.inp.extend([*map(ord,"A,C,A,C,B,A,C,B,A,B\n")])
+c.inp.extend([*map(ord,"R,6,L,6,L,10\n")]) #A
+c.inp.extend([*map(ord,"R,6,L,8,L,10,R,6\n")]) #B
+c.inp.extend([*map(ord,"L,8,L,6,L,10,L,6\n")]) #C
+c.inp.extend([*map(ord,"n\n")]) #B
+# ~ exit()
+for v in c.flow: print(v,chr(v),end="")
+	# ~ if v==10:
+		# ~ row+=1
+		# ~ col=0
+		# ~ continue
+	# ~ pos=complex(col,row)
+	# ~ M[pos]=chr(v)
+	# ~ col+=1
+	# ~ if chr(v) in "^<>v":
+		# ~ sp=pos
+		# ~ cd=dirs[chr(v)]
+# ~ def draw(cp=0):
+	# ~ mic=int(min(m.real for m in M))
+	# ~ mxc=int(max(m.real for m in M))
+	# ~ mir=int(min(m.imag for m in M))
+	# ~ mxr=int(max(m.imag for m in M))
+	# ~ S=complex(0,0)
+	# ~ for r in range(mir,mxr+1):
+		# ~ R=[]
+		# ~ for c in range(mic,mxc+1):
+			# ~ pos=complex(c,r)
+			# ~ if pos==S:sym="S"
+			# ~ elif pos==cp:sym="D"
+			# ~ else:sym=M.get(pos,"?")
+			# ~ R.append(sym)
+		# ~ print("".join(R))
+	# ~ print() 
+
+# ~ draw()
+# ~ print(sp,cd)
+# ~ visited=[sp]
+# ~ cp=sp
+# ~ steps=0
+# ~ path=""
+# ~ while True:
+	# ~ while M.get(cp+cd,".")=="#":
+		# ~ cp+=cd
+		# ~ visited.append(cp)
+		# ~ steps+=1
+	# ~ path+=str(steps)
+	# ~ if M.get(cp+cd*tl,".")=="#":
+		# ~ cd*=tl
+		# ~ path+=" L"
+		# ~ print("turned left")
+		# ~ steps=0
+		# ~ continue
+	# ~ if M.get(cp+cd*tr,".")=="#":
+		# ~ cd*=tr
+		# ~ path+=" R"
+		# ~ steps=0
+		# ~ print("turned right")
+		# ~ continue
+	# ~ break
+# ~ print(visited)
+# ~ tt=0
+# ~ for p in set(visited):
+	# ~ if visited.count(p)>1:
+		# ~ print(p)
+		# ~ tt+=p.real*p.imag
+# ~ print(tt)
+# ~ print(path[1:])

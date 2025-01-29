@@ -3,6 +3,7 @@
 fn,part="d17.txt",0
 from intcodegen import computer
 pgm=open(fn).readline().strip()
+# ~ pgm="2"+pgm[1:]
 c=computer(pgm)
 M={}
 row=0
@@ -42,23 +43,32 @@ draw()
 print(sp,cd)
 visited=[sp]
 cp=sp
+steps=0
+path=""
 while True:
 	while M.get(cp+cd,".")=="#":
 		cp+=cd
 		visited.append(cp)
+		steps+=1
+	path+=str(steps)
 	if M.get(cp+cd*tl,".")=="#":
 		cd*=tl
-		print("turned left")
+		path+=" L"
+		# ~ print("turned left")
+		steps=0
 		continue
 	if M.get(cp+cd*tr,".")=="#":
 		cd*=tr
-		print("turned right")
+		path+=" R"
+		steps=0
+		# ~ print("turned right")
 		continue
 	break
-print(visited)
+# ~ print(visited)
 tt=0
 for p in set(visited):
 	if visited.count(p)>1:
 		print(p)
 		tt+=p.real*p.imag
 print(tt)
+print(path[1:])
