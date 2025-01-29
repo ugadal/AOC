@@ -17,4 +17,4 @@ c.inp.extend([*map(ord,"R,6,L,8,L,10,R,6\n")]) #B
 c.inp.extend([*map(ord,"L,8,L,6,L,10,L,6\n")]) #C
 c.inp.extend([*map(ord,"n\n")]) #B
 for v in c.flow: print(chr(v),end="")
-print(v)
+print("==>",v)
