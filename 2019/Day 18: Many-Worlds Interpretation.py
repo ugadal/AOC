@@ -32,7 +32,8 @@ while True:
 		if all(s in ks for s in rk):
 			print(pos,steps-1,ks)
 			exit()
-		if visited.get((pos,ks),float("Inf"))<steps:continue
+		if visited.get((pos,ks),float("Inf"))<steps:
+			continue
 		# ~ input()
 		cs=M.get(pos,"#")
 		if cs in keys and cs not in ks:
