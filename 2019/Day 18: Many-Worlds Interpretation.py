@@ -17,12 +17,12 @@ print(rk)
 NR=r+1
 NC=c+1
 print(NR,NC,sp)
-def draw(cp=0):
+def draw(cp=-1):
 	mic=int(min(m.real for m in M))
 	mxc=int(max(m.real for m in M))
 	mir=int(min(m.imag for m in M))
 	mxr=int(max(m.imag for m in M))
-	S=complex(0,0)
+	S=complex(-10,-10)
 	for r in range(mir,mxr+1):
 		R=[]
 		for c in range(mic,mxc+1):
@@ -34,7 +34,7 @@ def draw(cp=0):
 		print("".join(R))
 	print() 
 draw()
-input()
+# ~ input()
 def around(p):
 	yield p-1
 	yield p+1
@@ -43,19 +43,20 @@ def around(p):
 def gets(p):return [M.get(tp,"#") for tp in around(p)]
 
 def removedeadends(M):
-	DE=[k for k,v in M.items() if v=="." and gets(k).count("#")>=3]
+	DE=[k for k,v in M.items() if (v=="." or v in locks) and gets(k).count("#")>=3]
 	return DE
 while True:
 	TR=removedeadends(M)
 	if not TR:break
-	print(len(TR))
+	# ~ print(len(TR))
 	for k in TR:M[k]="#"
 draw()
-input()
+# ~ exit()
+# ~ input()
 todo=[(sp,"",0)]
 visited={}
 leave=False
-doit="y"
+doit="n"
 # ~ doit=input("do partone ?")
 if doit=="y":doit=True
 else:doit=False
@@ -94,8 +95,54 @@ M[sp+1j]="#"
 M[sp-1]="#"
 M[sp+1]="#"
 M[sp]="#"
-
 SPS=(sp-1-1j,sp-1+1j,sp+1-1j,sp+1+1j)
+for s in SPS:M[s]="@"
+draw()
+DE=[(k,v) for k,v in M.items() if v!="#" and gets(k).count("#")==1]
+for k,v in DE:M[k]="§"
+draw()
+# ~ print(DE)
+NODES={}
+class nodes():
+	def __init__(self,sym,pos):
+		global NODES
+		self.sym=sym
+		self.pos=pos
+		self.con={}
+		# ~ NODES[sym]=self
+		NODES[pos]=self
+		self.d=0
+		
+while True:
+	try:pos,sy=next((k,v) for k,v in M.items() if v not in "#.@" and gets(k).count("#")>=3)
+	except:break
+	print(pos,sy)	
+	if pos in NODES:cn=NODES[pos]
+	else:cn=nodes(sy,pos)
+	print(cn)
+	pn=next(k for k in around(pos) if M.get(k,"#")!="#")
+	print(pn,M[pn])
+	if M[pn]==".":
+		M[pn]=sy
+		M[pos]="#"
+		cn.pos=pn
+		cn.d+=1
+		# ~ draw()
+		# ~ input()
+		continue
+	if pn in NODES:nxn=NODES[pn]
+	else:nxn=nodes(sy,pos)
+	nxn.con[cn]=cn.d
+	cn.con[nxn]=cn.d
+	print(nxn.pos,nxn.con)
+	M[cn.pos]="#"
+	# ~ draw()
+	# ~ input()
+draw()
+for x in SPS:
+	cs=NODES[x]
+	print(cs.con)
+exit()
 def gets(L):return [M.get(p,"#") for p in L]
 todo=[(SPS,"",0)]
 visited={}
