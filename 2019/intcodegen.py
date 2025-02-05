@@ -24,6 +24,7 @@ class computer():
 		if f==2:return pa+self.rb
 		return pa 
 	def run(self):
+		# ~ self.pos=0
 		while True:
 			cmd=str(self.OV[self.pos]).zfill(5)
 			opcode=int(cmd[-2:])
@@ -43,7 +44,12 @@ class computer():
 					self.pos+=4
 				case 3:
 					pa=self.fixw(self.pos+1,ia)   #!!!
-					self.OV[pa]=self.inp.pop(0)
+					try:
+						self.OV[pa]=self.inp.pop(0)
+						print("read",self.OV[pa])
+					except:
+						print("unable to pop form inp")
+						return
 					self.pos+=2
 				case 4:
 					va=self.fixr(self.pos+1,ia)
@@ -78,8 +84,10 @@ class computer():
 					self.rb+=pa
 					self.pos+=2
 				case 99:
-					return
-					yield f"end {self.OV[0]}"
+					print("ending")
+					return self.OV[0]
+					# ~ yield self.OV[0]
+					# ~ yield f"end {self.OV[0]}"
 if __name__ == '__main__':
 	d=open("d17.txt").readline().strip()
 	c=computer(d)
