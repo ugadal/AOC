@@ -46,7 +46,7 @@ class computer():
 					pa=self.fixw(self.pos+1,ia)   #!!!
 					try:
 						self.OV[pa]=self.inp.pop(0)
-						print("read",self.OV[pa])
+						# ~ print("read",self.OV[pa])
 					except:
 						print("unable to pop form inp")
 						return
@@ -84,7 +84,7 @@ class computer():
 					self.rb+=pa
 					self.pos+=2
 				case 99:
-					print("ending")
+					# ~ print("ending")
 					return self.OV[0]
 					# ~ yield self.OV[0]
 					# ~ yield f"end {self.OV[0]}"

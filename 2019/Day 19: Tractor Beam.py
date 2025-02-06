@@ -3,34 +3,30 @@
 fn,part="d19.txt",0
 from intcodegen import computer
 pgm=open(fn).readline().strip()
-pgm="2"+pgm[1:]
-c=computer(pgm)
-# ~ for v in c.flow: print(chr(v),end="")
-for x in range(50):
-	for y in range(50):
-		c.inp.extend([*map(ord,f"{x+1}\n")])
-		c.inp.extend([*map(ord,f"{y+1}\n")])
-		# ~ c.inp.append(ord(str(y)))
-for v in c.flow:
-	print(v,chr(v))
-# ~ for v in c.flow:
-	# ~ print(chr(v))
-# ~ for v in c.run():
-	# ~ print(chr(v))
-# ~ for v in c.run():
-	# ~ print(chr(v))
-	# ~ input()
-exit()
+# ~ pgm="2"+pgm[1:]
 M={}
-row=0
-col=0
-dirs={"^":-1j,"<":-1,"v":1j,">":1}
-tl=-1j
-tr=1j
-c.inp.extend([*map(ord,"A,C,A,C,B,A,C,B,A,B\n")])
-c.inp.extend([*map(ord,"R,6,L,6,L,10\n")]) #A
-c.inp.extend([*map(ord,"R,6,L,8,L,10,R,6\n")]) #B
-c.inp.extend([*map(ord,"L,8,L,6,L,10,L,6\n")]) #C
-c.inp.extend([*map(ord,"n\n")]) #B
-for v in c.flow: print(chr(v),end="")
-print("==>",v)
+for row in range(50):
+	for col in range(50):
+		p=complex(col,row)
+		c=computer(pgm)
+		c.inp.extend([row,col])
+		for v in c.flow:
+			M[p]="#" if v else "."
+def draw(M):
+	mic=int(min(m.real for m in M))
+	mxc=int(max(m.real for m in M))
+	mir=int(min(m.imag for m in M))
+	mxr=int(max(m.imag for m in M))
+	for r in range(mir,mxr+1):
+		R=[]
+		for c in range(mic,mxc+1):
+			pos=complex(c,r)
+			sym=M.get(pos,"?")
+			# ~ if pos==S:sym="S"
+			# ~ elif pos==cp:sym="D"
+			# ~ else:sym=M.get(pos,"?")
+			R.append(sym)
+		print("".join(R))
+	print() 
+draw(M)
+print(list(M.values()).count("#"))
