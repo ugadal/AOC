@@ -6,7 +6,7 @@ pgm=open(fn).readline().strip()
 # ~ pgm="2"+pgm[1:]
 M={}
 for row in range(50):
-	for col in range(50):
+	for col in range(100):
 		p=complex(col,row)
 		c=computer(pgm)
 		c.inp.extend([row,col])
