@@ -6,13 +6,31 @@ from intcodegen import computer
 pgm=open(fn).readline().strip()
 # ~ pgm="2"+pgm[1:]
 M={}
-for row in range(20):
-	for col in range(100):
+for row in range(47):
+	for col in range(150):
 		p=complex(col,row)
 		c=computer(pgm)
 		c.inp.extend([row,col])
 		for v in c.flow:
 			M[p]="#" if v else "."
+@cache
+def check(r,c):
+	C=computer(pgm)
+	C.inp.extend([r,c])
+	return next(C.flow)
+@cache
+def getlc(row):
+	if row<=5:return 8
+	b=getlc(row-1)
+	while not check(row,b):b+=1
+	return b
+@cache
+def getrc(row):
+	if row<=5:return 8
+	b=getrc(row-1)+5
+	while not check(row,b):b-=1
+	return b
+
 def draw(M):
 	mic=int(min(m.real for m in M))
 	mxc=int(max(m.real for m in M))
@@ -27,29 +45,27 @@ def draw(M):
 			# ~ elif pos==cp:sym="D"
 			# ~ else:sym=M.get(pos,"?")
 			R.append(sym)
-		print(r,"".join(R))
+		print("".join(R),r,getlc(r),getrc(r))
 	print() 
 draw(M)
 print(list(M.values()).count("#"))
-def check(r,c):
-	C=computer(pgm)
-	C.inp.extend([r,c])
-	return next(C.flow)
-@cache
-def getlc(row):
-	if row==5:return 8
-	b=getlc(row-1)
-	while not check(row,b):b+=1
-	return b
-@cache
-def getrc(row):
-	if row==5:return 8
-	b=getrc(row-1)+3
-	while not check(row,b):b-=1
-	return b
-r=200
+# ~ r=105
+d=100
+r=d+5
 while True:
 	r+=1
 	bl=getlc(r)
-	tr=getrc(r-99)
+	tr=getrc(r-d+1)
 	print(r,bl,tr)
+	if tr-bl>=d-1:
+		print(bl*10000+r-d+1)
+		print((r-d+1)*10000+bl)
+		break
+# ~ < 13370986
+# ~ < 13280979
+M={}
+for row in range(r-d,r+2):
+	for col in range(bl-1,tr+2):
+		p=complex(col,row)
+		M[p]="#" if check(row,col) else "."
+draw(M)
