@@ -61,5 +61,5 @@ SP={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==2}
 print(len(SP))
 TP={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1}
 print(len(TP))
-FK={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==3}
+FK={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3}
 print(len(FK))
