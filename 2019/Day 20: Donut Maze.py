@@ -50,10 +50,6 @@ class nodes():
 		self.sym=sym
 		self.pos=pos
 		self.con={}
-		self.l=None
-		self.r=None
-		self.b=None
-		self.t=None
 		# ~ NODES[sym]=self
 		NODES[pos]=self
 		self.d=0
