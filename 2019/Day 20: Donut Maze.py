@@ -57,11 +57,11 @@ class nodes():
 		# ~ NODES[sym]=self
 		NODES[pos]=self
 		self.d=0
-SP={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==2}
+SP=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==2]
 print(len(SP))
-TP={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1}
+TP=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1]
 print(len(TP))
-FK={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3}
+FK=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3]
 print(len(FK))
-for n in TP.values():
+for n in TP:
 	print (n.sym,n.pos,gets(n.pos))
