@@ -63,9 +63,9 @@ while True:
 		break
 # ~ < 13370986
 # ~ < 13280979
-M={}
-for row in range(r-d,r+2):
-	for col in range(bl-1,tr+2):
-		p=complex(col,row)
-		M[p]="#" if check(row,col) else "."
-draw(M)
+# ~ M={}
+# ~ for row in range(r-d,r+2):
+	# ~ for col in range(bl-1,tr+2):
+		# ~ p=complex(col,row)
+		# ~ M[p]="#" if check(row,col) else "."
+# ~ draw(M)
