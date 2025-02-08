@@ -63,3 +63,5 @@ TP={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1}
 print(len(TP))
 FK={k:nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3}
 print(len(FK))
+for n in TP.values():
+	print (n.sym,n.pos,gets(n.pos))
