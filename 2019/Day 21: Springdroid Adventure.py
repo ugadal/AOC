@@ -5,6 +5,17 @@ from functools import cache
 from intcodegen import computer
 pgm=open(fn).readline().strip()
 # ~ pgm="2"+pgm[1:]
+c=computer(pgm)
+# ~ for v in c.flow:print(chr(v),end="")
+c.inp.extend([*map(ord,"NOT A J\n")])
+c.inp.extend([*map(ord,"NOT B T\n")])
+c.inp.extend([*map(ord,"AND T J\n")])
+c.inp.extend([*map(ord,"NOT C T\n")])
+c.inp.extend([*map(ord,"AND T J\n")])
+c.inp.extend([*map(ord,"AND D J\n")])
+c.inp.extend([*map(ord,"WALK\n")])
+for v in c.flow:print(chr(v),end="")
+exit()
 M={}
 for row in range(47):
 	for col in range(150):
