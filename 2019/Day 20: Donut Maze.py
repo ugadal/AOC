@@ -49,10 +49,9 @@ class nodes():
 		# ~ global NODES
 		self.sym=sym
 		self.pos=pos
-		self.con={}
-		# ~ NODES[sym]=self
+		self.con=set()
 		NODES[pos]=self
-		self.d=0
+		self.remote=""
 SP=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==2]
 print(len(SP))
 TP=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1]
@@ -60,4 +59,33 @@ print(len(TP))
 FK=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3]
 print(len(FK))
 for n in TP:
-	print (n.sym,n.pos,gets(n.pos))
+	cont=next(p for p in around(n.pos) if M[p]!="#" and M[p]!=".")
+	nxcont=2*cont-n.pos
+	tl=[M[cont],M[nxcont]]
+	tl.sort()
+	tl="".join(tl)
+	# ~ print (n.pos,tl)
+	n.remote=tl
+snode=next(n for n in TP if n.remote=="AA")
+enode=next(n for n in TP if n.remote=="ZZ")
+print(snode.pos,enode.pos)
+for n in TP:
+	try:c=next(z for z in TP if z.remote==n.remote and z!=n)
+	except:continue
+	n.con.add(c)
+	c.con.add(n)
+for n in NODES.values():
+	for p in (p for p in around(n.pos) if M[p]=="."):
+		t=NODES[p]
+		n.con.add(t)
+		t.con.add(n)
+todo=[([snode],0)]
+while True:
+	path,d=todo.pop(0)
+	cp=path[-1]
+	if cp==enode:
+		print(d)
+		break
+	for p in cp.con:
+		if p in path:continue
+		todo.append((path+[p],d+1))
