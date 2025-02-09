@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d19.txt",0
+fn,part="d21.txt",0
 from functools import cache
 from intcodegen import computer
 pgm=open(fn).readline().strip()
