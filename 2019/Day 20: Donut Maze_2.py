@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-fn,part="d20.txt",1
+fn,part="d20.txt",0
 data=open(fn).read().split("\n\n")[part]
 M={}
 for r,row in enumerate(data.splitlines()):
@@ -58,6 +58,12 @@ TP=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")==1]
 print(len(TP))
 FK=[nodes(v,k) for k,v in M.items() if v=="." and gets(k).count(".")>=3]
 print(len(FK))
+toprow=min(p.pos.imag for p in TP)
+botrow=max(p.pos.imag for p in TP)
+leftcol=min(p.pos.real for p in TP)
+rightcol=max(p.pos.real for p in TP)
+print(toprow,botrow,leftcol,rightcol,NR,NC)
+input()
 for n in TP:
 	cont=next(p for p in around(n.pos) if M[p]!="#" and M[p]!=".")
 	nxcont=2*cont-n.pos
@@ -65,8 +71,8 @@ for n in TP:
 	tl.sort()
 	tl="".join(tl)
 	n.inner=True
-	if n.pos.real==2 or n.pos.real==NC-2:n.inner=False
-	if n.pos.imag==2 or n.pos.imag==NR-2:n.inner=False
+	if n.pos.real==leftcol or n.pos.real==rightcol:n.inner=False
+	if n.pos.imag==toprow or n.pos.imag==botrow:n.inner=False
 	# ~ print (n.pos,tl)
 	n.remote=tl
 snode=next(n for n in TP if n.remote=="AA")
@@ -85,25 +91,36 @@ for n in NODES.values():
 		t=NODES[p]
 		n.con.add(t)
 		t.con.add(n)
-todo=[({0:[snode]},0,0)]
+
+todo=[([[snode]],0,0)]
 while True:
 	paths,lvl,d=todo.pop(0)
-	cp=paths[lvl][-1]
-	print(len(todo),lvl,d)
-	for l,path in paths.items():
-		print(l,[p.pos for p in path])
-	input()
+	# ~ if any(paths.count(ap)==2 for ap in paths):
+		# ~ for l,path in enumerate(paths):
+			# ~ print(l,[p.pos for p in path])
+		# ~ input("possible loop")
+		# ~ continue
+	cpath=paths[-1]
+	cp=cpath[-1]
+	print(f"todo length {len(todo)}, current level {lvl}, current steps done {d}")
+	# ~ for l,path in enumerate(paths):
+		# ~ print(l,[p.pos for p in path])
+	# ~ input()
 	if cp==enode and lvl==0:
-		print(d)
+		print(d,cp.remote,lvl)
 		break
+		continue
 	for p in cp.con:
+		if p in cpath:continue
 		newlvl=lvl
-		if p in TP:
-			if p.inner:newlvl+=1
+		if cp in TP and p in TP:
+			if cp.inner:newlvl+=1
 			else:newlvl-=1
 		if newlvl<0:continue
-		newpaths=paths.copy()
-		if not newlvl in newpaths:newpaths[newlvl]=[]
-		if p in newpaths[newlvl]:continue
-		newpaths[newlvl]=newpaths[newlvl]+[p]
+		newpaths=[]
+		for ap in paths:newpaths.append(ap.copy())
+		if cp in TP and p in TP:
+			newpaths.append([cp,p])
+			print(cp.remote,cp.inner,p.remote,p.inner)
+		else:newpaths[-1]=cpath+[p]
 		todo.append((newpaths,newlvl,d+1))
