@@ -95,6 +95,8 @@ for n in NODES.values():
 todo=[([[snode]],0,0)]
 while True:
 	paths,lvl,d=todo.pop(0)
+	# ~ this doesn't work as expected and should be enhanced maybe by including the 
+	# ~ level at the head of the path
 	# ~ if any(paths.count(ap)==2 for ap in paths):
 		# ~ for l,path in enumerate(paths):
 			# ~ print(l,[p.pos for p in path])
@@ -103,13 +105,9 @@ while True:
 	cpath=paths[-1]
 	cp=cpath[-1]
 	print(f"todo length {len(todo)}, current level {lvl}, current steps done {d}")
-	# ~ for l,path in enumerate(paths):
-		# ~ print(l,[p.pos for p in path])
-	# ~ input()
 	if cp==enode and lvl==0:
 		print(d,cp.remote,lvl)
 		break
-		continue
 	for p in cp.con:
 		if p in cpath:continue
 		newlvl=lvl
