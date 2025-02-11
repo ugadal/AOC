@@ -13,7 +13,7 @@ for r in range(4,16):
 	print("\n",r)
 	for x,p in enumerate(it.product(pc,repeat=r)):
 		print(x,end="\r")
-		# ~ if x<2625000:continue
+		# ~ if x<2625000:continue 16320000
 		c=computer(pgm)
 		c.inp.extend([*map(ord,"".join(p))])
 		c.inp.extend([*map(ord,"RUN\n")])
