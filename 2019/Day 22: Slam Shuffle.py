@@ -28,6 +28,8 @@ for line in pgm:
 			# ~ sp-=cp
 			# ~ sp=sp%ld
 # ~ print (sp)
+# ~ while True:
 for f in P:
 	sp=f(sp)
 print(sp)
+	
