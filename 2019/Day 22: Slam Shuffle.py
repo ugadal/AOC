@@ -7,15 +7,30 @@ import itertools as it
 pgm=open(fn).read().splitlines()
 ld=10007
 sp=2019
+def dwi(inc):
+	def fun(x):
+		return (x*inc)%ld
+	return fun
+def dins(x):
+	return ld-x-1
+def cut(cp):
+	def fun(x):
+		return (x-cp)%ld
+	return fun
+P=[]
 for line in pgm:
 	match line.split():
 		case ['deal','with','increment',*arg]:
-			inc=int(arg[0])
-			sp=(sp*inc)%ld
+			P.append(dwi(int(arg[0])))
+			# ~ sp=(sp*inc)%ld
 		case ["deal","into","new","stack"]:
-			sp=ld-sp-1
+			P.append(dins)
 		case ["cut",*arg]:
 			cp=int(arg[0])
-			sp-=cp
-			sp=sp%ld
-print (sp)
+			P.append(cut(cp))
+			# ~ sp-=cp
+			# ~ sp=sp%ld
+# ~ print (sp)
+for f in P:
+	sp=f(sp)
+print(sp)
