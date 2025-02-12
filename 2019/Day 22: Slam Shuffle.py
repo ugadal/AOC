@@ -8,14 +8,11 @@ pgm=open(fn).read().splitlines()
 ld=10007
 sp=2019
 def dwi(inc):
-	def fun(x):
-		return (x*inc)%ld
+	def fun(x):return (x*inc)%ld
 	return fun
-def dins(x):
-	return ld-x-1
+def dins(x):return ld-x-1
 def cut(cp):
-	def fun(x):
-		return (x-cp)%ld
+	def fun(x):return (x-cp)%ld
 	return fun
 P=[]
 for line in pgm:
