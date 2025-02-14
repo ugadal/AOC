@@ -19,16 +19,11 @@ for line in pgm:
 	match line.split():
 		case ['deal','with','increment',*arg]:
 			P.append(dwi(int(arg[0])))
-			# ~ sp=(sp*inc)%ld
 		case ["deal","into","new","stack"]:
 			P.append(dins)
 		case ["cut",*arg]:
 			cp=int(arg[0])
 			P.append(cut(cp))
-			# ~ sp-=cp
-			# ~ sp=sp%ld
-# ~ print (sp)
-# ~ while True:
 for f in P:
 	sp=f(sp)
 print(sp)
