@@ -25,4 +25,4 @@ while lastok!=OK:
 	# ~ print(len(OK),OK)
 	OK=OK|set(k for k,v in Bags.items() if v&OK)
 print(len(OK))
-# ~ wtf
+# ~ wtf2
