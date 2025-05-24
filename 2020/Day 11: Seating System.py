@@ -5,7 +5,7 @@ import sys
 cp=str(sys.argv[0])
 dre=re.compile(r"^Day (\d+):")
 day=dre.findall(cp)[0]
-fn,part=f"d{day}.txt",0
+fn,part=f"d{day}.txt",1
 data=open(fn).read().split("\n\n")[part].splitlines()
 G={}
 for r,row in enumerate(data):
@@ -52,7 +52,7 @@ def insight(pos):
 	for td in dirs:
 		tp=pos
 		while G.get(tp+td,"-")==".":tp+=td
-		if G.get(tp,"-")!="-":yield tp
+		if G.get(tp,"-")!="-":yield tp+td
 def surroundlong(pos):
 	return [G.get(nx,".") for nx in insight(pos)]
 G={}
@@ -77,4 +77,6 @@ while True:
 		break
 	G=NG
 	draw()
-	input()
+	# ~ print (list(insight(complex(0,0))))
+	# ~ print (surroundlong(complex(0,0)))
+	# ~ input()
