@@ -12,3 +12,26 @@ data.insert(0,0)
 data.append(data[-1]+3)
 delta=[b-a for a,b in zip(data,data[1:])]
 print("p1:",delta.count(1)*delta.count(3))
+print(data)
+def count(L):
+	match len(L):
+		case 1:return 1
+		case 2:return 1
+		case 3:return 2
+		case 4:return 4
+		case 5:return 7
+R=1
+pos=0
+bg=0
+while pos<len(data):
+	if data[pos]==data[pos+1]-3:
+		print ("break at pos:",pos)
+		part=data[bg:pos+1]
+		print ("find combos in ",part)
+		n=pos-bg-1
+		print("combo is",count(part))
+		R*=count(part)
+		print(R)
+		bg=pos+1
+		# ~ input()
+	pos+=1
