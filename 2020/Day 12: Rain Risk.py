@@ -26,3 +26,17 @@ for line in data:
 		case "L":d=rot(d,i,n)
 		case "R":d=rot(d,i,n)
 print("p1:",pos.real+pos.imag)
+pos=complex(0,0)
+wp=complex(10,-1)
+for line in data:
+	i,n=ext.findall(line)[0]
+	n=int(n)
+	match i:
+		case "N":wp+=complex(0,-n)
+		case "S":wp+=complex(0,n)
+		case "E":wp+=complex(n,0)
+		case "W":wp+=complex(-n,0)
+		case "F":pos+=wp*n
+		case "L":wp=rot(wp,i,n)
+		case "R":wp=rot(wp,i,n)
+print("p2:",abs(pos.real)+abs(pos.imag))
