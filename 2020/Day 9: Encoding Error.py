@@ -13,11 +13,6 @@ while len(V)>=26:
 	V.pop(0)
 V=[int(x) for x in data]
 NV=[a+b for a,b in zip(V,V[1:])]
-"""
-a b c d e
-ab bc cd de
-abc bcd cde
-"""
 off=2
 while (target not in NV) and NV:
 	NV=[a+b for a,b in zip(NV,V[off:])]
