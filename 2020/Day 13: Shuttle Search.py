@@ -18,28 +18,22 @@ for v in data[1].split(","):
 		rec=r
 		t=int(v)
 print("p1:",t*rec)
+V=[]
 for d,v in enumerate(data[1].split(",")):
 	if v=="x":continue
-	print(d,v,int(v)+d)
-print
-"""
-
-7,13,x,x,59,x,31,19
-	x%7 and x+1%13 == 0 
-	x=77 recur=169 7*13
-	
-	x % 7 and x+1 % 13  x+4 % 59  == 0 
-	x=?  recur = 9971
-
-< 13-(x+1%13) <59-
-
-"""
-t=p=5713406
-while True:
-	if t%29 or (t+23)%37 or (t+29)%433 or(t+42)%13 or (t+43)%17:
-		t+=1
-		continue
-	print(t,t-p)
-	p=t
-	input()
-	t+=6039917
+	print(d,v)
+	V.append((d,int(v)))
+print("===")
+base,inc=V.pop(0)
+t=inc
+print(t)
+while V:
+	off,mod=V.pop(0)
+	while True:
+		if (t+off)%mod:
+			t+=inc
+			continue
+		break
+	base=t
+	inc*=mod
+	print(f"base: {base} inc: {inc}    ...")
