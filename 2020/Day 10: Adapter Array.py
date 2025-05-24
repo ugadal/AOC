@@ -15,11 +15,12 @@ print("p1:",delta.count(1)*delta.count(3))
 print(data)
 def count(L):
 	match len(L):
+		# ~ remove at most two consecutive
 		case 1:return 1
 		case 2:return 1
 		case 3:return 2 
 		case 4:return 4 #keep 2, or remove 1 twice, or remove both
-		case 5:return 7
+		case 5:return 7 
 R=1
 pos=0
 bg=0
@@ -33,5 +34,4 @@ while pos<len(data):
 		R*=count(part)
 		print(R)
 		bg=pos+1
-		# ~ input()
 	pos+=1
