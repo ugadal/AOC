@@ -17,8 +17,8 @@ def count(L):
 	match len(L):
 		case 1:return 1
 		case 2:return 1
-		case 3:return 2
-		case 4:return 4
+		case 3:return 2 
+		case 4:return 4 #keep 2, or remove 1 twice, or remove both
 		case 5:return 7
 R=1
 pos=0
