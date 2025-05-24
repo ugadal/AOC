@@ -20,13 +20,8 @@ abc bcd cde
 """
 off=2
 while (target not in NV) and NV:
-	print(off)
-	# ~ input()
 	NV=[a+b for a,b in zip(NV,V[off:])]
 	off+=1
-# ~ off-=1
 pos=NV.index(target)
 part=V[pos:pos+off]
-print(part,sum(part))
-print(min(part),max(part))
-print(min(part)+max(part))
+print("p2:",min(part)+max(part))
