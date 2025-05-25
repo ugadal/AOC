@@ -30,15 +30,17 @@ for line in data:
 	val=val&mand
 	R[add]=val
 print("p1:",sum(R.values()))
-add=format(42,"b").zfill(36)
-m="000000000000000000000000000000X1001X"
-nm=""
-for x,y in zip(m,add):
-	match x:
-		case "0":nm+=y
-		case "1":nm+=x
-		case "X":nm+=x
-print(nm)
+for line in data:
+	if line.startswith("mask"):
+		m=line.split()[2]
+		continue
+	add,val=map(int,memex.findall(line)[0])
+	nm=""
+	for x,y in zip(m,format(add,"b").zfill(36)):
+		match x:
+			case "0":nm+=y
+			case "1":nm+=x
+			case "X":nm+=x
 P=[""]
 for c in nm:
 	NP=[]
