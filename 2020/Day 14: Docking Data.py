@@ -1,39 +1,52 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=1
+part=0
 import re
 import sys
 cp=str(sys.argv[0])
 dre=re.compile(r"^Day (\d+):")
 day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
+"""
+mask = 1001X0X00110011X01X1000110100011000X
+mem[5228] = 409649
+mem[64037] = 474625
+"""
+R={}
+memex=re.compile(r"mem\[(\d+)\] = (\d+)")
 data=open(fn).read().split("\n\n")[part].splitlines()
-st=int(data[0])
-def z(st,x):return x-st%x
-rec=float("inf")
-for v in data[1].split(","):
-	if v=="x":continue
-	r=z(st,int(v))
-	if r<rec:
-		rec=r
-		t=int(v)
-print("p1:",t*rec)
-V=[]
-for d,v in enumerate(data[1].split(",")):
-	if v=="x":continue
-	print(d,v)
-	V.append((d,int(v)))
-print("===")
-base,inc=V.pop(0)
-t=inc
-print(t)
-while V:
-	off,mod=V.pop(0)
-	while True:
-		if (t+off)%mod:
-			t+=inc
-			continue
-		break
-	base=t
-	inc*=mod
-	print(f"base: {base} inc: {inc}    ...")
+for line in data:
+	if line.startswith("mask"):
+		m=line.split()[2]
+		# ~ force one
+		mor=m.replace("X","0")
+		mor=int(mor,2)
+		# ~ force zeroes
+		mand=m.replace("X","1")
+		mand=int(mand,2)
+		continue
+	add,val=map(int,memex.findall(line)[0])
+	val=val|mor
+	val=val&mand
+	R[add]=val
+print("p1:",sum(R.values()))
+add=format(42,"b").zfill(36)
+m="000000000000000000000000000000X1001X"
+nm=""
+for x,y in zip(m,add):
+	match x:
+		case "0":nm+=y
+		case "1":nm+=x
+		case "X":nm+=x
+print(nm)
+P=[""]
+for c in nm:
+	NP=[]
+	match c:
+		case "0":NP=[p+"0" for p in P]
+		case "1":NP=[p+"1" for p in P]
+		case "X":
+			NP=[p+"0" for p in P]
+			NP.extend([p+"1" for p in P])
+	P=NP
+for p in P:print(int(p,2))
