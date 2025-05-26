@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 import re
 import sys
 cp=str(sys.argv[0])
@@ -30,6 +30,7 @@ for line in data:
 	val=val&mand
 	R[add]=val
 print("p1:",sum(R.values()))
+R={}
 for line in data:
 	if line.startswith("mask"):
 		m=line.split()[2]
@@ -41,14 +42,17 @@ for line in data:
 			case "0":nm+=y
 			case "1":nm+=x
 			case "X":nm+=x
-P=[""]
-for c in nm:
-	NP=[]
-	match c:
-		case "0":NP=[p+"0" for p in P]
-		case "1":NP=[p+"1" for p in P]
-		case "X":
-			NP=[p+"0" for p in P]
-			NP.extend([p+"1" for p in P])
-	P=NP
-for p in P:print(int(p,2))
+	P=[""]
+	# ~ print("p2",nm)
+	for pos,c in enumerate(nm):
+		NP=[]
+		match c:
+			case "0":NP=[p+"0" for p in P]
+			case "1":NP=[p+"1" for p in P]
+			case "X":
+				NP=[p+"0" for p in P]
+				NP.extend([p+"1" for p in P])
+		P=NP
+	for p in P:
+		R[int(p,2)]=val
+print("p2:",sum(R.values()))		
