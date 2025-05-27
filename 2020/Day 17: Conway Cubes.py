@@ -43,7 +43,10 @@ for t in range(6):
 				if G.get(pos,False) and 2<=busy<=3:NG[pos]=True
 				if not G.get(pos,False) and busy==3:NG[pos]=True
 	G=NG
+
 print("p1:",len(NG))
+# ~ ======================================================================
+
 G={}
 for r,row in enumerate(data):
 	for c,s in enumerate(row):
