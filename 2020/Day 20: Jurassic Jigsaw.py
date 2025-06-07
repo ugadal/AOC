@@ -26,6 +26,8 @@ def transpose(b):
 	return ["".join(row) for row in zip(*b)]
 def rot(b):
 	return(flip(transpose(b)))
+def rotl(b):
+	return rot(rot(rot(b)))
 # ~ print()	
 # ~ for row in rot(lb):print(row)
 def allrot(b):
@@ -51,10 +53,54 @@ def nmatch(x,y):
 def sidebyside(x,y):
 	return	nmatch(x,y)+nmatch(rot(x),y)+nmatch(rot(rot(x)),y)+nmatch(rot(rot(rot(x))),y)
 p1=1
+corners=[]
+Conn={}
 for k,b in B.items():
+	Conn[k]=[]
 	ok=0
 	for t,c in B.items():
 		if k==t:continue
-		if sidebyside(b,c):ok+=1
-	if ok==2:p1*=int(k)
+		if sidebyside(b,c):
+			ok+=1
+			Conn[k].append(t)
+	if ok==2:
+		p1*=int(k)
+		corners.append(k)
 print("p1:",p1)
+print(corners)
+def isabove(a,b):
+	return compare(a,b)
+def isleftof(a,b):
+	return compare(rot(a),b)
+for corner in corners:
+	print(corner,Conn[corner])
+	base=B[corner]
+	for cmp in Conn[corner]:
+		tg=B[cmp]
+		if any(isabove(base,ar) for ar in allrot(tg)) :print(cmp,"under",corner)
+		if any(isleftof(base,ar) for ar in allrot(tg)) :print(cmp,"right of",corner)
+		# ~ if isabove(base,flip(tg)):print(cmp,"flipped under",corner)
+		# ~ if isleftof(base,tg):print(cmp,"right of",corner)
+# ~ for k,v in Conn.items():
+	# ~ print(k,v)
+def cmpalb(a,b):
+	rc="".join(x[-1] for x in a)
+	# ~ for r in a:print(r)
+	# ~ print()
+	# ~ print(rc)
+	# ~ print(rot(a)[-1])
+	# ~ exit()
+	
+	return any(rc==x[-1] for x in allrot(b))
+for b in corners:
+	for k,v in B.items():
+		if b==k:continue
+		if cmpalb(B[b],v):print(b,"left of",k)
+# ~ b=corners[-1]
+# ~ print(b)
+# ~ for row in B[b]:print(row)
+# ~ print()
+# ~ def edges(a):
+	# ~ for z in allrot(a):
+		# ~ yield z[-1]
+# ~ for edg in edges(B[b]):print(edg)
