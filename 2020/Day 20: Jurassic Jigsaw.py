@@ -11,23 +11,23 @@ blocks=open(fn).read().split("\n\n")
 B={}
 for block in blocks:
 	bid=block.splitlines()[0].split()[1][:-1]
-	print(bid)
+	# ~ print(bid)
 	B[bid]=block.splitlines()[1:]
-print(len(B))
+# ~ print(len(B))
 lb=B[bid]
-print(lb)
-for row in lb:print(row)
-print()
+# ~ print(lb)
+# ~ for row in lb:print(row)
+# ~ print()
 def flip(b):
 	return[r[::-1] for r in b]
-for row in flip(lb):print(row)
+# ~ for row in flip(lb):print(row)
 def transpose(b):
 	# ~ R=zip(*b)
 	return ["".join(row) for row in zip(*b)]
 def rot(b):
 	return(flip(transpose(b)))
-print()	
-for row in rot(lb):print(row)
+# ~ print()	
+# ~ for row in rot(lb):print(row)
 def allrot(b):
 	yield (b)
 	yield (rot(b))
@@ -40,11 +40,11 @@ def allrot(b):
 def compare(x,y):return x[-1]==y[0]
 def nmatch(x,y):
 	return sum(1 if compare(x,z) else 0 for z in allrot(y))
-for k,b in B.items():
-	print(bid,k,nmatch(lb,b))
-	print(bid,k,nmatch(rot(lb),b))
-	print(bid,k,nmatch(rot(rot(lb)),b))
-	print(bid,k,nmatch(rot(rot(rot(lb))),b))
+# ~ for k,b in B.items():
+	# ~ print(bid,k,nmatch(lb,b))
+	# ~ print(bid,k,nmatch(rot(lb),b))
+	# ~ print(bid,k,nmatch(rot(rot(lb)),b))
+	# ~ print(bid,k,nmatch(rot(rot(rot(lb))),b))
 # ~ for r in allrot(B["1871"]):
 	# ~ for row in r:print(row)
 	# ~ print()
@@ -57,4 +57,4 @@ for k,b in B.items():
 		if k==t:continue
 		if sidebyside(b,c):ok+=1
 	if ok==2:p1*=int(k)
-print(p1)
+print("p1:",p1)
