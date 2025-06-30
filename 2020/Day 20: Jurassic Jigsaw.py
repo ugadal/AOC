@@ -31,14 +31,14 @@ def rotl(b):
 # ~ print()	
 # ~ for row in rot(lb):print(row)
 def allrot(b):
-	yield (b)
-	yield (rot(b))
-	yield (rot(rot(b)))
-	yield (rot(rot(rot(b))))
-	yield (flip(b))
-	yield (flip(rot(b)))
-	yield (flip(rot(rot(b))))
-	yield (flip(rot(rot(rot(b)))))
+	yield b
+	yield rot(b)
+	yield rot(rot(b))
+	yield rotl(b)
+	yield flip(b)
+	yield flip(rot(b))
+	yield flip(rot(rot(b)))
+	yield flip(rotl(b))
 def compare(x,y):return x[-1]==y[0]
 def nmatch(x,y):
 	return sum(1 if compare(x,z) else 0 for z in allrot(y))
@@ -52,55 +52,67 @@ def nmatch(x,y):
 	# ~ print()
 def sidebyside(x,y):
 	return	nmatch(x,y)+nmatch(rot(x),y)+nmatch(rot(rot(x)),y)+nmatch(rot(rot(rot(x))),y)
+def toint(s):
+	return int()
+def desc(b):
+	D=[]
+	r=b[0]
+	D.append(int("".join(["1" if c =="#" else "0" for c in r]),2))
+	D.append(int("".join(["1" if c =="#" else "0" for c in r[::-1]]),2))
+	r=b[-1]
+	D.append(int("".join(["1" if c =="#" else "0" for c in r]),2))
+	D.append(int("".join(["1" if c =="#" else "0" for c in r[::-1]]),2))
+	r=[x[0] for x in b]
+	D.append(int("".join(["1" if c =="#" else "0" for c in r]),2))
+	D.append(int("".join(["1" if c =="#" else "0" for c in r[::-1]]),2))
+	r=[x[-1] for x in b]
+	D.append(int("".join(["1" if c =="#" else "0" for c in r]),2))
+	D.append(int("".join(["1" if c =="#" else "0" for c in r[::-1]]),2))
+	return D
 p1=1
 corners=[]
 Conn={}
+Desc={}
 for k,b in B.items():
-	Conn[k]=[]
-	ok=0
-	for t,c in B.items():
+	Desc[k]=desc(b)
+	print(Desc[k])
+	Conn[k]=set()
+for k in B.keys():
+	for t in B.keys():
 		if k==t:continue
-		if sidebyside(b,c):
-			ok+=1
-			Conn[k].append(t)
-	if ok==2:
-		p1*=int(k)
+		if set(Desc[k]) & set(Desc[t]):
+			Conn[k].add(t)
+			Conn[t].add(k)
+corners=[]
+p=1
+for k in B.keys():
+	if len(Conn[k])==2:
+		print(k,Conn[k],len(Conn[k]))
 		corners.append(k)
-print("p1:",p1)
-print(corners)
-def isabove(a,b):
-	return compare(a,b)
+		p*=int(k)
+print("p1:",p)
+print(corners)		
+# ~ find left
+def isunder(a,b):
+	for r in allrot(b):
+		if compare(a,r):return True
+	return False
 def isleftof(a,b):
-	return compare(rot(a),b)
+	v=rotl(a)
+	for r in rot(b):
+		if compare(v,r):return True
+	return False
 for corner in corners:
-	print(corner,Conn[corner])
-	base=B[corner]
-	for cmp in Conn[corner]:
-		tg=B[cmp]
-		if any(isabove(base,ar) for ar in allrot(tg)) :print(cmp,"under",corner)
-		if any(isleftof(base,ar) for ar in allrot(tg)) :print(cmp,"right of",corner)
-		# ~ if isabove(base,flip(tg)):print(cmp,"flipped under",corner)
-		# ~ if isleftof(base,tg):print(cmp,"right of",corner)
-# ~ for k,v in Conn.items():
-	# ~ print(k,v)
-def cmpalb(a,b):
-	rc="".join(x[-1] for x in a)
-	# ~ for r in a:print(r)
-	# ~ print()
-	# ~ print(rc)
-	# ~ print(rot(a)[-1])
-	# ~ exit()
-	
-	return any(rc==x[-1] for x in allrot(b))
-for b in corners:
-	for k,v in B.items():
-		if b==k:continue
-		if cmpalb(B[b],v):print(b,"left of",k)
-# ~ b=corners[-1]
-# ~ print(b)
-# ~ for row in B[b]:print(row)
-# ~ print()
-# ~ def edges(a):
-	# ~ for z in allrot(a):
-		# ~ yield z[-1]
-# ~ for edg in edges(B[b]):print(edg)
+	for t in Conn[corner]:
+		print(corner,t,"above",isabove(corner,t))
+		print(corner,t,"left of",isleftof(corner,t))
+exit()
+todo=B.keys()
+done=[]
+positions={}
+curr=todo.pop()
+positions[curr]=(0,0)
+while todo:
+	for t in Conn[curr]:
+		if t in done:continue
+		
