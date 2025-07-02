@@ -3,6 +3,7 @@
 part=0
 import re
 import sys
+import itertools as it
 cp=str(sys.argv[0])
 dre=re.compile(r"^Day (\d+):")
 day=dre.findall(cp)[0]
@@ -11,25 +12,16 @@ blocks=open(fn).read().split("\n\n")
 B={}
 for block in blocks:
 	bid=block.splitlines()[0].split()[1][:-1]
-	# ~ print(bid)
 	B[bid]=block.splitlines()[1:]
-# ~ print(len(B))
 lb=B[bid]
-# ~ print(lb)
-# ~ for row in lb:print(row)
-# ~ print()
 def flip(b):
 	return[r[::-1] for r in b]
-# ~ for row in flip(lb):print(row)
 def transpose(b):
-	# ~ R=zip(*b)
 	return ["".join(row) for row in zip(*b)]
 def rot(b):
-	return(flip(transpose(b)))
+	return flip(transpose(b))
 def rotl(b):
 	return rot(rot(rot(b)))
-# ~ print()	
-# ~ for row in rot(lb):print(row)
 def allrot(b):
 	yield b
 	yield rot(b)
@@ -42,14 +34,6 @@ def allrot(b):
 def compare(x,y):return x[-1]==y[0]
 def nmatch(x,y):
 	return sum(1 if compare(x,z) else 0 for z in allrot(y))
-# ~ for k,b in B.items():
-	# ~ print(bid,k,nmatch(lb,b))
-	# ~ print(bid,k,nmatch(rot(lb),b))
-	# ~ print(bid,k,nmatch(rot(rot(lb)),b))
-	# ~ print(bid,k,nmatch(rot(rot(rot(lb))),b))
-# ~ for r in allrot(B["1871"]):
-	# ~ for row in r:print(row)
-	# ~ print()
 def sidebyside(x,y):
 	return	nmatch(x,y)+nmatch(rot(x),y)+nmatch(rot(rot(x)),y)+nmatch(rot(rot(rot(x))),y)
 def toint(s):
@@ -77,12 +61,10 @@ for k,b in B.items():
 	Desc[k]=desc(b)
 	print(Desc[k])
 	Conn[k]=set()
-for k in B.keys():
-	for t in B.keys():
-		if k==t:continue
-		if set(Desc[k]) & set(Desc[t]):
-			Conn[k].add(t)
-			Conn[t].add(k)
+for k,t in it.combinations(B.keys(),2):
+	if set(Desc[k]) & set(Desc[t]):
+		Conn[k].add(t)
+		Conn[t].add(k)
 corners=[]
 p=1
 for k in B.keys():
@@ -92,27 +74,125 @@ for k in B.keys():
 		p*=int(k)
 print("p1:",p)
 print(corners)		
-# ~ find left
 def isunder(a,b):
 	for r in allrot(b):
-		if compare(a,r):return True
+		if a[-1]==r[0]:return r
 	return False
 def isleftof(a,b):
-	v=rotl(a)
-	for r in rot(b):
-		if compare(v,r):return True
+	v="".join(r[0] for r in a)
+	for tr in allrot(b):
+		w="".join(r[-1] for r in tr)
+		if v==w:return tr
 	return False
-for corner in corners:
-	for t in Conn[corner]:
-		print(corner,t,"above",isabove(corner,t))
-		print(corner,t,"left of",isleftof(corner,t))
-exit()
-todo=B.keys()
+def isrightof(a,b):
+	v="".join(r[-1] for r in a)
+	for tr in allrot(b):
+		w="".join(r[0] for r in tr)
+		if v==w:return tr
+	return False
+def isabove(a,b):
+	for r in allrot(b):
+		if a[0]==r[-1]:return r
+	return False
+todo=list(B.keys())
 done=[]
 positions={}
-curr=todo.pop()
+curr=todo.pop(0)
 positions[curr]=(0,0)
 while todo:
+	if curr not in positions:
+		todo.append(curr)
+		curr=todo.pop(0)
+		continue
+	print(f"working on {curr}: {Conn[curr]}")
+	cr,cc=positions[curr]
 	for t in Conn[curr]:
-		if t in done:continue
-		
+		# ~ print(f"positioning {t}")
+		if t in done:
+			print(f"skipping {t} already positioned")
+			continue
+		u=isunder(B[curr],B[t])
+		if u:
+			print(t,"under",curr)
+			B[t]=u
+			positions[t]=(cr+1,cc)
+			continue
+		u=isleftof(B[curr],B[t])
+		if u:
+			print(t,"left of",curr)
+			B[t]=u
+			positions[t]=(cr,cc-1)
+			continue
+		u=isrightof(B[curr],B[t])
+		if u:
+			print(t,"right of",curr)
+			B[t]=u
+			positions[t]=(cr,cc+1)
+			continue
+		u=isabove(B[curr],B[t])
+		if u:
+			print(t,"above of",curr)
+			B[t]=u
+			positions[t]=(cr-1,cc)
+			continue
+		else:
+			print("not positioned")
+			input()
+	done.append(curr)
+	curr=todo.pop(0)
+mir=min(r for r,c in positions.values())
+mic=min(c for r,c in positions.values())
+print(mir,mic)
+postopiece={}
+for k,(r,c) in positions.items():
+	positions[k]=r-mir,c-mic
+	postopiece[r-mir,c-mic]=k
+print(postopiece.keys())
+mxr=max(r for r,c in positions.values())
+mxc=max(c for r,c in positions.values())
+print(mxr,mxc)
+tl=postopiece[0,0]
+def shorten(b):	return [row[1:-1] for row in b[1:-1]]
+for k,v in B.items():
+	B[k]=shorten(v)
+ss=len(B[tl][0])
+nmap=set()
+for r in range(mxr+1):
+	br=r*ss
+	for c in range(mxc+1):
+		bc=c*ss
+		block=B[postopiece[r,c]]
+		for ir,row in enumerate(block):
+			for ic,c in enumerate(row):
+				if c=="#":
+					pos=complex(bc+ic,br+ir)
+					nmap.add(pos)
+smt="""                  # 
+#    ##    ##    ###
+ #  #  #  #  #  #   """
+sm=set()
+for r,row in enumerate(smt.splitlines()):
+	for c,s in enumerate(row):
+		if s=="#":
+			pos=complex(c,r)
+			sm.add(pos)
+mxr=int(max(pos.imag for pos in nmap))
+mxc=int(max(pos.real for pos in nmap))
+nmap={complex(mxc-(x.real),x.imag) for x in nmap} #flip
+for x in range(3): #rot 3 times
+	nmap={x*1j for x in nmap}
+	mir=min(pos.imag for pos in nmap)
+	mic=min(pos.real for pos in nmap)
+	nmap={x-mir-mic for x in nmap}
+insm=set()
+mxr=int(max(pos.imag for pos in nmap))
+mxc=int(max(pos.real for pos in nmap))
+print(sm,mxr,mxc)
+for row in range(mxr+1):
+	for col in range(mxc+1):
+		base=complex(col,row)
+		smp={s+base for s in sm}
+		inter=smp&nmap
+		if (smp&nmap)==smp:
+			insm=insm|smp
+print(len(nmap-insm))
