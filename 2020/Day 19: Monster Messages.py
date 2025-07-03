@@ -22,32 +22,19 @@ for line in rules.splitlines():
 def decompose(x):
 	print('entering on',x)
 	if x.startswith('"'):
-		print("returning simple from",x,[x[1:-1]])
 		return [x[1:-1]]
 	if x.count(" | "):
 		P=[]
 		for p in map(decompose,x.split(" | ")):
 			P.extend(p)
-		print(f"returning from or {x} {P}")
 		return P
 	if x.count(" "):
 		P=map(decompose,x.split(" "))
 		P=list(P)
-		# ~ print(P)
 		P=it.product(*P)
-		# ~ P=list(P)
-		# ~ print(P)
 		P=["".join(p) for p in P]
-		# ~ print(P)
-		print(f"returning from and {x} : {P}")
 		return P
-	# ~ if R[x].startswith('"'):return [R[x][1:-1]]
 	return decompose(R[x])
-# ~ 3: 4 5 | 5 4
-# ~ 4: "a"
-# ~ 5: "b"
-# ~ print(decompose("4 5 4"))
-# ~ print(decompose("4 | 5"))
 ok=decompose("0")
 nok=0
 for line in data.splitlines():
