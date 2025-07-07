@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 import re
 import sys
 import itertools as it
@@ -11,3 +11,17 @@ dre=re.compile(r"^Day (\d+):")
 day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 blocks=open(fn).read().split("\n\n")[part]
+IL=set()
+AL=set()
+for line in blocks.splitlines():
+	il,al=line.split(" (")
+	il=il.split()
+	al=al[:-1].split("contains ")[1]
+	al=al.split(", ")
+	IL|=set(il)
+	AL|=set(al)
+print(IL)
+print(AL)
+for i,c in enumerate(it.permutations(IL,len(AL))):
+	pass
+print(i)
