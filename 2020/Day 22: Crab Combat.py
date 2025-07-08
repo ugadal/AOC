@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=1
+part=0
 import re
 import sys
 import itertools as it
