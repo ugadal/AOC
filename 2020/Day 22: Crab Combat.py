@@ -24,9 +24,6 @@ while pa and pb:
 	else:
 		pb.append(b)
 		pb.append(a)
-print(pa)
-print(pb)
 w=pa if pa else pb
-print(w)
 w.reverse()
-print(sum((i+1)*v for i,v in enumerate(w)))
+print("p1:",sum((i+1)*v for i,v in enumerate(w)))
