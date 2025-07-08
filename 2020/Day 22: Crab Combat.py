@@ -27,3 +27,12 @@ while pa and pb:
 w=pa if pa else pb
 w.reverse()
 print("p1:",sum((i+1)*v for i,v in enumerate(w)))
+pa=list(map(int,(line for line in pa.splitlines()[1:])))
+pb=list(map(int,(line for line in pb.splitlines()[1:])))
+def game(A,B):
+	if not A:return "b",B
+	if not B:return "a",A
+	if A[0]>len[A] and B[0]>len(B):
+		hold=A[0],B[0]
+		winner,deck=game(A[1:],B[1:])
+		
