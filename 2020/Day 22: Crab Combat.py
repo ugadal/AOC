@@ -33,9 +33,9 @@ pb=list(pb.splitlines()[1:])
 def game(A,B):
 	oa=A
 	ob=B
-	print("started new (sub)game")
-	print(oa)
-	print(ob)
+	# ~ print("started new (sub)game")
+	# ~ print(oa)
+	# ~ print(ob)
 	V=set()
 	def turn(A,B):
 		# ~ print("started new turn")
@@ -66,9 +66,3 @@ def game(A,B):
 		return res
 	return turn(A,B)
 print(game(",".join(pa),",".join(pb)))
-# ~ n=8
-# ~ for c in it.permutations(range(1,n+1)):
-	# ~ pa=",".join(map(str,c[:n//2]))
-	# ~ pb=",".join(map(str,c[n//2:]))
-	# ~ print(pa,pb)
-	# ~ print (game(pa,pb))
