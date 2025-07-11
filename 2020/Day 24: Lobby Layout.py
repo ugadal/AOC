@@ -57,7 +57,7 @@ def nb(r,c):
 	yield r-1,c-1
 def gnb(r,c):
 	return [B.get(p,False) for p in nb(r,c)]
-print(B,len(B))
+# ~ print(B,len(B))
 for x in range(1,101):
 	TF=[]
 	Bl=[b for b,v in B.items() if v]
@@ -75,7 +75,7 @@ for x in range(1,101):
 	# ~ print(mir,mic,mar,mac)
 	for r in range(mir-2,mar+3):
 		for c in range(mic-2,mac+3):
-			if (r+c)%2:continue
+			if (r+c)%2:continue   # !!!!!!!!
 			if B.get((r,c),False):continue
 			N=gnb(r,c)
 			# ~ print(r,c,N)
@@ -84,5 +84,5 @@ for x in range(1,101):
 	for p in TF:
 		B[p]=not B.get(p,False)
 	Bl=[b for b,v in B.items() if v]
-	print(x,":",len(Bl))
+print("p2:",len(Bl))
 	
