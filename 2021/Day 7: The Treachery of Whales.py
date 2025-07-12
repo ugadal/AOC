@@ -13,7 +13,6 @@ fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 block=open(fn).read().split("\n\n")[part]
 V=tuple(map(int,block.split(",")))
-print(V)
 rec=float("+Inf")
 for p in range(max(V)+1):
 	r=sum(abs(x-p) for x in V)
@@ -22,7 +21,7 @@ for p in range(max(V)+1):
 print("p1:",rec)
 rec=float("+Inf")
 for p in range(max(V)+1):
-	r=sum(abs(x-p)*(abs(x-p)+1)/2 for x in V)
+	r=sum(abs(x-p)*(abs(x-p)+1)//2 for x in V)
 	if r<rec:
 		rec=r
 print("p2:",rec)
