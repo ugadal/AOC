@@ -20,3 +20,8 @@ for x in range(80):
 	V=V+[z]
 	V[6]+=z
 print("p1:",sum(V))
+for x in range(256-80):
+	z=V.pop(0)
+	V=V+[z]
+	V[6]+=z
+print("p2:",sum(V))
