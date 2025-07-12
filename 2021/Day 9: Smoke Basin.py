@@ -27,4 +27,4 @@ res=0
 for k,v in G.items():
 	if all(x>v for x in around(k)):
 		res+=v+1
-print(res)
+print("p1:",res)
