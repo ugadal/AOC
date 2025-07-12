@@ -21,6 +21,7 @@ SC={
 	">": 25137}
 
 res=0
+incomplete=[]
 for s in block.splitlines():
 	# ~ print(s)
 	while True:
@@ -30,8 +31,27 @@ for s in block.splitlines():
 		s=s.replace("<>","")
 		s=s.replace("{}","")
 		if s==ori:break
-	if all(s.count(x)==0 for x in ")]>}"):continue
-	print(s)
+	if all(s.count(x)==0 for x in ")]>}"):
+		incomplete.append(s)
+		continue
+	# ~ print(s)
 	loc=min(s.index(x) for x in ")]>}" if s.count(x))
 	res+=SC[s[loc]]
 print("p1;",res)
+SC={
+	"(": 1,
+	"[": 2,
+	"{": 3,
+	"<": 4}
+res=[]
+for line in incomplete:
+	ttl=0
+	for k in reversed(line):
+		ttl*=5
+		ttl+=SC[k]
+	res.append(ttl)
+	# ~ print(ttl)
+res.sort()
+p=len(res)//2
+print("p2:",res[p])
+	
