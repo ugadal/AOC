@@ -27,7 +27,6 @@ pos=5
 while True:
 	V=list(valid(board,tirage[:pos]) for board in B)
 	if any(V):
-		# ~ print(pos,tirage[pos-1],next(v for v in V if v))
 		lv=tirage[pos-1]
 		gr=next(v for v in V if v)
 		break
@@ -43,9 +42,7 @@ for board in B:
 print("p1:",int(lv)*ttl)
 pos=len(tirage)
 while all (valid(board,tirage[:pos]) for board in B):pos-=1
-# ~ print(pos,tirage [pos])
 lwb=next(b for i,b in enumerate(B) if not valid(b,tirage[:pos]))
-# ~ print(lwb)
 V=[]
 for row in lwb:	V.extend(row)
 V=[v for v in V if v not in tirage[:pos+1]]
