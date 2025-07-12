@@ -12,15 +12,14 @@ dre=re.compile(r"^Day (\d+):")
 day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
+
 block=open(fn).read().split("\n\n")[part]
-# ~ [({(<(())[]>[[{[]{<()<>>
-# ~ [({([[{{
-# ~ {([(<{}[<>[]}>{[]{[(<()> incomplete
-# ~ {([(<[}>{{[( invalid
-SC={")": 3 ,
-"]": 57,
-"}": 1197,
-">": 25137}
+SC={
+	")": 3,
+	"]": 57,
+	"}": 1197,
+	">": 25137}
+
 res=0
 for s in block.splitlines():
 	# ~ print(s)
