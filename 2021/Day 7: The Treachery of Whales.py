@@ -13,14 +13,10 @@ fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 block=open(fn).read().split("\n\n")[part]
 V=tuple(map(int,block.split(",")))
-V=[V.count(x) for x in range(9)]
-for x in range(80):
-	z=V.pop(0)
-	V=V+[z]
-	V[6]+=z
-print("p1:",sum(V))
-for x in range(256-80):
-	z=V.pop(0)
-	V=V+[z]
-	V[6]+=z
-print("p2:",sum(V))
+print(V)
+rec=float("+Inf")
+for p in range(max(V)+1):
+	r=sum(abs(x-p) for x in V)
+	if r<rec:
+		rec=r
+		print(p,rec)
