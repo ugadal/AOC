@@ -14,11 +14,7 @@ fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 
 block=open(fn).read().split("\n\n")[part]
-SC={
-	")": 3,
-	"]": 57,
-	"}": 1197,
-	">": 25137}
+SC={")": 3,"]": 57,"}": 1197,">": 25137}
 
 res=0
 incomplete=[]
@@ -38,11 +34,7 @@ for s in block.splitlines():
 	loc=min(s.index(x) for x in ")]>}" if s.count(x))
 	res+=SC[s[loc]]
 print("p1;",res)
-SC={
-	"(": 1,
-	"[": 2,
-	"{": 3,
-	"<": 4}
+SC={"(": 1,"[": 2,"{": 3,"<": 4}
 res=[]
 for line in incomplete:
 	ttl=0
@@ -50,7 +42,7 @@ for line in incomplete:
 		ttl*=5
 		ttl+=SC[k]
 	res.append(ttl)
-	# ~ print(ttl)
+
 res.sort()
 p=len(res)//2
 print("p2:",res[p])
