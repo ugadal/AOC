@@ -19,4 +19,10 @@ for p in range(max(V)+1):
 	r=sum(abs(x-p) for x in V)
 	if r<rec:
 		rec=r
-		print(p,rec)
+print("p1:",rec)
+rec=float("+Inf")
+for p in range(max(V)+1):
+	r=sum(abs(x-p)*(abs(x-p)+1)/2 for x in V)
+	if r<rec:
+		rec=r
+print("p2:",rec)
