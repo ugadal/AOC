@@ -30,13 +30,13 @@ for k,v in G.items():
 	if all(x>v for x in around(k)):
 		res+=v+1
 		lp.append(k)
+
 print("p1:",res)
 def around(pos):
 	for offs in (-1,1,1j,-1j):
 		np=pos+offs
 		if np in G:yield np
 
-print(lp)
 R=[]
 for p in lp:
 	todo=[p]
@@ -49,10 +49,10 @@ for p in lp:
 		for n in around(pos):
 			if G[n]==9:continue
 			if G[n]>ch:todo.append(n)
-	print(len(done))
 	R.append(done)
+
 R=sorted(R,key=lambda s:len(s),reverse=True)
 R=R[:3]
 res=1
 for r in R:res*=len(r)
-print(res)
+print("p2:",res)
