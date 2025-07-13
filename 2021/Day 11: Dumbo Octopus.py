@@ -21,18 +21,16 @@ for r,row in enumerate(block.splitlines()):
 		G[pos]=int(s)
 R=r+1
 C=c+1
-# ~ print(R,C)
 POS=set(G.keys())
-# ~ print(len(POS))
+DP=[complex(r,i) for r,i in it.product([-1,1,0],[-1,1,0])][:-1]
 def around(pos):
-	for dp in (-1-1j,-1j,1+-1j,-1,1,-1+1j,1j,1+1j):
-		if pos+dp in POS:yield pos+dp
+	for dp in DP:
+		np=pos+dp
+		if np in POS:yield np
 def rep():
 	print(step)
-	for row in range(R):
-		print ("".join(map(str,(G[complex(col,row)] for col in range(C)))))
+	for row in range(R):print ("".join(map(str,(G[complex(col,row)] for col in range(C)))))
 	print()
-# ~ rep()
 step=0
 flashes=0
 while True:
@@ -41,7 +39,6 @@ while True:
 	todo=set(k for k,v in G.items() if v>9)
 	done=set()
 	while todo:
-		# ~ print(len(todo))
 		for f in todo:
 			for n in around(f):G[n]+=1
 			done.add(f)
@@ -51,4 +48,4 @@ while True:
 	if step==100:print(f"p1: {flashes} flashes done after {step} steps...")
 	if len(done)==R*C:
 		print("p2:",step)
-		exit()
+		break
