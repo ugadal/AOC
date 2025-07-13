@@ -35,7 +35,7 @@ def rep():
 # ~ rep()
 step=0
 flashes=0
-for x in range(100):
+while True:
 	step+=1
 	G={k:v+1 for k,v in G.items()}
 	todo=set(k for k,v in G.items() if v>9)
@@ -48,5 +48,7 @@ for x in range(100):
 		todo=set(k for k,v in G.items() if v>9)-done
 	for n in done:G[n]=0
 	flashes+=len(done)
-rep()
-print(f"p1: {flashes} flashes done after {step} steps...")
+	if step==100:print(f"p1: {flashes} flashes done after {step} steps...")
+	if len(done)==R*C:
+		print("p2:",step)
+		exit()
