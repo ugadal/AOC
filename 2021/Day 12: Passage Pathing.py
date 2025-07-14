@@ -44,10 +44,28 @@ while todo:
 	lp=cp[-1]
 	if lp==en:
 		paths+=1
-		print([p.n for p in cp])
+		# ~ print([p.n for p in cp])
 		continue
 	for tar in lp.link:
 		if tar.small and tar in cp:continue
 		todo.append(cp+[tar])
 		# ~ print (todo)
 print("p1:",paths)
+for n in Nodes:
+	if sn in n.link:n.link.remove(sn)
+paths=0
+todo=[[sn]]
+while todo:
+	cp=todo.pop(0)
+	lp=cp[-1]
+	if lp==en:
+		paths+=1
+		# ~ print([p.n for p in cp])
+		continue
+	sv=set(no for no in cp if no.small)
+	svt=any(cp.count(no)==2 for no in sv)
+	for tar in lp.link:
+		if tar.small and tar in cp and svt:continue
+		todo.append(cp+[tar])
+		# ~ print (todo)
+print("p2:",paths)
