@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 
 import re
 import sys
@@ -32,3 +32,30 @@ for c in set(R.values()):
 	mx=max(mx,v)
 	mn=min(mn,v)
 print("p1:",mx-mn)
+# ~ p2
+st,rules=block.split("\n\n")
+em=set(R.values())
+IC={a+b: 0 for a,b in it.product(em,repeat=2)}
+# ~ print(IC)
+for a,b in zip(st,st[1:]):IC[a+b]+=1
+for x in range(40):
+	NC={a+b: 0 for a,b in it.product(em,repeat=2)}
+	for k,v in IC.items():
+		if not v:continue
+		a,b=k
+		t=R[k]
+		NC[a+t]+=v
+		NC[t+b]+=v
+	IC=NC
+	# ~ print(x,1+sum(IC.values()))
+seen={x:0 for x in em}
+for (a,b),v in IC.items():
+	seen[a]+=v
+	seen[b]+=v
+# ~ print(seen)
+print("p2:",1+(max(seen.values())-min(seen.values()))//2)
+# ~ this might seem strange
+# ~ ab -> ax xb -> ay yx xz zb
+# ~ as string
+# ~ ab -> axb -> ayxzb  each symbol seen once
+# ~ but in dimers count a and b seen once, xyz seen twice, first and last symbol lacking one
