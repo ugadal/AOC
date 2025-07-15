@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=1
+part=0
 
 import re
 import sys
@@ -19,13 +19,11 @@ R={}
 for rule in rules.splitlines():
 	a,b=rule.split(" -> ")
 	R[a]=b
-print(R)
 for x in range(10):
 	z=""
 	for a,b in zip(st,st[1:]):
 		z+=a+R[a+b]
 	z+=b
-	# ~ print(z)
 	st=z
 mx=float("-inf")
 mn=-mx
@@ -33,5 +31,4 @@ for c in set(R.values()):
 	v=z.count(c)
 	mx=max(mx,v)
 	mn=min(mn,v)
-	print(c,v,mn,mx)
-print(mx-mn)
+print("p1:",mx-mn)
