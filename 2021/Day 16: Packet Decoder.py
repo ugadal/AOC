@@ -13,53 +13,53 @@ day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
-def getlitv(s):
-	print(s)
+def getlitv(s,lvl=1):
+	print("="*lvl,s)
+	global ttv
 	cp=0
 	tv=""
 	while True:
 		tv+=s[cp+1:cp+5]
 		if s[cp]=="0":break
 		cp+=5
-		print(tv,len(tv)*5/4)
+		print(tv,len(tv)*5//4)
 	print(tv,len(tv)*5//4)
 	print("lit value",int(tv,2),cp+5)
 	return cp+5
-def op(s):
+def op(s,lvl=0):
 	if s[0]=="1":
 		sp=int(s[1:12],2)
 		print("# subpackets",sp)
 		cp=0
 		for x in range(sp):
-			cp+=treat(s[12+cp:])
-def treat(bs):
-	# ~ pv=int(bs[:3],2)
-	# ~ ptid=int(bs[3:6],2)
-	x=int(bs[:6],2)
-	# ~ print (f"pv: {pv}, ptid: {ptid}")
-	# ~ if ptid==4:
-	if x&4==4:
-		# ~ print (x&4==ptid)
-		return getlitv(bs[6:])
+			cp+=res(s[12+cp:])
 	else:
-		op(bs[6:])
-def res(s,lvl=0):
-	h=int(s[:7],2)
-	if h&8==8:
+		tex=int(s[1:16],2)
+		print("examine next",tex,s[16:16+tex])
+		res(s[16:16+tex],lvl+1)
+def res(s,lvl=1):
+	print("res","="*lvl,s)
+	global ttv
+	pv=int(s[:3],2)
+	ptid=int(s[3:6],2)
+	if ptid==4:
 		print("litval")
-		return 6+getlitv(s[6:])
-	else:print("operator")
+		ttv+=pv
+		return 6+getlitv(s[6:],lvl+1)
+	else:
+		print("operator")
+		return op(s[6:],lvl+1)
 def getbs(line):
 	r=bin(int(line,16))[2:]
 	while len(r)%4:r="0"+r
 	print(r)
 	return r
-for line in open(fn).read().splitlines()[:-1]:
+ttv=0
+for line in open(fn).read().splitlines()[:2]:
 # ~ for line in open(fn).read().splitlines():
+	print(line)
 	print(res(getbs(line)))
-# ~ 110100 lit val
-		# ~ 10111	11110	00101	000
-# ~ 110100	10111	11110	00101	000
+print("ttv:",ttv)
 """
 00111000000000000110111101000101001010010001001000000000
 001110 op
