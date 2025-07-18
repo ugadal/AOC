@@ -14,14 +14,17 @@ fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
 def getlitv(s):
+	print(s)
 	cp=0
 	tv=""
 	while True:
 		tv+=s[cp+1:cp+5]
 		if s[cp]=="0":break
 		cp+=5
-	print("lit value",int(tv,2),cp+11)
-	return cp+11
+		print(tv,len(tv)*5/4)
+	print(tv,len(tv)*5//4)
+	print("lit value",int(tv,2),cp+5)
+	return cp+5
 def op(s):
 	if s[0]=="1":
 		sp=int(s[1:12],2)
@@ -40,15 +43,20 @@ def treat(bs):
 		return getlitv(bs[6:])
 	else:
 		op(bs[6:])
-def res(s):
+def res(s,lvl=0):
 	h=int(s[:7],2)
 	if h&8==8:
 		print("litval")
-		getlitv(s[6:])
+		return 6+getlitv(s[6:])
 	else:print("operator")
-
+def getbs(line):
+	r=bin(int(line,16))[2:]
+	while len(r)%4:r="0"+r
+	print(r)
+	return r
 for line in open(fn).read().splitlines()[:-1]:
-	res(bin(int(line,16))[2:])
+# ~ for line in open(fn).read().splitlines():
+	print(res(getbs(line)))
 # ~ 110100 lit val
 		# ~ 10111	11110	00101	000
 # ~ 110100	10111	11110	00101	000
