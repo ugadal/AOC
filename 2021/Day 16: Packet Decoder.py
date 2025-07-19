@@ -30,9 +30,8 @@ def operate(ptid,V):
 		case 6:v=1 if V[0]<V[1] else 0
 		case 7:v=1 if V[0]==V[1] else 0
 	return v
-def treat(r,lvl=1):
+def treat(r):
 	global ttv
-	decal=" ="*lvl
 	pv,r=int(r[:3],2),r[3:]
 	ptid,r=int(r[:3],2),r[3:]
 	ttv+=pv
@@ -50,7 +49,7 @@ def treat(r,lvl=1):
 			nsp,r=int(r[:11],2),r[11:]
 			V=[]
 			for sp in range(nsp):
-				v,r=treat(r,lvl+1)
+				v,r=treat(r)
 				V.append(v)
 			v=operate(ptid,V)
 			return v,r
@@ -59,7 +58,7 @@ def treat(r,lvl=1):
 			tex,r=r[:ttlb],r[ttlb:]
 			V=[]
 			while tex:
-				t,tex=treat(tex,lvl+1)
+				t,tex=treat(tex)
 				V.append(t)
 			v=operate(ptid,V)
 			return v,r
