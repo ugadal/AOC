@@ -33,87 +33,50 @@ def treat(r,lvl=1):
 			a,b,r=r[0],r[1:5],r[5:]
 			tex+=b
 			if a=="0":break
-		# ~ print(" ="*lvl,"lv:",int(tex,2))
-		return r
+		v=int(tex,2)
+		return v,r
 	else:
 		ltid,r=r[0],r[1:]
 		if ltid=="1":
 			nsp,r=int(r[:11],2),r[11:]
 			# ~ print(decal,"nsp",nsp)
+			V=[]
 			for sp in range(nsp):
-				r=treat(r,lvl+1)
-			return r
+				v,r=treat(r,lvl+1)
+				V.append(v)
+			match ptid:
+				case 0:v=sum(V)
+				case 1:
+					v=1
+					for t in V:v*=t	
+				case 2:v=min(V)
+				case 3:v=max(V)
+				case 5:v=1 if V[0]>V[1] else 0
+				case 6:v=1 if V[0]<V[1] else 0
+				case 7:v=1 if V[0]==V[1] else 0
+			return v,r
 		else:
 			ttlb,r=int(r[:15],2),r[15:]
 			# ~ print(decal,ttlb)
 			tex,r=r[:ttlb],r[ttlb:]
+			V=[]
 			while tex:
-				tex=treat(tex,lvl+1)
-			return r
+				t,tex=treat(tex,lvl+1)
+				V.append(t)
+			match ptid:
+				case 0:v=sum(V)
+				case 1:
+					v=1
+					for t in V:v*=t	
+				case 2:v=min(V)
+				case 3:v=max(V)
+				case 5:v=1 if V[0]>V[1] else 0
+				case 6:v=1 if V[0]<V[1] else 0
+				case 7:v=1 if V[0]==V[1] else 0
+			return v,r
 ttv=0
 for line in open(fn).read().splitlines()[7:]:
 # ~ for line in open(fn).read().splitlines():
 	# ~ print(line)
-	print(treat(getbs(line)))
+	print("p2:",treat(getbs(line)))
 print("p1:",ttv)
-"""
-00111000000000000110111101000101001010010001001000000000
-001110 op
-	  0  > read 15 bits => 27
-	   000000000011011 >examine 27 next bits
-					  1101000101001010010001001000000000
-					  110100
-					        01010
-					  010100
-					        10001
-					        00100   0000000
-11101110000000001101010000001100100000100011000001100000
-111011 op
-	  1 > read 11 bits
-	   00000000011 > 3 read 3 sub packets
-				  01010000001100100000100011000001100000
-				  010100 lit value
-						00001 >1
-				  100100 lit value 
-						00010 >2
-				  001100 lit value 
-						00011 >3
-								00000
-100010100000000001001010100000000001101010000000000000101111010001111000
-100010 op    v 4
-		1 >read 11 bits
-		 00000000001 > 1 sub packet
-					001010 op   v 1
-							1 read 11 bits
-							 00000000001 > 1 sub packet
-										101010 op  v5
-											  0 > reads 15 bits
-											  000000000001011 > examine 11  next bits
-															  110100 lit val  v6
-																	01111 > 15   
-																			R=000
-01100010000000001000000000000000000101100001000101010110001011001000100000000010000100011000111000110100
-011000 op v3
-      1 >read 11 bits
-       00000000010 > 2 sub packets
-                  00000000000000000101100001000101010110001011001000100000000010000100011000111000110100
-                  000000 op v0
-                        0 read 15 bits
-                         000000000010110 > examine 22 bits
-									    0001000101010110001011:001000100000000010000100011000111000110100
-									    0001000101010110001011
-									    000100 lit value v0 
-									     01010 lv 10 
-									    101100 lit value v 5
-									     01011 lv 11
-				  001000 op v 1 
-				   1 read 11 bits 
-				    00000000010000100011000111000110100
-				    00000000010 >2 sub packets
-								:000100 lit val v0 
-								  01100 lv 12 
-								 :011100 lit val v3
-								  01101  lv 13  00
-
-
-"""
