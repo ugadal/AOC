@@ -13,29 +13,18 @@ day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
-def op(s,lvl=0):
-	if s[0]=="1":
-		sp=int(s[1:12],2)
-		print("# subpackets",sp)
-		cp=0
-		for x in range(sp):
-			cp+=res(s[12+cp:])
-	else:
-		tex=int(s[1:16],2)
-		print("examine next",tex,s[16:16+tex])
-		res(s[16:16+tex],lvl+1)
 def getbs(line):
 	r=bin(int(line,16))[2:]
 	while len(r)%4:r="0"+r
-	print(r)
+	# ~ print(r)
 	return r
 
 def treat(r,lvl=1):
 	global ttv
 	decal=" ="*lvl
-	print(decal,r)
+	# ~ print(decal,r)
 	pv,r=int(r[:3],2),r[3:]
-	print(decal,"pv",pv)
+	# ~ print(decal,"pv",pv)
 	ptid,r=int(r[:3],2),r[3:]
 	ttv+=pv
 	if ptid==4:
@@ -44,19 +33,19 @@ def treat(r,lvl=1):
 			a,b,r=r[0],r[1:5],r[5:]
 			tex+=b
 			if a=="0":break
-		print(" ="*lvl,"lv:",int(tex,2))
+		# ~ print(" ="*lvl,"lv:",int(tex,2))
 		return r
 	else:
 		ltid,r=r[0],r[1:]
 		if ltid=="1":
 			nsp,r=int(r[:11],2),r[11:]
-			print(decal,"nsp",nsp)
+			# ~ print(decal,"nsp",nsp)
 			for sp in range(nsp):
 				r=treat(r,lvl+1)
 			return r
 		else:
 			ttlb,r=int(r[:15],2),r[15:]
-			print(decal,ttlb)
+			# ~ print(decal,ttlb)
 			tex,r=r[:ttlb],r[ttlb:]
 			while tex:
 				tex=treat(tex,lvl+1)
@@ -64,9 +53,9 @@ def treat(r,lvl=1):
 ttv=0
 for line in open(fn).read().splitlines()[7:]:
 # ~ for line in open(fn).read().splitlines():
-	print(line)
+	# ~ print(line)
 	print(treat(getbs(line)))
-print("ttv:",ttv)
+print("p1:",ttv)
 """
 00111000000000000110111101000101001010010001001000000000
 001110 op
