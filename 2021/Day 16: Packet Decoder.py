@@ -13,19 +13,6 @@ day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
-def getlitv(s,lvl=1):
-	print("="*lvl,s)
-	global ttv
-	cp=0
-	tv=""
-	while True:
-		tv+=s[cp+1:cp+5]
-		if s[cp]=="0":break
-		cp+=5
-		print(tv,len(tv)*5//4)
-	print(tv,len(tv)*5//4)
-	print("lit value",int(tv,2),cp+5)
-	return cp+5
 def op(s,lvl=0):
 	if s[0]=="1":
 		sp=int(s[1:12],2)
@@ -37,28 +24,48 @@ def op(s,lvl=0):
 		tex=int(s[1:16],2)
 		print("examine next",tex,s[16:16+tex])
 		res(s[16:16+tex],lvl+1)
-def res(s,lvl=1):
-	print("res","="*lvl,s)
-	global ttv
-	pv=int(s[:3],2)
-	ptid=int(s[3:6],2)
-	if ptid==4:
-		print("litval")
-		ttv+=pv
-		return 6+getlitv(s[6:],lvl+1)
-	else:
-		print("operator")
-		return op(s[6:],lvl+1)
 def getbs(line):
 	r=bin(int(line,16))[2:]
 	while len(r)%4:r="0"+r
 	print(r)
 	return r
+
+def treat(r,lvl=1):
+	global ttv
+	decal=" ="*lvl
+	print(decal,r)
+	pv,r=int(r[:3],2),r[3:]
+	print(decal,"pv",pv)
+	ptid,r=int(r[:3],2),r[3:]
+	ttv+=pv
+	if ptid==4:
+		tex=""
+		while True:
+			a,b,r=r[0],r[1:5],r[5:]
+			tex+=b
+			if a=="0":break
+		print(" ="*lvl,"lv:",int(tex,2))
+		return r
+	else:
+		ltid,r=r[0],r[1:]
+		if ltid=="1":
+			nsp,r=int(r[:11],2),r[11:]
+			print(decal,"nsp",nsp)
+			for sp in range(nsp):
+				r=treat(r,lvl+1)
+			return r
+		else:
+			ttlb,r=int(r[:15],2),r[15:]
+			print(decal,ttlb)
+			tex,r=r[:ttlb],r[ttlb:]
+			while tex:
+				tex=treat(tex,lvl+1)
+			return r
 ttv=0
-for line in open(fn).read().splitlines()[:2]:
+for line in open(fn).read().splitlines()[7:]:
 # ~ for line in open(fn).read().splitlines():
 	print(line)
-	print(res(getbs(line)))
+	print(treat(getbs(line)))
 print("ttv:",ttv)
 """
 00111000000000000110111101000101001010010001001000000000
