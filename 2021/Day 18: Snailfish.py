@@ -22,6 +22,7 @@ class pair():
 		self.b=None
 		self.pp=None
 		self.nat=None
+		self.par=None
 	def rep(self):
 		# ~ print(self,"repping")
 		V=[]
@@ -30,8 +31,14 @@ class pair():
 		return V
 	def mkdep(self,d=0):
 		self.pp=d
-		if type(self.a)==pair:self.a.mkdep(d+1)
-		if type(self.b)==pair:self.b.mkdep(d+1)
+		if type(self.a)==pair:
+			self.a.par=self
+			self.a.nat="left"
+			self.a.mkdep(d+1)
+		if type(self.b)==pair:
+			self.b.par=self
+			self.b.nat="right"
+			self.b.mkdep(d+1)
 s="[1,2]"
 pre=re.compile(r"^\[.*\]$")
 def smartsplit(s):
@@ -73,12 +80,24 @@ x=ana(l)
 # ~ print([p.pp for p in pair.ap])
 x.mkdep()
 print(l,[p.pp for p in pair.ap])
+pb=next(p for p in pair.ap if p.pp==4)
+print(pb)
+print(pb.rep())
+print(pb.par)
+print(pb.par.rep())
+# ~ exit()
 l="[7,[6,[5,[4,[3,2]]]]]"
 pair.ap=[]
 x=ana(l)
 # ~ print([p.pp for p in pair.ap])
 x.mkdep()
 print(l,[p.pp for p in pair.ap])
+pb=next(p for p in pair.ap if p.pp==4)
+print(pb)
+print(pb.rep())
+print(pb.par)
+print(pb.par.rep())
+exit()
 l="[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
 pair.ap=[]
 x=ana(l)
