@@ -14,4 +14,12 @@ fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
 # ~ target area: x=192..251, y=-89..-59
-lc,rc,br,tr=
+class pair():
+	ap=[]
+	def __init__(self):
+		pair.ap.append(self)
+		self.a=None
+		self.b=None
+		self.pp=None
+		self.nat=None
+		
