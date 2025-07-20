@@ -22,4 +22,7 @@ class pair():
 		self.b=None
 		self.pp=None
 		self.nat=None
-		
+s="[1,2]"
+cp=pair()
+for c in s[1:]:
+	if c
