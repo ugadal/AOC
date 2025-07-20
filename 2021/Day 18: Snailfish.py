@@ -22,7 +22,66 @@ class pair():
 		self.b=None
 		self.pp=None
 		self.nat=None
+	def rep(self):
+		# ~ print(self,"repping")
+		V=[]
+		V.append(self.a if type(self.a)==int else self.a.rep())
+		V.append(self.b if type(self.b)==int else self.b.rep())
+		return V
+	def mkdep(self,d=0):
+		self.pp=d
+		if type(self.a)==pair:self.a.mkdep(d+1)
+		if type(self.b)==pair:self.b.mkdep(d+1)
 s="[1,2]"
-cp=pair()
-for c in s[1:]:
-	if c
+pre=re.compile(r"^\[.*\]$")
+def smartsplit(s):
+	# ~ print("sm",s)
+	cp=-1
+	while True:
+		nc=s.index(",",cp+1)
+		# ~ print("nc",nc)
+		lp=s[:nc]
+		rp=s[nc+1:]
+		if lp.count("[")==lp.count("]") and rp.count("[")==rp.count("]"):
+			return lp,rp
+		cp=nc
+def ana(s):
+	if s.isdigit():return int(s)
+	if pre.match(s):
+		a,b=smartsplit(s[1:-1])
+		tp=pair()
+		tp.a=ana(a)
+		tp.b=ana(b)
+		return tp
+	else:return "?"
+e="""[1,2]
+[[1,2],3]
+[9,[8,7]]
+[[1,9],[8,5]]
+[[[[1,2],[3,4]],[[5,6],[7,8]]],9]
+[[[9,[3,8]],[[0,9],6]],[[[3,7],[4,9]],3]]
+[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]"""
+for l in e.splitlines():
+	pair.ap=[]
+	x=ana(l)
+	# ~ print([p.pp for p in pair.ap])
+	x.mkdep()
+	print(l,[p.pp for p in pair.ap])
+l="[[[[[9,8],1],2],3],4]"
+pair.ap=[]
+x=ana(l)
+# ~ print([p.pp for p in pair.ap])
+x.mkdep()
+print(l,[p.pp for p in pair.ap])
+l="[7,[6,[5,[4,[3,2]]]]]"
+pair.ap=[]
+x=ana(l)
+# ~ print([p.pp for p in pair.ap])
+x.mkdep()
+print(l,[p.pp for p in pair.ap])
+l="[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+pair.ap=[]
+x=ana(l)
+# ~ print([p.pp for p in pair.ap])
+x.mkdep()
+print(l,[p.pp for p in pair.ap])
