@@ -191,16 +191,10 @@ lines="""[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
 [[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]""".splitlines()
 lines=open(fn).read().splitlines()
 rec=0
-for la,lb in it.combinations(lines,2):
+for la,lb in it.permutations(lines,2):
 	np=pair()
 	np.a=ana(la)
 	np.b=ana(lb)
-	np.mkdep()
-	np=simplify(np)
-	rec=max(rec,np.mag())
-	np=pair()
-	np.a=ana(lb)
-	np.b=ana(la)
 	np.mkdep()
 	np=simplify(np)
 	rec=max(rec,np.mag())
