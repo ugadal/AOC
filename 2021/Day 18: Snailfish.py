@@ -19,6 +19,7 @@ class val():
 		self.v=v
 	def rep(self):return self.v
 	def vis(self):yield self
+	def visp(self):yield self
 class pair():
 	ap=[]
 	def __init__(self):
@@ -49,7 +50,10 @@ class pair():
 		for v in self.a.vis():yield v
 		for v in self.b.vis():yield v
 		# ~ yield self
-		
+	def visp(self):
+		for v in self.a.visp():yield v
+		for v in self.b.visp():yield v
+		yield self
 s="[1,2]"
 pre=re.compile(r"^\[.*\]$")
 def smartsplit(s):
@@ -72,53 +76,64 @@ def ana(s):
 		tp.b=ana(b)
 		return tp
 	else:return "?"
-e="""[1,2]
-[[1,2],3]
-[9,[8,7]]
-[[1,9],[8,5]]
-[[[[1,2],[3,4]],[[5,6],[7,8]]],9]
-[[[9,[3,8]],[[0,9],6]],[[[3,7],[4,9]],3]]
-[[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]"""
-# ~ for l in e.splitlines():
-	# ~ pair.ap=[]
-	# ~ x=ana(l)
-	# ~ print([p.pp for p in pair.ap])
-	# ~ x.mkdep()
-	# ~ print(l,[p.pp for p in pair.ap])
-# ~ l="[[[[[9,8],1],2],3],4]"
+l="[[[[[9,8],1],2],3],4]"
 l="[7,[6,[5,[4,[3,2]]]]]"
-# ~ l="[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+l="[[6,[5,[4,[3,2]]]],1]"
+l="[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+l="[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]"
 pair.ap=[]
-x=ana(l)
-# ~ print([p.pp for p in pair.ap])
-x.mkdep()
-print(l,[p.pp for p in pair.ap])
-pb=next(p for p in pair.ap if p.pp==4)
-print(pb.num)
-lv,rv=pb.a,pb.b
-print(pb.rep())
-print(pb.par.num)
-print(pb.par.rep())
-print("----")
-for p in x.vis():print(p,p.v)
-ov=[p for p in x.vis()]
-if ov[0]==lv:
-	print("hit")
-	pass
-else:
-	for x,y in zip(ov,ov[1:]):
-		if y==lv:break
-	print(x.v,y.v)
-	x.v+=y.v
-if ov[-1]==rv:
-	print("hit")
-	pass
-else:
-	for x,y in zip(ov,ov[1:]):
-		if x==rv:break
-	print(x.v,y.v)
-	y.v+=x.v
-if pb.par.a==pb:pb.par.a=val(0)
-else:pb.par.b=val(0)
-pair.ap.remove(pb)
-for p in x.vis():print(p,p.v)
+tree=ana(l)
+tree.mkdep()
+# ~ print(l,[p.pp for p in pair.ap])
+while True:
+	while any(p.pp==4 for p in pair.ap):
+		print("explodes")
+		pb=next(p for p in pair.ap if p.pp==4)
+		print(pb.num)
+		lv,rv=pb.a,pb.b
+		# ~ for p in tree.vis():print(p,p.v)
+		ov=[p for p in tree.vis()]
+		if ov[0]==lv:pass
+		else:
+			for x,y in zip(ov,ov[1:]):
+				if y==lv:break
+			# ~ print(x.v,y.v)
+			x.v+=y.v
+		if ov[-1]==rv:pass
+		else:
+			for x,y in zip(ov,ov[1:]):
+				if x==rv:break
+			# ~ print(x.v,y.v)
+			y.v+=x.v
+		if pb.par.a==pb:pb.par.a=val(0)
+		else:pb.par.b=val(0)
+		pair.ap.remove(pb)
+		# ~ for p in tree.vis():print(p,p.v)
+		tree.mkdep()
+		print(tree.rep())
+	
+	split=False
+	if any(p.v>9 for p in tree.vis()):
+		split=True
+		print("splits")
+		pv=next(p for p in tree.vis() if p.v>9)
+		# ~ print(pv,pv.v)
+		# ~ input()
+		na=pv.v//2
+		nb=pv.v-na
+		np=pair()
+		np.a=val(na)
+		np.b=val(nb)
+		for pos in tree.visp():
+			if type(pos)==val:continue
+			if pos.a==pv:
+				pos.a=np
+				break
+			if pos.b==pv:
+				pos.b=np
+				break
+		tree.mkdep()
+	if split:continue
+	print(tree.rep())
+	break
+print(tree.rep())
