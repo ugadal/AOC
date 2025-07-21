@@ -32,13 +32,13 @@ for line in block.splitlines():
 		continue
 	cs.p.add(tuple(map(int,(line.split(",")))))
 AS=scanner.asc.values()
-for s in AS:
+def rebase(s):
 	print(s.n)
 	print(s.p)
 	minx=min(p[0] for p in s.p)
 	miny=min(p[1] for p in s.p)
 	minz=min(p[2] for p in s.p)
-	s.p=set((a-minx,b-miny,c-minz) for a,b,c in s.p)
+	return=set((a-minx,b-miny,c-minz) for a,b,c in s.p)
 	s.off=(minx,miny,minz)
 for s in AS:
 	print(s.n)
