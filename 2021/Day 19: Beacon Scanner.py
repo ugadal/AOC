@@ -30,22 +30,15 @@ for line in block.splitlines():
 		cs=scanner(n)
 		print(line)
 		continue
-	cs.p.add(tuple(map(int,(line.split(",")))))
-AS=scanner.asc.values()
+	tp=tuple(map(int,line.split(",")))
+	cs.p.add(tp)
+AS=list(scanner.asc.values())
 def rebase(s):
-	print(s.n)
-	print(s.p)
-	minx=min(p[0] for p in s.p)
-	miny=min(p[1] for p in s.p)
-	minz=min(p[2] for p in s.p)
-	return=set((a-minx,b-miny,c-minz) for a,b,c in s.p)
-	s.off=(minx,miny,minz)
-for s in AS:
-	print(s.n)
-	print(s.p)
-	print(s.off)
-for a,b in it.combinations(AS,2):
-	print (a.n,b.n,len(a.p&b.p))
+	minx=min(p[0] for p in s)
+	miny=min(p[1] for p in s)
+	minz=min(p[2] for p in s)
+	res=set((a-minx,b-miny,c-minz) for a,b,c in s)
+	return (minx,miny,minz),res
 V=np.array([(1,0,0),(0,1,0),(0,0,1)])
 OR=[]
 for a,b in it.permutations(V,2):
@@ -53,4 +46,37 @@ for a,b in it.permutations(V,2):
 	OR.append(np.array([-a,b,np.cross(-a,b)]))
 	OR.append(np.array([a,-b,np.cross(a,-b)]))
 	OR.append(np.array([-a,-b,np.cross(-a,-b)]))
-print(OR)
+def loopor(s):
+	P=[np.array(x) for x in s]
+	for ori in OR:
+		t=[np.dot(ori,p) for p in P]
+		ofs,t=rebase(t)
+		yield t
+os,k=rebase(AS[0].p)
+# ~ print(os,k)
+done=0
+for t in AS[1:]:
+	for z in loopor(t.p):
+		done+=1
+		# ~ print(k)
+		# ~ print(z)
+		print(done,len(k),len(z),len(k&z))
+		# ~ exit()
+# ~ --- scanner 0 ---
+# ~ 0,2  
+# ~ 4,1  
+# ~ 3,3	 
+
+# ~ as vectors :
+	# ~ 4,-1
+	# ~ 3,1
+	# ~ -1,2
+
+# ~ --- scanner 1 ---
+# ~ -1,-1 
+# ~ -5,0  
+# ~ -2,1  
+# ~ av 
+# ~ -4,1
+# ~ -1,2
+# ~ 3,1
