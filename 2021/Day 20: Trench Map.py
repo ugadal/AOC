@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 
 import re
 import sys
@@ -24,10 +24,10 @@ for ir,row in enumerate(img.splitlines()):
 		pos=complex(ic,ir)
 		G[pos]=s
 def getedge():
-	mir=min(p.imag for p,v in G.items() if v=="#")
-	mar=max(p.imag for p,v in G.items() if v=="#")
-	mic=min(p.real for p,v in G.items() if v=="#")
-	mac=max(p.real for p,v in G.items() if v=="#")
+	mir=min(p.imag for p,v in G.items())
+	mar=max(p.imag for p,v in G.items())
+	mic=min(p.real for p,v in G.items())
+	mac=max(p.real for p,v in G.items())
 	return map(int,(mir,mar,mic,mac))
 def draw():
 	print(len(G))
@@ -53,16 +53,27 @@ def around(pos):
 	yield pos+1+1j
 draw()
 for enhance in range(2):
+# ~ while True:
 	NG={}
 	mir,mar,mic,mac=getedge()
 	# ~ input(f"{mir},{mar}  {mic},{mac}")
-	for row in range(mir-1,mar+2):
-		for col in range(mic-1,mac+2):
+	for row in range(-200,200):
+		for col in range(-200,200):
 			pos=complex(col,row)
 			t="".join("1" if G.get(z,".")=="#" else "0" for z in around(pos))
 			pp=int(t,2)
 			pp=pgm[pp]
 			NG[pos]=pp
 	G=NG
-	draw()
-print("p1:",list(NG.values()).count("#"))
+	# ~ draw()
+	# ~ input()
+r=[]
+for k,v in G.items():
+	if v==".":continue
+	if not -180<k.imag<180:continue
+	if not -180<k.real<180:continue
+	r.append(k)
+
+print("p1:",len(r))
+
+# ~ print("p1:",list(NG.values()).count("#"))
