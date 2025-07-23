@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 
 import re
 import sys
@@ -15,6 +15,13 @@ fn=f"d{day}.txt"
 block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
 scre=re.compile(r"^--- scanner (\d+) ---$")
+V=np.array([(1,0,0),(0,1,0),(0,0,1)])
+OR=[]
+for a,b in it.permutations(V,2):
+	OR.append(np.array([a,b,np.cross(a,b)]))
+	OR.append(np.array([-a,b,np.cross(-a,b)]))
+	OR.append(np.array([a,-b,np.cross(a,-b)]))
+	OR.append(np.array([-a,-b,np.cross(-a,-b)]))
 scanners={}
 class scanner():
 	asc={}
@@ -22,7 +29,16 @@ class scanner():
 		scanner.asc[n]=self
 		self.n=n
 		self.p=set()
-		self.off=None
+		self.cp=None
+		self.cv=None
+	def read(self,frame):
+		self.cp=[tuple(np.dot(frame,p)) for p in self.p]
+		self.cv=set((ax-bx,ay-by,az-bz) for (ax,ay,az),(bx,by,bz) in it.combinations(self.cp,2))
+		return self.cv
+	def tovec(self):
+		for (ax,ay,az),(bx,by,bz) in it.permutations(self.cp,2):
+			self.V.add((ax-bx,ay-by,az-bz))
+			self.V.add((bx-ax,by-ay,bz-az))
 for line in block.splitlines():
 	if line=="":continue
 	if scre.match(line):
@@ -33,50 +49,66 @@ for line in block.splitlines():
 	tp=tuple(map(int,line.split(",")))
 	cs.p.add(tp)
 AS=list(scanner.asc.values())
-def rebase(s):
-	minx=min(p[0] for p in s)
-	miny=min(p[1] for p in s)
-	minz=min(p[2] for p in s)
-	res=set((a-minx,b-miny,c-minz) for a,b,c in s)
-	return (minx,miny,minz),res
-V=np.array([(1,0,0),(0,1,0),(0,0,1)])
-OR=[]
-for a,b in it.permutations(V,2):
-	OR.append(np.array([a,b,np.cross(a,b)]))
-	OR.append(np.array([-a,b,np.cross(-a,b)]))
-	OR.append(np.array([a,-b,np.cross(a,-b)]))
-	OR.append(np.array([-a,-b,np.cross(-a,-b)]))
-def loopor(s):
-	P=[np.array(x) for x in s]
-	for ori in OR:
-		t=[np.dot(ori,p) for p in P]
-		ofs,t=rebase(t)
-		yield t
-os,k=rebase(AS[0].p)
-# ~ print(os,k)
-done=0
-for t in AS[1:]:
-	for z in loopor(t.p):
-		done+=1
-		# ~ print(k)
-		# ~ print(z)
-		print(done,len(k),len(z),len(k&z))
-		# ~ exit()
-# ~ --- scanner 0 ---
-# ~ 0,2  
-# ~ 4,1  
-# ~ 3,3	 
-
-# ~ as vectors :
-	# ~ 4,-1
-	# ~ 3,1
-	# ~ -1,2
-
-# ~ --- scanner 1 ---
-# ~ -1,-1 
-# ~ -5,0  
-# ~ -2,1  
-# ~ av 
-# ~ -4,1
-# ~ -1,2
-# ~ 3,1
+fs=scanner.asc[0]
+reg=OR[0]
+cd=fs.read(reg)
+ss=scanner.asc[1]
+cb=0
+for ori in OR:
+	common=len(cd&ss.read(ori))
+	if common>cb:
+		goodori=ori
+		cb=common
+print(goodori,cb)
+ss.read(goodori)
+print(ss.cv&cd)
+offsets={}
+def merge(a,b):
+	rec=float("Inf")
+	for ax,ay,az in a.cp:
+		for bx,by,bz in b.cp:
+			z=set(a.cp)
+			dx,dy,dz=bx-ax,by-ay,bz-az
+			for tx,ty,tz in b.cp:
+				z.add((tx-dx,ty-dy,tz-dz))
+			if len(z)<rec:
+				rec=len(z)
+				print(rec,dx,dy,dz)
+				goodoffset=(-dx,-dy,-dz)			
+				gs=z
+	offsets[b.n]=goodoffset
+	return gs
+todo=AS[1:]
+while todo:
+	print(len(todo),todo)
+	cb=0
+	for ts in todo:
+		for ori in OR:
+			common=len(cd&ts.read(ori))
+			if common>cb:
+				goodscan=ts
+				goodori=ori
+				cb=common
+	# ~ print("goodmap",goodscan.n)
+	# ~ print(goodori)
+	# ~ print(goodscan in todo)
+	# ~ input()
+	goodscan.read(goodori)
+	cd=merge(fs,goodscan)
+	fs.p=cd
+	cd=fs.read(reg)
+	print("final",len(fs.p))
+	todo.remove(goodscan)
+# ~ print(goodori,cb)
+# ~ ss.read(goodori)
+# ~ print(ss.cv&cd)
+			
+			
+res=merge(fs,ss)
+print(len(fs.cp),len(ss.cp),len(res),res)
+print("p1:",len(fs.p))
+# ~ print(offsets)
+def md(a,b):
+	return sum(abs(x-y) for x,y in zip(a,b))
+r=max(md(a,b) for a,b in it.combinations(offsets.values(),2))
+print("p2:",r)
