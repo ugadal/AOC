@@ -51,29 +51,34 @@ def around(pos):
 	yield pos-1+1j
 	yield pos+1j
 	yield pos+1+1j
-draw()
-for enhance in range(2):
+# ~ draw()
+for enhance in range(50):
+	print(enhance)
 # ~ while True:
 	NG={}
 	mir,mar,mic,mac=getedge()
 	# ~ input(f"{mir},{mar}  {mic},{mac}")
-	for row in range(-200,200):
-		for col in range(-200,200):
+	for row in range(-400,400):
+		for col in range(-400,400):
 			pos=complex(col,row)
 			t="".join("1" if G.get(z,".")=="#" else "0" for z in around(pos))
 			pp=int(t,2)
 			pp=pgm[pp]
 			NG[pos]=pp
 	G=NG
-	# ~ draw()
-	# ~ input()
+	if enhance==1:
+		r=[]
+		for k,v in G.items():
+			if v==".":continue
+			if not -250<k.imag<250:continue
+			if not -250<k.real<250:continue
+			r.append(k)
+		print("p1:",len(r))		
 r=[]
 for k,v in G.items():
 	if v==".":continue
-	if not -180<k.imag<180:continue
-	if not -180<k.real<180:continue
+	if not -250<k.imag<250:continue
+	if not -250<k.real<250:continue
 	r.append(k)
+print("p2:",len(r))
 
-print("p1:",len(r))
-
-# ~ print("p1:",list(NG.values()).count("#"))
