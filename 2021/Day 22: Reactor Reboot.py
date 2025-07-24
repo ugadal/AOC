@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=1
-
+part=0
+def repres(p,v):print(f"p{p}: {v}")
 import re
 import sys
 import itertools as it
@@ -14,3 +14,4 @@ day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 # ~ block=open(fn).read().split("\n\n")[part]
+
