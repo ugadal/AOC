@@ -57,11 +57,12 @@ lx=sorted(list(set(lx)))
 ly=sorted(list(set(ly)))
 lz=sorted(list(set(lz)))
 # ~ print(lx,ly,lz)
-for x,ex in zip(lx,lx[1:]):
-	for y,ey in zip(ly,ly[1:]):
-		for z,ez in zip(lz,lz[1:]):
-			cube(x,y,z,ex,ey,ez)
-print(len(cube.a))
+# ~ for x,ex in zip(lx,lx[1:]):
+	# ~ for y,ey in zip(ly,ly[1:]):
+		# ~ for z,ez in zip(lz,lz[1:]):
+			# ~ cube(x,y,z,ex,ey,ez)
+# ~ print(len(cube.a))
+ON=set()
 for line in block.splitlines():
 	print("\r",line,end="")
 	st,coord=line.split()
@@ -69,13 +70,24 @@ for line in block.splitlines():
 	rx,ry,rz=coord.split(",")
 	V=[tuple(map(int,(r[2:].split("..")))) for r in coord.split(",")]
 	(bx,ex),(by,ey),(bz,ez)=V
-	for c in cube.a:
-		# ~ c.rep()
-		# ~ print(c.x,c.ex,bx,ex)
-		if bx<=c.x<c.ex<=ex+1:
-			if by<=c.y<c.ey<=ey+1:
-				if bz<=c.z<c.ez<=ez+1:
-					# ~ print("ok")
-					c.status=st
+	if st:
+		for cx,cex in zip(lx,lx[1:]):
+			if bx<=cx<cex<=ex+1:
+				for cy,cey in zip(ly,ly[1:]):
+					if by<=cy<cey<=ey+1:
+						for cz,cez in zip(lz,lz[1:]):
+							if bz<=cz<cez<=ez+1:
+								ON.add((cx,cy,cz,cex,cey,cez))
+	else:
+		toremove=set()
+		for cx,cy,cz,cex,cey,cez in ON:
+			if bx<=cx<cex<=ex+1:
+				if by<=cy<cey<=ey+1:
+					if bz<=cz<cez<=ez+1:
+						toremove.add((cx,cy,cz,cex,cey,cez))
+		ON=ON-toremove
 	# ~ break
-repres (2,sum(c.v for c in cube.a if c.status))
+res=0
+for cx,cy,cz,cex,cey,cez in ON:
+	res+=(cex-cx)*(cey-cy)*(cez-cz)
+repres (2,res)
