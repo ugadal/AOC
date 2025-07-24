@@ -48,8 +48,6 @@ pa,pb=9,6
 oc=[x + y + z for x in [1, 2, 3] for y in [1, 2, 3] for z in [1, 2, 3]]
 @cache
 def rec(pa,pb,sa,sb):
-	print(pa,pb,sa,sb)
-	# ~ input()
 	if sa>=21:return (1,0)
 	sc=[0,0]
 	for d in oc:
@@ -62,7 +60,5 @@ def rec(pa,pb,sa,sb):
 			sc[1]+=wb
 			sc[0]+=wa
 	return sc
-# ~ r=rec(4,8,0,0)
-# ~ print(r,max(r))
 r=rec(9,6,0,0)
-print(r,max(r))
+print("p2:",max(r))
