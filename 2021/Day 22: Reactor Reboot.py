@@ -67,10 +67,10 @@ mx=len(block.splitlines())
 UNIQ=[]
 for lix,line in enumerate(block.splitlines()):
 	print(lix,"/",mx,line)
-	ON=[]
 	st,coord=line.split()
 	st=True if st=="on" else False
 	if not st:continue
+	ON=[]
 	rx,ry,rz=coord.split(",")
 	V=[tuple(map(int,(r[2:].split("..")))) for r in coord.split(",")]
 	(bx,ex),(by,ey),(bz,ez)=V
@@ -82,7 +82,8 @@ for lix,line in enumerate(block.splitlines()):
 					for cz,cez in zip(lz,lz[1:]):
 						if bz<=cz<cez<=ez+1:
 							ON.append((cx,cy,cz,cex,cey,cez))
-		ON=list(set(ON))
+		# ~ ON=list(set(ON))
+	ON=set(ON)
 	for offline in block.splitlines()[lix+1:]:
 		st,coord=offline.split()
 		st=True if st=="on" else False
