@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=1
+part=3
 def repres(p,v):print(f"p{p}: {v}")
 import re
 import sys
@@ -29,11 +29,40 @@ for line in block.splitlines():
 		G[p]=st
 repres(1,list(G.values()).count(True))
 for i in I[:5]:print(i)
-def ana(TI):
+def isincluded(a,b):
+	abx,aby,abz,aex,aey,aez=a
+	bbx,bby,bbz,bex,bey,bez=b
+	if bbx<=abx and aex<=bex:
+		if bby<=aby and aey<=bey:
+			if bbz<=abz and aez<=bez:return True
+	return False
+	
+def nonoverlap(a,b):
+	abx,aby,abz,aex,aey,aez=a
+	bbx,bby,bbz,bex,bey,bez=b
+	if aex<bbx or abx>bex:return True
+	if aey<bby or aby>bey:return True
+	if aez<bbz or abz>bez:return True
+	return False
+	
+def addcube(Cubes,newcube):
+	print("nc",newcube)
+	torem=set()
+	for c in Cubes:
+		if isincluded(c,newcube[1:]):
+			torem.add(c)
+			# ~ print(f"removing {c} as fully included in {newcube}")
+	Cubes-=torem
+	print("cubes remaining:",len(Cubes))
 	lx=[]
 	ly=[]
 	lz=[]
-	for st,bx,by,bz,ex,ey,ez in TI:
+	ON=set()
+	OV=set()
+	for c in Cubes:
+		if nonoverlap(c,newcube[1:]):ON.add(c)
+		else:OV.add(c)
+	for bx,by,bz,ex,ey,ez in list(OV)+[newcube[1:]]:
 		lx.append(bx)
 		lx.append(ex+1)
 		ly.append(by)
@@ -43,89 +72,63 @@ def ana(TI):
 	lx=sorted(list(set(lx)))
 	ly=sorted(list(set(ly)))
 	lz=sorted(list(set(lz)))
-	ON=[]
-	st,bx,by,bz,ex,ey,ez=TI[0]
-	for cx,cex in zip(lx,lx[1:]):
-		if bx<=cx<cex<=ex+1:
-			for cy,cey in zip(ly,ly[1:]):
-				if by<=cy<cey<=ey+1:
-					for cz,cez in zip(lz,lz[1:]):
-						if bz<=cz<cez<=ez+1:
-							ON.append((cx,cy,cz,cex-1,cey-1,cez-1))
-	ON=set(ON)
-	for st,bx,by,bz,ex,ey,ez in TI[1:]:
-		toremove=[]
-		for cx,cy,cz,cex,cey,cez in ON:
+	for bx,by,bz,ex,ey,ez in list(OV)+[newcube[1:]]:
+		for cx,cex in zip(lx,lx[1:]):
 			if bx<=cx<cex<=ex+1:
-				if by<=cy<cey<=ey+1:
-					if bz<=cz<cez<=ez+1:
-						toremove.append((cx,cy,cz,cex-1,cey-1,cez-1))
-		ON=ON-set(toremove)
+				for cy,cey in zip(ly,ly[1:]):
+					if by<=cy<cey<=ey+1:
+						for cz,cez in zip(lz,lz[1:]):
+							if bz<=cz<cez<=ez+1:
+								ON.add((cx,cy,cz,cex-1,cey-1,cez-1))
+	print("lon",len(ON))
 	return ON
-def isincluded(a,b):
-	abx,aby,abz,aex,aey,aez=a
-	bbx,bby,bbz,bex,bey,bez=b
-	if bbx<=abx and aex<=bex:
-		if bby<=aby and aey<=bey:
-			if bbz<=abz and aez<=bez:return True
-	return False
-U=set()
-print("collecting")
-for ix,quad in enumerate(I):
-	st,bx,by,bz,ex,ey,ez=quad
-	if not st:continue
-	print("\r",ix,quad,end="")
-	Z=[quad]
-	Z.extend(q for q in I[ix+1:] if not q[0])
-	res=ana(Z)
-	# ~ print("removing included from new")
+def remcube(Cubes,newcube):
+	print("nc",newcube)
 	torem=set()
-	for a,b in it.product(U,res):
-		if isincluded(a,b):torem.add(a)
-	U=U-torem
-	# ~ print("removing new from included")
-	torem=set()
-	for a,b in it.product(res,U):
-		if isincluded(a,b):torem.add(a)
-	res=res-torem
-	# ~ print(len(res))
-	U=U|res
-	# ~ print(len(U))
-print("collecting done")
-print(len(U))
-lx=[]
-ly=[]
-lz=[]
-for bx,by,bz,ex,ey,ez in U:
-	lx.append(bx)
-	lx.append(ex)
-	ly.append(by)
-	ly.append(ey)
-	lz.append(bz)
-	lz.append(ez)
-lx=sorted(list(set(lx)))
-ly=sorted(list(set(ly)))
-lz=sorted(list(set(lz)))
+	for c in Cubes:
+		if isincluded(c,newcube[1:]):
+			torem.add(c)
+			# ~ print(f"removing {c} as fully included in {newcube}")
+	Cubes-=torem
+	print("cubes remaining:",len(Cubes))
+	lx=[]
+	ly=[]
+	lz=[]
+	ON=set()
+	OV=set()
+	for c in Cubes:
+		if nonoverlap(c,newcube[1:]):ON.add(c)
+		else:OV.add(c)
+	for bx,by,bz,ex,ey,ez in list(OV)+[newcube[1:]]:
+		lx.append(bx)
+		lx.append(ex+1)
+		ly.append(by)
+		ly.append(ey+1)
+		lz.append(bz)
+		lz.append(ez+1)
+	lx=sorted(list(set(lx)))
+	ly=sorted(list(set(ly)))
+	lz=sorted(list(set(lz)))
+	st,bx,by,bz,ex,ey,ez=newcube
+	# ~ ON=set()
+	for bx,by,bz,ex,ey,ez in list(OV):
+		for cx,cex in zip(lx,lx[1:]):
+			if bx<=cx<cex<=ex+1:
+				for cy,cey in zip(ly,ly[1:]):
+					if by<=cy<cey<=ey+1:
+						for cz,cez in zip(lz,lz[1:]):
+							if bz<=cz<cez<=ez+1:
+								if not isincluded((cx,cy,cz,cex-1,cey-1,cez-1),newcube[1:]):
+									ON.add((cx,cy,cz,cex-1,cey-1,cez-1))
+	print("lon",len(ON))
+	return ON
+C=set()
+for il,cube in enumerate(I):
+	st,bx,by,bz,ex,ey,ez=cube
+	if st:C=addcube(C,cube)
+	else:C=remcube(C,cube)
+# ~ print(C)
 res=0
-ON=set()
-mx=len(U)
-for iq,quad  in enumerate(U):
-	bx,by,bz,ex,ey,ez=quad
-	print(f"\r{iq+1}/{mx}",quad,end="")
-	for cx,cex in zip(lx,lx[1:]):
-		if bx<=cx<cex<=ex+1:
-			for cy,cey in zip(ly,ly[1:]):
-				if by<=cy<cey<=ey+1:
-					for cz,cez in zip(lz,lz[1:]):
-						if bz<=cz<cez<=ez+1:
-							ON.add((cx,cy,cz,cex,cey,cez))
-							# ~ res+=(ex-bx)*(ey-by)*(ez-cz)
-							# ~ res+=(cex-cx)*(cey-cy)*(cez-cz)
-						
-res=0
-# ~ for ON in UNIQ:
-# ~ print(ON)
-for cx,cy,cz,cex,cey,cez in ON:
-	res+=(cex-cx)*(cey-cy)*(cez-cz)
-repres (2,res)
-print('expected 39769202357779 p0 ok')
+for bx,by,bz,ex,ey,ez in C:
+	res+=(1+ex-bx)*(1+ey-by)*(1+ez-bz)
+repres(2,res)
