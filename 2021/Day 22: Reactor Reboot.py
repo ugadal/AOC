@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-part=0
+part=1
 def repres(p,v):print(f"p{p}: {v}")
 import re
 import sys
@@ -22,14 +22,13 @@ for line in block.splitlines():
 	st=True if st=="on" else False
 	V=[tuple(map(int,(r[2:].split("..")))) for r in coord.split(",")]
 	(bx,ex),(by,ey),(bz,ez)=V
-	# ~ I.append((st,bx,ex,by,ey,bz,ez))
 	I.append((st,bx,by,bz,ex,ey,ez))
 	skip=any(b>50 or a<-50	for a,b in V)
-	# ~ print(V,skip)
 	if skip:continue
 	for p in ((x,y,z) for x in range(V[0][0],V[0][1]+1) for y in range(V[1][0],V[1][1]+1) for z in range(V[2][0],V[2][1]+1)):
 		G[p]=st
 repres(1,list(G.values()).count(True))
+for i in I[:5]:print(i)
 def ana(TI):
 	lx=[]
 	ly=[]
