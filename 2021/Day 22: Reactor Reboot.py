@@ -73,13 +73,11 @@ def addcube(Cubes,newcube):
 	ly=sorted(list(set(ly)))
 	lz=sorted(list(set(lz)))
 	for bx,by,bz,ex,ey,ez in list(OV)+[newcube[1:]]:
-		for cx,cex in zip(lx,lx[1:]):
-			if bx<=cx<cex<=ex+1:
-				for cy,cey in zip(ly,ly[1:]):
-					if by<=cy<cey<=ey+1:
-						for cz,cez in zip(lz,lz[1:]):
-							if bz<=cz<cez<=ez+1:
-								ON.add((cx,cy,cz,cex-1,cey-1,cez-1))
+		pxr=[(cx,cex) for cx,cex in zip(lx,lx[1:]) if bx<=cx<cex<=ex+1]
+		pyr=[(cy,cey) for cy,cey in zip(ly,ly[1:]) if by<=cy<cey<=ey+1]
+		pzr=[(cz,cez) for cz,cez in zip(lz,lz[1:]) if bz<=cz<cez<=ez+1]
+		for (cx,cex),(cy,cey),(cz,cez) in it.product(pxr,pyr,pzr):
+			ON.add((cx,cy,cz,cex-1,cey-1,cez-1))
 	print("lon",len(ON))
 	return ON
 def remcube(Cubes,newcube):
@@ -112,14 +110,19 @@ def remcube(Cubes,newcube):
 	st,bx,by,bz,ex,ey,ez=newcube
 	# ~ ON=set()
 	for bx,by,bz,ex,ey,ez in list(OV):
-		for cx,cex in zip(lx,lx[1:]):
-			if bx<=cx<cex<=ex+1:
-				for cy,cey in zip(ly,ly[1:]):
-					if by<=cy<cey<=ey+1:
-						for cz,cez in zip(lz,lz[1:]):
-							if bz<=cz<cez<=ez+1:
-								if not isincluded((cx,cy,cz,cex-1,cey-1,cez-1),newcube[1:]):
-									ON.add((cx,cy,cz,cex-1,cey-1,cez-1))
+		pxr=[(cx,cex) for cx,cex in zip(lx,lx[1:]) if bx<=cx<cex<=ex+1]
+		pyr=[(cy,cey) for cy,cey in zip(ly,ly[1:]) if by<=cy<cey<=ey+1]
+		pzr=[(cz,cez) for cz,cez in zip(lz,lz[1:]) if bz<=cz<cez<=ez+1]
+		for (cx,cex),(cy,cey),(cz,cez) in it.product(pxr,pyr,pzr):
+			ON.add((cx,cy,cz,cex-1,cey-1,cez-1))	
+	torem=set()
+	bx,by,bz,ex,ey,ez=newcube[1:]
+	pxr=[(cx,cex) for cx,cex in zip(lx,lx[1:]) if bx<=cx<cex<=ex+1]
+	pyr=[(cy,cey) for cy,cey in zip(ly,ly[1:]) if by<=cy<cey<=ey+1]
+	pzr=[(cz,cez) for cz,cez in zip(lz,lz[1:]) if bz<=cz<cez<=ez+1]
+	for (cx,cex),(cy,cey),(cz,cez) in it.product(pxr,pyr,pzr):
+		torem.add((cx,cy,cz,cex-1,cey-1,cez-1))	
+	ON-=torem
 	print("lon",len(ON))
 	return ON
 C=set()
