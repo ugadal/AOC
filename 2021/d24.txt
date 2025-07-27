@@ -1,4 +1,180 @@
 inp w
+set y w
+add y 12
+set z y
+inp w
+set x 1
+set y 26
+mul z 26
+set y w
+add y 7
+add z y
+inp w
+set x z
+mod x 26
+add x 12
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 1
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+add x 11
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 2
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -5
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 4
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+add x 14
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 15
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+add x 15
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 11
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -13
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 5
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -16
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -8
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 9
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+add x 15
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 2
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -8
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+inp w
+set x z
+mod x 26
+div z 26
+add x -4
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 11
+mul y x
+add z y
+
+
+
+inp w
 mul x 0
 add x z
 mod x 26
