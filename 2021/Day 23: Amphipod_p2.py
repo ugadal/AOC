@@ -29,8 +29,8 @@ class sit():
 	def rep(self):
 		return (self.lobby+":"+self.h,self.e)
 s=sit()
-s.h="11303202" #me
-# ~ s.h="12130320" #example
+s.h="1130321031023202" #me
+# ~ s.h="1213321031020320" #example
 todo=[s]
 visited={}
 # ~ visited[s.rep()[0]]=s.e
@@ -39,7 +39,7 @@ skipped=0
 while todo:
 	cs=todo.pop(0)
 	print("\rentering",cs.rep(),skipped,done,end="")
-	if cs.h=="01230123":
+	if cs.h=="0123012301230123":
 		print (cs.rep())
 		rec=min(rec,cs.e)
 		continue
@@ -47,75 +47,52 @@ while todo:
 		skipped+=1
 		continue
 	if cs.rep()[0] in visited and cs.e>=visited[cs.rep()[0]]:
-		# ~ print(cs.rep())
-		# ~ print("skipped already visited")
-		# ~ print(visited[cs.rep()])
-		# ~ input()
 		skipped+=1
 		continue
 	for hx in range(4):
-		cm=cs.h[hx]
+		house_content="".join(cs.h[hx+4*depth] for depth in range(4))
+		# ~ print("hc",house_content)
+		if house_content=="----":continue
+		depth=next(i for i,c in enumerate(house_content) if c!="-")
+		# ~ print("mob at depth",depth)
+		# ~ cm=cs.h[hx]
+		cm=house_content[depth]
 		# ~ print(cm,hx)
-		if cm!="-":
-			# ~ move to lobby
-			lobpos=2+2*hx
-			# ~ print(lobpos)
-			if cs.lobby[lobpos]!="-":continue
-			aplob=[]
-			for x in range(lobpos-1,-1,-1):
-				if cs.lobby[x]!="-":break
-				if x in [2,4,6,8]:continue
-				aplob.append(x)
-			for x in range(lobpos+1,11):
-				if cs.lobby[x]!="-":break
-				if x in [2,4,6,8]:continue
-				aplob.append(x)
-			# ~ print(aplob)
-			for nl in aplob:
-				ns=cs.copy()
-				ns.lobby=cs.lobby[:nl]+cm+cs.lobby[nl+1:]
-				ns.h=cs.h[:hx]+"-"+cs.h[hx+1:]
-				ns.e+=(abs(nl-lobpos)+1)*10**int(cm)
-				# ~ print(ns.rep())
-				todo.append(ns)
-			# ~ exit()
-	for hx in range(4):
-		cm=cs.h[hx]
-		# ~ print(cm,hx)
-		if cm=="-":
-			if cs.h[hx+4]=="-":continue
-			cm=cs.h[hx+4]
-			# ~ move to lobby
-			lobpos=2+2*hx
-			# ~ print(lobpos)
-			if cs.lobby[lobpos]!="-":continue
-			aplob=[]
-			for x in range(lobpos-1,-1,-1):
-				if cs.lobby[x]!="-":break
-				if x in [2,4,6,8]:continue
-				aplob.append(x)
-			for x in range(lobpos+1,11):
-				if cs.lobby[x]!="-":break
-				if x in [2,4,6,8]:continue
-				aplob.append(x)
-			# ~ print(aplob)
-			for nl in aplob:
-				ns=cs.copy()
-				ns.lobby=cs.lobby[:nl]+cm+cs.lobby[nl+1:]
-				ns.h=cs.h[:hx+4]+"-"+cs.h[hx+5:]
-				ns.e+=(abs(nl-lobpos)+2)*10**int(cm)
-				# ~ print(ns.rep())
-				todo.append(ns)
-			# ~ exit()
+		thismobpos=hx+4*depth
+		# ~ move to lobby
+		lobpos=2+2*hx
+		# ~ print(lobpos)
+		if cs.lobby[lobpos]!="-":continue
+		aplob=[]
+		for x in range(lobpos-1,-1,-1):
+			if cs.lobby[x]!="-":break
+			if x in [2,4,6,8]:continue
+			aplob.append(x)
+		for x in range(lobpos+1,11):
+			if cs.lobby[x]!="-":break
+			if x in [2,4,6,8]:continue
+			aplob.append(x)
+		# ~ print(aplob)
+		for nl in aplob:
+			ns=cs.copy()
+			ns.lobby=cs.lobby[:nl]+cm+cs.lobby[nl+1:]
+			ns.h=cs.h[:thismobpos]+"-"+cs.h[thismobpos+1:]
+			ns.e+=(abs(nl-lobpos)+1+depth)*10**int(cm)
+			# ~ print(ns.rep())
+			todo.append(ns)
+		# ~ input()
+		
 	for lp in range(11):
 		cm=cs.lobby[lp]
 		if cm=="-":continue
 		icm=int(cm)
-		occ=cs.h[icm]+cs.h[icm+4]
-		if any(occ.count(mob) for mob in "0123" if mob!=cm):
+		house_content="".join(cs.h[icm+4*depth] for depth in range(4))
+		# ~ occ=cs.h[icm]+cs.h[icm+4]
+		if any(house_content.count(mob) for mob in "0123" if mob!=cm):
 			# ~ print(f"skipping trying to move mob {cm} cos home is composed of {occ}")
 			# ~ input()
 			continue
+		depth=[d for d,c in enumerate(house_content) if c=="-"][-1]
 		hp=2+2*icm
 		la,lb=lp,hp
 		clp=lp
@@ -125,25 +102,25 @@ while todo:
 			# ~ print(f"skipping trying to move mob {cm} cos path occupied hp {hp} clp {clp}")
 			# ~ input()
 			continue
-		if occ=="--":
+		# ~ if occ=="--":
 			# ~ move to bottom
-			ns=cs.copy()
-			ns.h=cs.h[:icm+4]+cm+cs.h[icm+5:]
-			ns.lobby=cs.lobby[:lp]+"-"+cs.lobby[lp+1:]
-			ns.e+=(abs(hp-clp)+2)*10**icm
-			todo.append(ns)
+		ns=cs.copy()
+		ns.h=cs.h[:icm+4*depth]+cm+cs.h[icm+4*depth+1:]
+		ns.lobby=cs.lobby[:lp]+"-"+cs.lobby[lp+1:]
+		ns.e+=(abs(hp-clp)+depth+1)*10**icm
+		todo.append(ns)
 			# ~ print (f"moved {cm} to bottom occ: {occ} home e:{(abs(hp-clp)+2)*10**icm}")
 			# ~ print(ns.rep())
 			# ~ input()
-		else:
-			ns=cs.copy()
-			ns.h=cs.h[:icm]+cm+cs.h[icm+1:]
-			ns.lobby=cs.lobby[:lp]+"-"+cs.lobby[lp+1:]
-			ns.e+=(abs(hp-clp)+1)*10**icm
-			todo.append(ns)
+		# ~ else:
+			# ~ ns=cs.copy()
+			# ~ ns.h=cs.h[:icm]+cm+cs.h[icm+1:]
+			# ~ ns.lobby=cs.lobby[:lp]+"-"+cs.lobby[lp+1:]
+			# ~ ns.e+=(abs(hp-clp)+1)*10**icm
+			# ~ todo.append(ns)
 			# ~ print (f"moved {cm} to top occ {occ} home e:{(abs(hp-clp)+1)*10**icm}")
 			# ~ print(ns.rep())
 			# ~ input()
 	visited[cs.rep()[0]]=cs.e
 	done+=1
-repres(1,rec)
+repres(2,rec)
