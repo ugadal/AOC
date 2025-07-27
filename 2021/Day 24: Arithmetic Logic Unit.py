@@ -20,17 +20,19 @@ class reg():
 	def __init__(self,name):
 		try:
 			v=int(name)
-			self.v=v
+			self.v=self.ori=v
 		except:
-			self.v=0
+			self.v=self.ori=0
 		reg.A[name]=self
+	def reset(self):
+		self.v=self.ori
 for line in open(fn).read().splitlines():
 	P=line.split()
 	if line.startswith("inp"):
 		tn=P[1]
 		if tn in reg.A:tn=reg.A[tn]
 		else:tn=reg(tn)
-		ops.append(("inp",tn))
+		ops.append(("inp",tn,None))
 		continue
 	ta,tb=P[1:]
 	if ta in reg.A:ta=reg.A[ta]
@@ -38,4 +40,23 @@ for line in open(fn).read().splitlines():
 	if tb in reg.A:tb=reg.A[tb]
 	else:tb=reg(tb)
 	ops.append((P[0],ta,tb))
-print(ops)
+# ~ for op in ops:
+	# ~ print(op)
+# ~ for r in reg.A.items():print(r)
+res=reg.A["z"]
+def run(pool):
+	for r in reg.A.values():r.reset()
+	for op,ta,tb in ops:
+		match op:
+			case 'inp':ta.v=pool.pop(0)
+			case 'add':ta.v+=tb.v
+			case 'mul':ta.v*=tb.v
+			case 'div':ta.v//=tb.v
+			case 'mod':ta.v%=tb.v
+			case 'eql':ta.v=1 if ta.v==tb.v else 0
+	return res.v==0
+for pool in it.product([9,8,7,6,5,4,3,2,1],repeat=14):
+	print(pool)
+	v=run(list(pool))
+	# ~ print(v)
+	if v:break
