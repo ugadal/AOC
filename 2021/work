@@ -1,0 +1,167 @@
+inp w		w:1-9 v1			w=v1
+set x 1		x:1					x=1
+set z w		y:1-9				
+add z 12	y:13-21				z=v1+12
+
+inp w		w:1-9 v2
+mul z 26	z:13-21 *26			z=(v1+12)*26
+add y 7		y:8-16				y=v2+7
+add z y		z:13-21 *26  +  8-16	z=(v1+12)*26 + v2+7
+
+inp w		w:1-9 v3		w=v3
+
+inp w		w:1-9 v4		w=v4
+set x 1		x:1				x=1
+set y 26	y:26			y=26
+mul z y		z: (13-21 *26  +  8-16) *26
+							z=  (v1+12)*26 + v2+7) * 26
+add y 2		y:3-11			y=v4+2
+add z y		z: (13-21 *26  +  8-16) *26  +   3-11
+							z=  (v1+12)*26 + v2+7) * 26 +v4+2
+							
+inp w		w:v5			w=v5
+set x z						x= (v1+12)*26 + v2+7) * 26 +v4+2
+mod x 26	x:3-11			x=v4+2
+div z 26	z: (13-21 *26  +  8-16)
+							z=(v1+12)*26 + v2+7)
+add x -5	x: -2->6   		x=v4-3									!! v4>=4
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 4
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+add x 14
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 15
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+add x 15
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 11
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+add x -13
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 5
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+add x -16
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+add x -8
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 9
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+add x 15
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 2
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+add x -8
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 3
+mul y x
+add z y
+
+inp w
+set x z
+mod x 26
+div z 26
+add x -4
+dif x w
+set y 25
+mul y x
+add y 1
+mul z y
+set y w
+add y 11
+mul y x
+add z y
