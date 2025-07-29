@@ -116,13 +116,8 @@ for rr in range(200):
 				pos=complex(c,r)
 				if G.get((couche,pos),".")=="#":alive.append(pos)
 				else:deads.append(pos)
-		# ~ print(couche,alive)
-		# ~ print(couche,deads)
-		# ~ input()
 		NG=NG|{(couche,pos):"." if livearound2(couche,pos)!=1 else "#" for pos in alive}
 		NG=NG|{(couche,pos):"#" if 1<=livearound2(couche,pos)<=2 else "." for pos in deads}
-		# ~ print(NG)
-		# ~ input()
 	G=NG
 	mic=min(couche-1 for (couche,pos),v in G.items() if v=="#")
 	mac=max(couche+1 for (couche,pos),v in G.items() if v=="#")
