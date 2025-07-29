@@ -48,18 +48,15 @@ def livesaround(pos):
 def cs():
 	r=0
 	
-# ~ NG={}
 seen=set()
 while True:
 	alive=[pos for pos,v in G.items() if v=="#"]
 	NG={pos:"." if livesaround(pos)!=1 else "#" for pos in alive}
 	deads=[pos for pos,v in G.items() if v=="."]
 	NG=NG|{pos:"#" if 1<=livesaround(pos)<=2 else "." for pos in deads}
-	# ~ print (NG)
 	G=NG
 	res=rep()
 	if res in seen:
 		repres(1,res)
 		exit()
 	seen.add(res)
-	# ~ input(res)
