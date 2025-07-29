@@ -56,7 +56,79 @@ while True:
 	NG=NG|{pos:"#" if 1<=livesaround(pos)<=2 else "." for pos in deads}
 	G=NG
 	res=rep()
-	if res in seen:
-		repres(1,res)
-		exit()
+	if res in seen:break
 	seen.add(res)
+repres(1,res)
+
+G={}
+for r,row in enumerate(block.splitlines()):
+	for c,s in enumerate(row):
+		pos=complex(c,r)
+		G[0,pos]=s
+def livearound2(l,pos):
+	left=[(l,pos-1)]
+	right=[(l,pos+1)]
+	top=[(l,pos-1j)]
+	bottom=[(l,pos+1j)]
+	if pos.imag==0:top=[(l+1,2+1j)]
+	if pos.imag==4:bottom=[(l+1,2+3j)]
+	if pos.real==0:left=[(l+1,1+2j)]
+	if pos.real==4:right=[(l+1,3+2j)]
+	if pos==2+1j:
+		bottom=[(l-1,c) for c in range(5)]
+	if pos==1+2j:
+		right=[(l-1,r*1j) for r in range(5)]
+	if pos==2+3j:
+		top=[(l-1,4j+c) for c in range(5)]
+	if pos==3+2j:
+		left=[(l-1,4+r*1j) for r in range(5)]
+	P=left+right+top+bottom
+	return[G.get(p,".") for p in P].count("#")
+print (livearound2(0,4))
+print (livearound2(0,3))
+# ~ exit()
+def rep2(l):
+	print()
+	# ~ res=0
+	# ~ bf=1
+	for r in range(NR):
+		t=[]
+		for c in range(NC):
+			pos=complex(c,r)
+			t.append(G.get((l,pos),"."))
+			# ~ if G[(l,pos)]=="#":res+=bf
+			# ~ bf*=2
+		print ("".join(t))
+	# ~ return res
+mic=min(couche-1 for (couche,pos),v in G.items() if v=="#")
+mac=max(couche+1 for (couche,pos),v in G.items() if v=="#")
+print(mic,mac)
+for couche in range (mic,mac+1):
+	rep2(couche)
+for rr in range(200):
+	NG={}
+	for couche in range(mic,mac+1):
+		alive=[]
+		deads=[]
+		for r in range(NR):
+			for c in range(NC):
+				if c==r==2:continue
+				pos=complex(c,r)
+				if G.get((couche,pos),".")=="#":alive.append(pos)
+				else:deads.append(pos)
+		# ~ print(couche,alive)
+		# ~ print(couche,deads)
+		# ~ input()
+		NG=NG|{(couche,pos):"." if livearound2(couche,pos)!=1 else "#" for pos in alive}
+		NG=NG|{(couche,pos):"#" if 1<=livearound2(couche,pos)<=2 else "." for pos in deads}
+		# ~ print(NG)
+		# ~ input()
+	G=NG
+	mic=min(couche-1 for (couche,pos),v in G.items() if v=="#")
+	mac=max(couche+1 for (couche,pos),v in G.items() if v=="#")
+	print(mic,mac)
+for couche in range (mic,mac+1):
+	print(couche)
+	rep2(couche)
+res=sum(1 for k,v in G.items() if v=="#")
+repres(2,res)
