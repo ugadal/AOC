@@ -34,7 +34,7 @@ class computer():
 			ic,ib,ia=map(int,cmd[:3])
 			# ~ print("curr cmd",cmd,opcode)
 			self.comp+=1
-			if self.comp>1000:
+			if self.comp>100000:
 				yield "waiting"
 				self.comp=0
 			match opcode:
@@ -66,6 +66,7 @@ class computer():
 					self.out=True
 					yield va
 					self.out=False
+					self.comp=0
 					self.pos+=2
 				case 5: # jump if non zero param1
 					pa=self.fixr(self.pos+1,ia)
@@ -97,8 +98,8 @@ class computer():
 					self.pos+=2
 				case 99:
 					# ~ print("ending")
-					self.out.append(self.OV[0])
-					return self.OV[0]
+					# ~ self.out.append(self.OV[0])
+					yield self.OV[0]
 					# ~ yield self.OV[0]
 					# ~ yield f"end {self.OV[0]}"
 if __name__ == '__main__':
