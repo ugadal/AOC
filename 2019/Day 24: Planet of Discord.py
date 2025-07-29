@@ -16,3 +16,5 @@ day=dre.findall(cp)[0]
 fn=f"d{day}.txt"
 # ~ block=open(fn).read().split("\n\n\n")[part]
 block=open(fn).read().split("\n\n")[part]
+G={}
+for r,row in enumerate(block.splitlines()):
