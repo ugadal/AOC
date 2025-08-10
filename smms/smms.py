@@ -3,8 +3,8 @@
 #  smms.py
 import itertools as it
 import random as rnd
-nr=2
-nc=5
+nr=5
+nc=8
 G={(r,c):rnd.randrange(-9,10) for r in range(nr) for c in range(nc)}
 def gc(v):
 	p=list(range(v))
