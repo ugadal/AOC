@@ -26,11 +26,11 @@ for row in range(R):
 		a=[G.get(p,".") for p in around(pos)]
 		if a.count("@")<4:res+=1
 print("p1 :",res)
-cyc=0
+# ~ cyc=0
 total=0
 while True:
 	pmap(G)
-	cyc+=1
+	# ~ cyc+=1
 	torem=[]
 	for row in range(R):
 		for col in range(C):
@@ -38,8 +38,8 @@ while True:
 			if G[pos]==".":continue
 			a=[G.get(p,".") for p in around(pos)]
 			if a.count("@")<4:torem.append(pos)
-	print(f"{cyc} : {len(torem)}")
-	for pos in torem:G[pos]="."
+	# ~ print(f"{cyc} : {len(torem)}")
 	if not torem:break
+	for pos in torem:G[pos]="."
 	total+=len(torem)
 print("p2 :",total)
