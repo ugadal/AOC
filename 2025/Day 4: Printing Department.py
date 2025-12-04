@@ -22,7 +22,7 @@ res=0
 for row in range(R):
 	for col in range(C):
 		pos=complex(col,row)
-		if G.get(pos,".")==".":continue
+		if G[pos]==".":continue
 		a=[G.get(p,".") for p in around(pos)]
 		if a.count("@")<4:res+=1
 print("p1 :",res)
@@ -35,7 +35,7 @@ while True:
 	for row in range(R):
 		for col in range(C):
 			pos=complex(col,row)
-			if G.get(pos,".")==".":continue
+			if G[pos]==".":continue
 			a=[G.get(p,".") for p in around(pos)]
 			if a.count("@")<4:torem.append(pos)
 	print(f"{cyc} : {len(torem)}")
