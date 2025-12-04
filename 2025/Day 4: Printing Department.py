@@ -14,14 +14,17 @@ def pmap(G):
 	for row in range(R):
 		print("".join([G[complex(col,row)] for col in range(C)]))
 def around(pos):
-	yield pos-1-1j
-	yield pos-1j
-	yield pos+1-1j
-	yield pos-1
-	yield pos+1
-	yield pos-1+1j
-	yield pos+1j
-	yield pos+1+1j
+	for dc in (-1,0,1):
+		for dr in (-1j,0,1j):
+			if dc+dr:yield pos+dc+dr
+	# ~ yield pos-1-1j
+	# ~ yield pos-1j
+	# ~ yield pos+1-1j
+	# ~ yield pos-1
+	# ~ yield pos+1
+	# ~ yield pos-1+1j
+	# ~ yield pos+1j
+	# ~ yield pos+1+1j
 res=0
 for row in range(R):
 	for col in range(C):
