@@ -29,7 +29,7 @@ print("p1 :",res)
 # ~ cyc=0
 total=0
 while True:
-	pmap(G)
+	# ~ pmap(G)
 	# ~ cyc+=1
 	torem=[]
 	for row in range(R):
