@@ -3,13 +3,14 @@
 fn,part="d4.txt",1
 sep="\n\n"
 data=open(fn).read().split(sep)[part]
-G={}
-for row,line in enumerate(data.splitlines()):
-	for col,s in enumerate(line):
-		pos=complex(col,row)
-		G[pos]=s
-R=row+1
-C=col+1
+def readG(data):
+	G={}
+	for row,line in enumerate(data.splitlines()):
+		for col,s in enumerate(line):
+			pos=complex(col,row)
+			G[pos]=s
+	return G,row+1,col+1
+G,R,C=readG(data)
 def pmap(G):
 	for row in range(R):
 		print("".join([G[complex(col,row)] for col in range(C)]))
@@ -17,14 +18,6 @@ def around(pos):
 	for dc in (-1,0,1):
 		for dr in (-1j,0,1j):
 			if dc+dr:yield pos+dc+dr
-	# ~ yield pos-1-1j
-	# ~ yield pos-1j
-	# ~ yield pos+1-1j
-	# ~ yield pos-1
-	# ~ yield pos+1
-	# ~ yield pos-1+1j
-	# ~ yield pos+1j
-	# ~ yield pos+1+1j
 res=0
 for row in range(R):
 	for col in range(C):
