@@ -46,12 +46,10 @@ def checkconn(a,b,C):
 			print("p2 :",a[0]*b[0])
 			exit()
 for (a,b),d in DL:
-	if any(a in c for c in C):
-		ac=next(c for c in C if a in c)
-	else:ac=False
-	if any(b in c for c in C):
-		bc=next(c for c in C if b in c)
-	else:bc=False
+	try:ac=next(c for c in C if a in c)
+	except:ac=False
+	try:bc=next(c for c in C if b in c)
+	except:bc=False
 	if ac and bc:
 		if ac==bc:continue
 		C.remove(ac)
