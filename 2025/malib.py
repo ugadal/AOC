@@ -18,7 +18,6 @@ def around(pos):
 	for dc in (-1,0,1):
 		for dr in (-1j,0,1j):
 			if dc+dr:yield pos+dc+dr
-def reduce(L):
-	p=1
+def reduce(L,p=1):
 	for v in L:p=p*v
 	return p
