@@ -3,6 +3,8 @@
 import itertools as it
 sep="\n\n"
 inf=float("Inf")
+import sys
+fn=f"d{sys.argv[0].split(":")[0].split()[1]}.txt"
 def readG(data):
 	G={}
 	for row,line in enumerate(data.splitlines()):

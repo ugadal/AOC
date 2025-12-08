@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 from malib import *
-fn,part="d8.txt",1
+part=1
 data=open(fn).read().split(sep)[part]
 
 JB=[tuple(map(int,l.split(","))) for l in data.splitlines()]
