@@ -6,12 +6,6 @@ data=open(fn).read().split(sep)[part]
 
 JB=[tuple(map(int,l.split(","))) for l in data.splitlines()]
 
-def dist(i,j):
-	a,b,c=i
-	d,e,f=j
-	d=(a-d)**2+(b-e)**2+(c-f)**2
-	d=d**.5
-	return d
 rec=inf
 DP={}
 for i,j in it.combinations(JB,2):

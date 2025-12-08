@@ -26,3 +26,5 @@ def news(pos):
 def reduce(L,p=1):
 	for v in L:p=p*v
 	return p
+def dist(i,j):
+	return sum((a-b)**2 for a,b in zip(i,j))**.5
