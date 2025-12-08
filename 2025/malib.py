@@ -30,3 +30,8 @@ def reduce(L,p=1):
 	return p
 def dist(i,j):
 	return sum((a-b)**2 for a,b in zip(i,j))**.5
+def toint(L):
+	return list(map(int,L))
+def tostr(L):
+	return list(map(str,L))
+	

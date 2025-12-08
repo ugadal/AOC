@@ -59,8 +59,7 @@ def ot(a,b):
 	if a[0]<b[0]:return -1
 	return 1
 	
-SW=sorted(SW,key=cmp_to_key(ot))
-SW.reverse()
+SW=sorted(SW,key=cmp_to_key(ot),reverse=True)
 res=sum(sid*(i+1) for i,(sid,_,_) in enumerate(SW))
 print(res)
 	
