@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 #
 import itertools as it
+import sys
+part=1 if len(sys.argv)>1 else 0
 sep="\n\n"
 inf=float("Inf")
 import sys

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 from malib import *
-part=0
+# ~ part=0
 data=open(fn).read().split(sep)[part]
 rs=[]
 for line in data.splitlines():
@@ -15,7 +15,16 @@ def area(a,b):
 	return gx*gy
 res=max(area(a,b) for a,b in it.combinations(rs,2))
 print("p1 :",res)
-
+Rot=[]
+# ~ for a,b,c in zip(rs,rs[1:],rs[2:]):
+	# ~ u,v=b[0]-a[0],b[1]-a[1]
+	# ~ s,t=c[0]-b[0],c[1]-b[1]
+	# ~ if u*t-s*v >0:Rot.append("R")
+	# ~ else:Rot.append("L")
+# ~ print (f"R: {Rot.count("R")} L: {Rot.count("L")}")
+# ~ print(sum([ox*dy-dx*oy for (ox,oy),(dx,dy) in zip(rs,rs[1:]+[rs[0]])]))
+# ~ exit()
+	
 C=[c for c,r in rs]
 C.extend([c+1 for c in C])
 C=set(C)
@@ -40,7 +49,7 @@ class rect():
 		self.br=b,d
 		self.c=c
 		self.d=d
-		self.colored=False
+		self.colored=0
 		self.gx=(a+b)/2
 		self.gy=(c+d)/2
 		rect.all.append(self)
@@ -56,95 +65,41 @@ Rec=[]
 for a,b in zip (C,C[1:]):
 	for c,d in zip(R,R[1:]):
 		rect((a,b-1,c,d-1))
-rect((7,11,1,2))
-V=rect.all.pop()
-print(V)
-for rec in rect.all:print(rec,rec.p,rec.tl,rec.br,rec.gx,rec.gy,rec.area(),rec.isin(V))
-print(rs)
-exit()
-
-
-V=[(a,b-a) for a,b in zip(rs,rs[1:])]
-a=rs[-1]
-b=rs[0]
-V.append((a,b-a))
-print(V)
-def within(s,v):
-	# ~ print("is",v,"within",s,"?")
-	dc=s[1]-s[0]
-	dc=dc.real
-	if dc:#horizontal
-		if v[0].imag!=s[0].imag:return False
-		if dc>0:#right
-			return (s[0].real<=v[0].real and s[1].real>=v[1].real )
-		else:#left
-			return (s[0].real>=v[0].real and s[1].real<=v[1].real )
-	else:#vertical
-		if v[0].real!=s[0].real:return False
-		dr=s[1]-s[0]
-		dr=dr.imag
-		if dr>0:#down
-			return (s[0].imag<=v[0].imag and s[1].imag>=v[1].imag )
-		else:#up
-			return (s[0].imag>=v[0].imag and s[1].imag<=v[1].imag )
-def rectcover(a,b):
-	ga,ha,da,ba=a.p
-	SA=set((r,c) for r in range(ha,ba) for c in range(ga,da))
-	gb,hb,db,bb=b.p
-	SB=set((r,c) for r in range(hb,bb) for c in range(gb,db))
-	if SA&SB:return True
-	return False
-	if da<gb:return False
-	if ga>=db:return False
-	if ha>=bb:return False
-	if ba<hb:return False
-	return True
-for v in V:
-	o,d=v
-	print(o,d)
-	s,t=o,o+d
-	print ("working on segment",s,t)
-	for rec in Rec:
-		so,st=rec.getside(d)
-		r=within((s,t),(so,st))
-		if r:
-			rec.colored=True
-			# ~ print("ok",rec,(so,st))
-	# ~ exit()
-for rec in Rec:
-	print(rec.colored,rec.p)
-colored=tuple(rec for rec in Rec if rec.colored)
-print(len(colored))
-for rec in (r for r in Rec if not r.colored):
-	print(rec.p,rec.gx,rec.gy)
-R=set(rec.gy for rec in Rec)
-R=list(R)
-R.sort()
-print(R)
+def rfv(o,d):
+	ox,oy=o
+	dx,dy=d
+	a,b=sorted((ox,dx))
+	c,d=sorted((oy,dy))
+	rect((a,b,c,d))
+	return rect.all.pop()
 G=[]
-for row in R:
-	tr=[r for r in Rec if r.gy==row]
-	tr=sorted(tr,key=lambda rec:rec.gx)
-	G.append(tr)
-for T,M,B in zip(G,G[1:],G[2:]):
-	for t,l,m,r,d in zip(T[1:],M,M[1:],M[2:],B[1:]):
-		if m.colored:continue
-		# ~ print("examining",m)
-		if all(x.colored for x in (t,l,r,d)):
-			print("changed color",m)
-z=rect((0,0,8,8))
-for rec in Rec:
-	print(rec.p,rectcover(z,rec))
+rows=list(set(r.gy for r in rect.all))
+rows.sort()
+for row in rows:
+	G.append(sorted([r for r in rect.all if r.gy==row],key=lambda s:s.gx))
+z=1
+for ox,oy in rs[::-1]:
+# ~ for ox,oy in rs:
+	for r in rect.all:
+		if r.b<ox and r.d<oy:r.colored+=z
+	z=-z
+	# ~ for row in G:
+		# ~ print("".join(["x" if r.colored>0 else "." for r in row]))
+	# ~ input()
+print("==")
+for o,d in zip(rs,rs[1:]+[rs[0]]):
+	V=rfv(o,d)
+	for rec in rect.all:
+		if rec.isin(V):rec.colored=True
+for row in G:
+	print("".join(["x" if r.colored>0 else "." for r in row]))
+rec=-inf
 for a,b in it.combinations(rs,2):
-	print("combo",a,b)
-	mic,mac=sorted([a.real,b.real])
-	mir,mar=sorted([a.imag,b.imag])
-	z=(mic,mir,mac+1,mar+1)
-	z=[int(v) for v in z]
-	z=rect(z)
-	print("rect considered",z.gx,z.gy,z.p)
-	covering=[r for r in Rec if rectcover(z,r)]
-	print([(r.gx,r.gy,r.p) for r in covering])
-	if all(r.colored for r in covering):
-		print("ok",a,b,len(covering))
-	else:print("rejected")
+	V=rfv(a,b)
+	if V.area()<rec:continue
+	incl=[r for r in rect.all if r.isin(V)]
+	if all(r.colored>0 for r in incl):
+		if V.area()>rec:
+			print("ok",a,b,V.area())
+			rec=V.area()
+# ~ 1410501884
