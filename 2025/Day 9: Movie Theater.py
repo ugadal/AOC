@@ -33,33 +33,36 @@ class rect():
 	all=[]
 	def __init__(self,p):
 		a,b,c,d=p
-		a,c=sorted((a,c))
-		b,d=sorted((b,d))
 		self.p=a,b,c,d
 		self.a=a
 		self.b=b
+		self.tl=a,c
+		self.br=b,d
 		self.c=c
 		self.d=d
 		self.colored=False
-		self.gx=(a+c)/2
-		self.gy=(b+d)/2
+		self.gx=(a+b)/2
+		self.gy=(c+d)/2
 		rect.all.append(self)
-	# ~ def getside(self,dp):
-		# ~ print("rec:",self.p,"getside",dp)
-		# ~ if dp.real:
-			# ~ if dp.real>0:return self.r
-			# ~ else:return self.l
-		# ~ elif dp.imag<0:return self.t
-		# ~ else:return self.d
 	def area(self):
 		return (1+self.b-self.a) * (1+self.d-self.c)
-
+	def isin(self,T):
+		if not T.a<=self.a<=T.b:return False
+		if not T.a<=self.b<=T.b:return False
+		if not T.c<=self.c<=T.d:return False
+		if not T.c<=self.d<=T.d:return False
+		return True
 Rec=[]
 for a,b in zip (C,C[1:]):
 	for c,d in zip(R,R[1:]):
-		rect((a,b,c-1,d-1))
-for rec in rect.all:print(rec,rec.p,rec.gx,rec.gy,rec.area())
+		rect((a,b-1,c,d-1))
+rect((7,11,1,2))
+V=rect.all.pop()
+print(V)
+for rec in rect.all:print(rec,rec.p,rec.tl,rec.br,rec.gx,rec.gy,rec.area(),rec.isin(V))
 exit()
+
+
 V=[(a,b-a) for a,b in zip(rs,rs[1:])]
 a=rs[-1]
 b=rs[0]
