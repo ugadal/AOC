@@ -33,29 +33,31 @@ class rect():
 	all=[]
 	def __init__(self,p):
 		a,b,c,d=p
-		self.p=p
-		self.t=complex(a,d),complex(a,c)
-		self.r=complex(a,c),complex(b,c)
-		self.d=complex(b,c),complex(b,d)
-		self.l=complex(b,d),complex(a,d)
+		a,c=sorted((a,c))
+		b,d=sorted((b,d))
+		self.p=a,b,c,d
+		self.a=a
+		self.b=b
+		self.c=c
+		self.d=d
 		self.colored=False
-		self.gx=(a+c-1)/2
-		self.gy=(b+d-1)/2
+		self.gx=(a+c)/2
+		self.gy=(b+d)/2
 		rect.all.append(self)
-	def getside(self,dp):
+	# ~ def getside(self,dp):
 		# ~ print("rec:",self.p,"getside",dp)
-		if dp.real:
-			if dp.real>0:return self.r
-			else:return self.l
-		elif dp.imag<0:return self.t
-		else:return self.d
+		# ~ if dp.real:
+			# ~ if dp.real>0:return self.r
+			# ~ else:return self.l
+		# ~ elif dp.imag<0:return self.t
+		# ~ else:return self.d
 	def area(self):
-		return (self.p[1]-self.p[0]) * (self.p[3]-self.p[2])
+		return (1+self.b-self.a) * (1+self.d-self.c)
 
 Rec=[]
 for a,b in zip (C,C[1:]):
 	for c,d in zip(R,R[1:]):
-		rect((a,b,c,d))
+		rect((a,c,b-1,d-1))
 for rec in rect.all:print(rec,rec.p,rec.gx,rec.gy,rec.area())
 exit()
 V=[(a,b-a) for a,b in zip(rs,rs[1:])]
