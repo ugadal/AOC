@@ -60,6 +60,7 @@ rect((7,11,1,2))
 V=rect.all.pop()
 print(V)
 for rec in rect.all:print(rec,rec.p,rec.tl,rec.br,rec.gx,rec.gy,rec.area(),rec.isin(V))
+print(rs)
 exit()
 
 
