@@ -57,7 +57,7 @@ class rect():
 Rec=[]
 for a,b in zip (C,C[1:]):
 	for c,d in zip(R,R[1:]):
-		rect((a,c,b-1,d-1))
+		rect((a,b,c-1,d-1))
 for rec in rect.all:print(rec,rec.p,rec.gx,rec.gy,rec.area())
 exit()
 V=[(a,b-a) for a,b in zip(rs,rs[1:])]
