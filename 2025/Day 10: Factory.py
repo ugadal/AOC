@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
 #
 from malib import *
-# ~ part=0
 data=open(fn).read().split(sep)[part]
+def mnmx(a,b):
+	for v in range(a,b+1):
+		if v==0 or v%2:yield v
+def recsam(l,t,st=[]):
+	needed=t-sum(st)
+	if len(st)==l-1:
+		if needed==0 or needed%2:
+			yield st+[needed]
+	else:
+		needed=t-sum(st)
+		for v in mnmx(0,needed):
+			yield from recsam(l,t,st+[v])
+
 res=0
 for line in data.splitlines():
 	parts=line.split()
@@ -13,20 +25,20 @@ for line in data.splitlines():
 	press=1
 	found=False
 	while not found:
-		for co in it.product(buttons,repeat=press):
-			# ~ print("comb",co)
+		for co in recsam(len(buttons),press):
 			status=[False]*len(goal)
-			for but in co:
-				for v in but:
-					status[v]=not status[v]
+			for but,p in zip(buttons,co):
+				if p:
+					for v in but:
+						status[v]=not status[v]
 			if status==goal:
-				# ~ print("found",press)
 				res+=press
 				found=True
 				break
 		else:
 			press+=1
 print("p1 :",res)
+
 res=0
 for line in data.splitlines():
 	parts=line.split()
