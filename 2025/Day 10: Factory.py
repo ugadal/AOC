@@ -38,6 +38,15 @@ for line in data.splitlines():
 			press+=1
 print("p1 :",res)
 
+def recsam(l,t,st=[]):
+	needed=t-sum(st)
+	if len(st)==l-1:
+		yield st+[needed]
+	else:
+		for v in range(0,needed+1):
+			yield from recsam(l,t,st+[v])
+
+
 res=0
 for line in data.splitlines():
 	parts=line.split()
@@ -46,21 +55,19 @@ for line in data.splitlines():
 	goal=list(map(int,target[1:-1].split(",")))
 	buttons=[list(map(int,b[1:-1].split(",")))  for b in buttons ]
 	pool=[]
-	for but in buttons:
-		mp=min(goal[v] for v in but)
-		pool.extend([but]*mp)
-	print(pool)
-	# ~ exit()
-	press=1
+	press=max(goal)
 	found=False
+	print(len(buttons),len(goal))
+	for but in buttons:print(but)
 	while not found:
-		print(press)
-		for co in it.combinations(pool,press):
-			# ~ print("comb",co)
+		print(press,goal)
+		for co in recsam(len(buttons),press):
+			# ~ print(co)
 			status=[0]*len(goal)
-			for but in co:
+			for but,p in zip(buttons,co):
+				if not p :continue
 				for v in but:
-					status[v]+=1
+					status[v]+=p
 			if status==goal:
 				# ~ print("found",press)
 				res+=press
@@ -68,4 +75,5 @@ for line in data.splitlines():
 				break
 		else:
 			press+=1
+	# ~ exit()
 print("p2 :",res)
