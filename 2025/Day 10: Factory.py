@@ -11,7 +11,6 @@ def recsam(l,t,st=[]):
 		if needed==0 or needed%2:
 			yield st+[needed]
 	else:
-		needed=t-sum(st)
 		for v in mnmx(0,needed):
 			yield from recsam(l,t,st+[v])
 
