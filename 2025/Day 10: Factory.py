@@ -45,7 +45,34 @@ def recsam(l,t,st=[]):
 	else:
 		for v in range(0,needed+1):
 			yield from recsam(l,t,st+[v])
-
+def solve(B,goal):
+	buttons=[set(b) for b in B]
+	G=[]
+	for i,v in enumerate(goal):
+		G.append([1 if i in b else 0 for b in buttons]+[v])
+	for row in G:print(row)
+	print()
+	if len(B)<len(goal):
+		avrow=list(range(len(G)))
+		for col in range(len(buttons)):
+			i,refrow=next((i,G[i]) for i in avrow if G[i][col])
+			print(avrow,"ref row",i,refrow)
+			avrow.remove(i)
+			v=refrow[col]
+			if v!=1:G[i]=[r/v for r in refrow ]
+			refrow=G[i]
+			for row in G:print(row)
+			print()
+			for ti,row in enumerate(G):
+				if ti==i:continue
+				if row[col]:
+					f=row[col]
+					G[ti]=[t-f*v for t,v in zip(row,refrow)]
+			for row in G:print(row)
+			print()
+			input()
+	print("======================")
+	# ~ exit()
 
 res=0
 for line in data.splitlines():
@@ -54,26 +81,27 @@ for line in data.splitlines():
 	buttons=parts[1:-1]
 	goal=list(map(int,target[1:-1].split(",")))
 	buttons=[list(map(int,b[1:-1].split(",")))  for b in buttons ]
-	pool=[]
-	press=max(goal)
-	found=False
-	print(len(buttons),len(goal))
-	for but in buttons:print(but)
-	while not found:
-		print(press,goal)
-		for co in recsam(len(buttons),press):
+	solve(buttons,goal)
+	# ~ pool=[]
+	# ~ press=max(goal)
+	# ~ found=False
+	# ~ print(len(buttons),len(goal))
+	# ~ for but in buttons:print(but)
+	# ~ while not found:
+		# ~ print(press,goal)
+		# ~ for co in recsam(len(buttons),press):
 			# ~ print(co)
-			status=[0]*len(goal)
-			for but,p in zip(buttons,co):
-				if not p :continue
-				for v in but:
-					status[v]+=p
-			if status==goal:
+			# ~ status=[0]*len(goal)
+			# ~ for but,p in zip(buttons,co):
+				# ~ if not p :continue
+				# ~ for v in but:
+					# ~ status[v]+=p
+			# ~ if status==goal:
 				# ~ print("found",press)
-				res+=press
-				found=True
-				break
-		else:
-			press+=1
+				# ~ res+=press
+				# ~ found=True
+				# ~ break
+		# ~ else:
+			# ~ press+=1
 	# ~ exit()
 print("p2 :",res)
