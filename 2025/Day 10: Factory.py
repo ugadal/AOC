@@ -51,17 +51,25 @@ def solve(B,goal):
 	for i,v in enumerate(goal):
 		G.append([1 if i in b else 0 for b in buttons]+[v])
 	for row in G:print(row)
+	G=[tuple(row) for row in G]
+	G=list(set(G))
+	print("eventually simplified")
+	for row in G:print(row)
 	print()
-	if len(B)<len(goal):
+	if True:
 		avrow=list(range(len(G)))
 		for col in range(len(buttons)):
-			i,refrow=next((i,G[i]) for i in avrow if G[i][col])
-			print(avrow,"ref row",i,refrow)
+			print("fixing col",col)
+			try:i,refrow=next((i,G[i]) for i in avrow if G[i][col])
+			except:
+				print("need to optimize from here")
+				break
+			# ~ print(avrow,"ref row",i,refrow)
 			avrow.remove(i)
 			v=refrow[col]
 			if v!=1:G[i]=[r/v for r in refrow ]
 			refrow=G[i]
-			for row in G:print(row)
+			# ~ for row in G:print(row)
 			print()
 			for ti,row in enumerate(G):
 				if ti==i:continue
@@ -70,7 +78,10 @@ def solve(B,goal):
 					G[ti]=[t-f*v for t,v in zip(row,refrow)]
 			for row in G:print(row)
 			print()
-			input()
+		else:
+			print("solved")
+			for row in G:print("solved",row)
+			# ~ input()
 	print("======================")
 	# ~ exit()
 
