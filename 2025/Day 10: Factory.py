@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 #
 from malib import *
+from z3 import *
 data=open(fn).read().split(sep)[part]
 def mnmx(a,b):
 	for v in range(a,b+1):
@@ -47,43 +48,15 @@ def recsam(l,t,st=[]):
 			yield from recsam(l,t,st+[v])
 def solve(B,goal):
 	buttons=[set(b) for b in B]
-	G=[]
+	s=Optimize()
+	bsyms=[Int(f"but{bi}") for bi,b in enumerate(buttons)]
+	for bsym in bsyms:s.add(bsym>=0)
 	for i,v in enumerate(goal):
-		G.append([1 if i in b else 0 for b in buttons]+[v])
-	for row in G:print(row)
-	G=[tuple(row) for row in G]
-	G=list(set(G))
-	print("eventually simplified")
-	for row in G:print(row)
-	print()
-	if True:
-		avrow=list(range(len(G)))
-		for col in range(len(buttons)):
-			print("fixing col",col)
-			try:i,refrow=next((i,G[i]) for i in avrow if G[i][col])
-			except:
-				print("need to optimize from here")
-				break
-			# ~ print(avrow,"ref row",i,refrow)
-			avrow.remove(i)
-			v=refrow[col]
-			if v!=1:G[i]=[r/v for r in refrow ]
-			refrow=G[i]
-			# ~ for row in G:print(row)
-			print()
-			for ti,row in enumerate(G):
-				if ti==i:continue
-				if row[col]:
-					f=row[col]
-					G[ti]=[t-f*v for t,v in zip(row,refrow)]
-			for row in G:print(row)
-			print()
-		else:
-			print("solved")
-			for row in G:print("solved",row)
-			# ~ input()
-	print("======================")
-	# ~ exit()
+		s.add(sum([bsym for but,bsym in zip(buttons,bsyms) if i in but])==v)
+	s.minimize(sum(bsyms))
+	s.check()
+	res=s.model()
+	return sum([res.eval(bsym).as_long() for bsym in bsyms])
 
 res=0
 for line in data.splitlines():
@@ -92,27 +65,5 @@ for line in data.splitlines():
 	buttons=parts[1:-1]
 	goal=list(map(int,target[1:-1].split(",")))
 	buttons=[list(map(int,b[1:-1].split(",")))  for b in buttons ]
-	solve(buttons,goal)
-	# ~ pool=[]
-	# ~ press=max(goal)
-	# ~ found=False
-	# ~ print(len(buttons),len(goal))
-	# ~ for but in buttons:print(but)
-	# ~ while not found:
-		# ~ print(press,goal)
-		# ~ for co in recsam(len(buttons),press):
-			# ~ print(co)
-			# ~ status=[0]*len(goal)
-			# ~ for but,p in zip(buttons,co):
-				# ~ if not p :continue
-				# ~ for v in but:
-					# ~ status[v]+=p
-			# ~ if status==goal:
-				# ~ print("found",press)
-				# ~ res+=press
-				# ~ found=True
-				# ~ break
-		# ~ else:
-			# ~ press+=1
-	# ~ exit()
+	res+=solve(buttons,goal)
 print("p2 :",res)
