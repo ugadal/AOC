@@ -88,4 +88,4 @@ for n in keep:
 	n.left=set(n.left)-drop
 	n.right=set(n.right)-drop
 node.all["out"].toout=1
-print(node.all["svr"].TO())
+print("p2 :",node.all["svr"].TO())
