@@ -82,7 +82,7 @@ keep.append(fft)
 keep.append(dac)
 drop=[n for n in node.all.values() if n not in keep]
 print(len(keep),len(node.all),len(drop))
-for n in keep:print(n.name)
+# ~ for n in keep:print(n.name)
 drop=set(drop)
 for n in keep:
 	n.left=set(n.left)-drop
