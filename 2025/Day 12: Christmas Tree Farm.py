@@ -38,12 +38,20 @@ def compbb(ba,bb):
 		for ca,cb in zip(ra,rb):
 			if ca==cb=="#":return False
 	return True
+def gensm(G):
+	R=len(G)
+	C=len(G[0])
+	for smr in range(R-2):
+		for smc in range(C-2):
+			V=[G[smr][smc:smc+3],G[smr+1][smc:smc+3],G[smr+2][smc:smc+3]]
+			yield smr,smc,V
 def analyse(rule):
 	dim,reqs=rule.split(": ")
 	r,c=map(int,dim.split("x"))
 	reqs=list(map(int,reqs.split()))
 	G=[]
 	for row in range(r):G.append("."*c)
-	
+	for r,c,sm in gensm(G):
+		print(r,c,sm)
 for rule in Rules.splitlines():
 	analyse(rule)
