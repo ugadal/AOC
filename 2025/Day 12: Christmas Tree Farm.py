@@ -32,5 +32,18 @@ class block():
 					v.append(r[b:b+3])
 				self.allrot.append(v)
 		block.F[bn]=self
-
 for b in B:block(b.splitlines())
+def compbb(ba,bb):
+	for ra,rb in zip(ba,bb):
+		for ca,cb in zip(ra,rb):
+			if ca==cb=="#":return False
+	return True
+def analyse(rule):
+	dim,reqs=rule.split(": ")
+	r,c=map(int,dim.split("x"))
+	reqs=list(map(int,reqs.split()))
+	G=[]
+	for row in range(r):G.append("."*c)
+	
+for rule in Rules.splitlines():
+	analyse(rule)
