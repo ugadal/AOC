@@ -22,7 +22,7 @@ echo "p1 : ",count
 proc invbis(s:string):bool=
   let L=s.len
   var c,sub=""
-  for rl in countdown(L div 2, 1, 1):
+  for rl in countdown(L div 2, 1):
     var ok = true
     if (L mod rl) != 0 : continue
     c = s[0..<rl]
