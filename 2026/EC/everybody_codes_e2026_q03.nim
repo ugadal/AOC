@@ -13,7 +13,7 @@ proc fana(s:string):int=
   for exp in countdown(3,0,1):
     var i=3-exp
     var c=parseint($coeff[i])
-    res+=($coeff[i]).parseint * ($base[i]).parseint ^ exp
+    res +=  c * ($base[i]).parseint ^ exp
   return res
 let da1 = nomSansExtension & "_p1.txt"
 var res=0
@@ -33,12 +33,19 @@ proc fanb(s:string):int=
   var parts=ls.split
   var base=parts[0]
   var coeff=parts[1]
-  #~ var res=0
-  #~ for exp in countdown(3,0,1):
+  while base.len<coeff.len:
+    base=base&base
+  base=base[^coeff.len..^1]
+  echo s," ",base," ",coeff
+  var lres=0
+  for pos in countdown(coeff.len-1,0,1):
+    var c=($coeff[pos]).parseint
+    var b=($base[pos]).parseint
+    echo "c: ",c," b: ",b," pos: ",pos," ",c,"*",b,"^",coeff.len-1-pos
     #~ var i=3-exp
     #~ var c=parseint($coeff[i])
-    #~ res+=($coeff[i]).parseint * ($base[i]).parseint ^ exp
-  return 1
+    lres+=c * b ^ (coeff.len-1-pos)
+  return lres
 
 
 let d2ex="""ISO-3210 7654
@@ -50,10 +57,10 @@ ISO-789 2465112
 ISO-2341 945"""
 let da2 = nomSansExtension & "_p2.txt"
 ttl=0
-#~ for l in open(da1).lines:
-for l in d2ex.splitlines:
-  echo fanb(l)
-  #~ var res=fanb(l)
+for l in open(da2).lines:
+#~ for l in d2ex.splitlines:
+  #~ echo fanb(l)
+  var res=fanb(l)
   ttl+=res
   echo res
 echo "p2 : ",ttl
