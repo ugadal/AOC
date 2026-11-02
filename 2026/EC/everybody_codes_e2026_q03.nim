@@ -29,21 +29,17 @@ for l in open(da1).lines:
 echo "p1 : ",ttl
 
 proc fanb(s:string):int=
-  var ls=s[4..^1]
+  var ls =s.split("-")[1]
   var parts=ls.split
   var base=parts[0]
   var coeff=parts[1]
   while base.len<coeff.len:
     base=base&base
   base=base[^coeff.len..^1]
-  echo s," ",base," ",coeff
   var lres=0
   for pos in countdown(coeff.len-1,0,1):
     var c=($coeff[pos]).parseint
     var b=($base[pos]).parseint
-    echo "c: ",c," b: ",b," pos: ",pos," ",c,"*",b,"^",coeff.len-1-pos
-    #~ var i=3-exp
-    #~ var c=parseint($coeff[i])
     lres+=c * b ^ (coeff.len-1-pos)
   return lres
 
@@ -64,6 +60,7 @@ for l in open(da2).lines:
   ttl+=res
   echo res
 echo "p2 : ",ttl
+
 let d3ex="""ISO2-3 23
 ISO2-61 149
 ISO2-978 99
