@@ -64,5 +64,12 @@ for l in open(da2).lines:
   ttl+=res
   echo res
 echo "p2 : ",ttl
-
-  #~ var tl=l[4..^1]
+let d3ex="""ISO2-3 23
+ISO2-61 149
+ISO2-978 99
+ISO2-5887 5923
+ISO2-76988 123749
+ISO2-435657 929977
+ISO2-3949 870737"""
+for l in d3ex.splitlines:
+  echo l," ",fanb(l)
