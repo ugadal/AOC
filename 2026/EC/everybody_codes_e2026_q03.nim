@@ -61,6 +61,34 @@ for l in open(da2).lines:
   echo res
 echo "p2 : ",ttl
 
+#~ proc smcf(v:int,c:string):int=
+  #~ var lv=v
+  #~ for pos in countdown(c.len-1,0,1):
+    
+proc fanc(s:string):bool=
+  var ls =s.split("-")[1]
+  var parts=ls.split
+  var base=parts[0]
+  var coeff=parts[1]
+  while base.len<coeff.len:
+    base=base&base
+  base=base[^coeff.len..^1]
+  var lres=0
+  for pos in countdown(coeff.len-1,0,1):
+    var c=($coeff[pos]).parseint
+    var b=($base[pos]).parseint
+    lres+=c * b ^ (coeff.len-1-pos)
+  var value=lres
+  var c=0
+  while true:
+    c+=1
+    var nv=fanb("iso-" & base & " " & ($c))  
+    if nv==value:
+      echo "smallest ",c
+      break
+  if c == coeff.parseint: return true
+  return false
+
 let d3ex="""ISO2-3 23
 ISO2-61 149
 ISO2-978 99
@@ -68,5 +96,15 @@ ISO2-5887 5923
 ISO2-76988 123749
 ISO2-435657 929977
 ISO2-3949 870737"""
-for l in d3ex.splitlines:
-  echo l," ",fanb(l)
+let da3 = nomSansExtension & "_p3.txt"
+res=0
+var tv=0
+#~ for l in d3ex.splitlines:
+for l in open(da3).lines:
+  tv = fanb(l)
+  var valid = fanc(l)
+  echo l," ",tv," ",valid
+  if valid:
+    res+=tv
+    echo "adding ",tv
+echo "p3 ",res
