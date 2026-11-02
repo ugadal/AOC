@@ -25,7 +25,7 @@ for l in open(da1).lines:
 #~ for l in exdata.splitlines:
   var res=fana(l)
   ttl+=res
-  echo res
+  #~ echo res
 echo "p1 : ",ttl
 
 proc fanb(s:string):int=
@@ -58,7 +58,7 @@ for l in open(da2).lines:
   #~ echo fanb(l)
   var res=fanb(l)
   ttl+=res
-  echo res
+  #~ echo res
 echo "p2 : ",ttl
 
 #~ proc smcf(v:int,c:string):int=
@@ -79,12 +79,12 @@ proc fanc(s:string):bool=
     var b=($base[pos]).parseint
     lres+=c * b ^ (coeff.len-1-pos)
   var value=lres
-  var c=0
+  var c=value-1
   while true:
     c+=1
     var nv=fanb("iso-" & base & " " & ($c))  
     if nv==value:
-      echo "smallest ",c
+      #~ echo "smallest ",c
       break
   if c == coeff.parseint: return true
   return false
@@ -103,8 +103,8 @@ var tv=0
 for l in open(da3).lines:
   tv = fanb(l)
   var valid = fanc(l)
-  echo l," ",tv," ",valid
+  #~ echo l," ",tv," ",valid
   if valid:
     res+=tv
-    echo "adding ",tv
-echo "p3 ",res
+    #~ echo "adding ",tv
+echo "p3 : ",res
