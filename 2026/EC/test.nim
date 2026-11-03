@@ -3,7 +3,7 @@ import std/[strutils, algorithm]
 #~ let d = "4<3 2<5 3>1 1>2 1<5 4<1 3>2 4<2 3>5 4<5"
 ##
 ### 1. On extrait la liste de tous les caractères uniques présents (ex: ['1', '2', '3', '4', '5'])
-##var elements: seq[char] = @['1', '2', '3', '4', '5'] 
+##var elements: seq[char] = @['1', '2', '3', '4', '5']
 ##
 ### 2. On trie notre liste avec une fonction de comparaison personnalisée
 ##elements.sort(proc (x, y: char): int =
