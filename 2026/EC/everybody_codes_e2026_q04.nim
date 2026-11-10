@@ -7,6 +7,7 @@ import regex
 import tables
 import sugar
 import strscans
+import sets
 
 #~ import enumerate
 
@@ -122,14 +123,27 @@ var mid=max(allrec.mapit(it.id))
 #~ var tabscore= default(array[mid,int])
 var tabscore = newSeqWith(mid + 1, 0)
 var mq=max(allrec.mapit(it.quest))
+
+proc comparb(z:seq[record]):int=
+  var mxp=max(z.mapit(it.part))
+  var ids=z.mapit(it.id).toHashset()
+  var sc3=inittable[int,int]()
+  echo ids
+  for x in ids:sc3[x]=0
+  for r in z.filterit(it.part==1):
+    sc3[r.id]+=r.time
+  echo sc3
+    
+  return mxp
 for q in 1..mq:
   let subrec=allrec.filterit(it.quest==q)
   echo subrec
   var mp=max(subrec.mapit(it.part))
-  echo mp
+  echo "quest : ",q
   for p in 1..mp:
     echo "up to part : ",p
     let ok=subrec.filterit(it.part<=p)
     echo ok
+    echo "max part : ",comparb(ok)
     
   
