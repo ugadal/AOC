@@ -26,25 +26,24 @@ let ex1="""010100100100001101000
 001001001111010001001
 100011011110011010101
 001100101110010010000"""
-var G=initTable[Complex64,char]()
-#~ var al=ex1.splitlines
-#~ var al=toseq(open(da1).lines)
-var al=toseq(open(da2).lines)
-let R = al.len       # Nombre total de lignes
-let C = al[0].len     # Longueur de la première ligne (largeur)
-let sr=(R-1)/2
-let sc=(C-1)/2
-for row,line in al:
-  #~ dump((row,line))
-  for c,s in line:
-    let pos=complex(c.float,row.float)
-    #~ if s=='1':G[pos]='#'
-    #~ else:G[pos]="."
-    G[pos]=s
-#~ dump((R,C))
-#~ dump((sr,sc))
-let sp=complex(sc,sr)
-G[sp]='#'
+
+proc createGrid(al: seq[string]): tuple[grid: Table[Complex64, char], sp: Complex64, rows: int, cols: int] =
+  var g = initTable[Complex64, char]()
+  let rows = al.len
+  let cols = if rows > 0: al[0].len else: 0
+  for row, line in al:
+    for c, s in line:
+      let pos = complex(c.float, row.float)
+      g[pos] = s
+  let sr = (rows.float - 1.0) / 2.0
+  let sc = (cols.float - 1.0) / 2.0
+  let startPos = complex(sc, sr)
+  g[startPos] = '#'
+  return (g, startPos, rows, cols)
+
+var al=ex1.splitlines
+var (G, sp, R, C) = createGrid(al)
+
 const directions = [
   complex(-1.0, -1.0), complex(0.0, -1.0), complex(1.0, -1.0),
   complex(-1.0,  0.0),                     complex(1.0,  0.0),
