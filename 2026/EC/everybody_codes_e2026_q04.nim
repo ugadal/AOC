@@ -90,34 +90,53 @@ for f,pair in toseq(sc2.pairs).sorted(compar):
   res+=(f+1)*pair[1].sum
 echo "p2 : ",res
 
-let d3="""id=2 quest=1 part=1 time=100
+#~ let d3="""id=2 quest=1 part=1 time=100
+#~ id=4 quest=2 part=1 time=150
+#~ id=1 quest=2 part=1 time=140
+#~ id=1 quest=1 part=2 time=180
+#~ id=2 quest=2 part=1 time=130
+#~ id=4 quest=1 part=1 time=110
+#~ id=1 quest=2 part=2 time=210
+#~ id=2 quest=2 part=2 time=240
+#~ id=1 quest=2 part=3 time=330
+#~ id=2 quest=1 part=2 time=170
+#~ id=3 quest=1 part=1 time=90
+#~ id=4 quest=1 part=2 time=175
+#~ id=3 quest=2 part=1 time=120
+#~ id=1 quest=1 part=1 time=120
+#~ id=3 quest=2 part=2 time=220
+#~ id=2 quest=2 part=3 time=350
+#~ id=3 quest=1 part=2 time=160"""
+
+let d3="""id=2 quest=1 part=1 time=90
 id=4 quest=2 part=1 time=150
-id=1 quest=2 part=1 time=140
+id=1 quest=2 part=1 time=130
 id=1 quest=1 part=2 time=180
 id=2 quest=2 part=1 time=130
 id=4 quest=1 part=1 time=110
 id=1 quest=2 part=2 time=210
-id=2 quest=2 part=2 time=240
+id=2 quest=2 part=2 time=220
 id=1 quest=2 part=3 time=330
 id=2 quest=1 part=2 time=170
 id=3 quest=1 part=1 time=90
-id=4 quest=1 part=2 time=175
+id=4 quest=1 part=2 time=170
 id=3 quest=2 part=1 time=120
 id=1 quest=1 part=1 time=120
 id=3 quest=2 part=2 time=220
 id=2 quest=2 part=3 time=350
-id=3 quest=1 part=2 time=160"""
+id=3 quest=1 part=2 time=170"""
+
 let da3 = nfs & "_p3.txt"
 #~ for l in d3.splitlines:
 #~ for l in open(da3.lines):
   #~ var values = l.split(" ").mapit(it.split("=")[1].parseint)
-type record = tuple [id: int, quest: int, part: int, time:int]
+type record = tuple [id: int, quest: int, part: int, time:int,cumtime:int]
 var allrec: seq[record] = @[]
-for l in d3.splitlines:
-#~ for l in open(da3).lines:
+#~ for l in d3.splitlines:
+for l in open(da3).lines:
   var i, q, p, t: int
   if l.scanf("id=$i quest=$i part=$i time=$i", i, q, p, t):
-    allrec.add((id: i, quest: q, part: p, time: t))
+    allrec.add((id: i, quest: q, part: p, time: t,cumtime: 0))
 #~ echo allrec
 var mid=max(allrec.mapit(it.id))
 #~ var tabscore= default(array[mid,int])
@@ -133,17 +152,105 @@ proc comparb(z:seq[record]):int=
   for r in z.filterit(it.part==1):
     sc3[r.id]+=r.time
   echo sc3
-    
   return mxp
+#~ let allids=allrec.mapit(it.id)
+#~ echo allids
+var score3 = newSeqWith(mid + 1, 0)
+var time=newSeqWith(mid + 1, 0)
 for q in 1..mq:
   let subrec=allrec.filterit(it.quest==q)
   echo subrec
   var mp=max(subrec.mapit(it.part))
-  echo "quest : ",q
+  #~ echo "quest : ",q
   for p in 1..mp:
-    echo "up to part : ",p
-    let ok=subrec.filterit(it.part<=p)
-    echo ok
-    echo "max part : ",comparb(ok)
+    #~ echo "up to part : ",p
+    let ok=subrec.filterit(it.part==p)
+    let particip=ok.mapit(it.id)
+    for rec in ok:
+      score3[rec.id]+=rec.time
+    echo score3
     
+    #~ echo "max part : ",comparb(ok)
+#~ proc comparz(z:seq[record]):int=
   
+for q in 1..mq:
+  for p in 1..mid:
+    var ct=0
+    var ind: seq[int] = @[]
+    for idx in 0 ..< allrec.len:
+      if allrec[idx].quest == q and allrec[idx].id == p :
+        ind.add(idx)
+    echo ind
+    ind.sort((x,y)=>cmp(allrec[x].part,allrec[y].part))
+    for idx in ind:
+      ct+=allrec[idx].time
+      allrec[idx].cumtime=ct
+      echo allrec[idx]
+    #~ for rec in allrec.filterit(it.quest==q).filterit(it.id==p).sorted((x,y)=>cmp(x.time,y.time)).mitems:
+      #~ ct+=rec.time
+      #~ rec.cumtime=ct
+      #~ echo rec
+var sc4=newSeqWith(mid + 1, 0)
+echo "scoring now "
+for q in 1..mq:
+  let subrec=allrec.filterit(it.quest==q)
+  #~ echo subrec
+  var mp=max(subrec.mapit(it.part))
+  echo "quest ",q," max part ",mp
+  for p in 1..mp:
+    echo "part : ",p
+    #~ let ok=subrec.filterit(it.part==p)
+    var basescore=50*p
+    var pv=0
+    var consecdraw=0
+    for z in  subrec.filterit(it.part==p).sorted((x,y)=>cmp(x.cumtime,y.cumtime)):
+      var who=z.id
+      if pv==0: 
+        pv=z.cumtime
+      else:
+        if z.cumtime==pv:
+          consecdraw+=1
+        else:
+          basescore-=1+consecdraw
+          basescore=max(0,basescore)
+          #~ echo "new bs ",basescore
+          consecdraw=0
+          pv=z.cumtime
+      sc4[who]+=basescore
+      echo "quest ",q," part ",p," rec ",z," thisscore ",basescore
+      #~ if z.cumtime==pv:
+        #~ consecdraw+=1
+      #~ else:
+        #~ basescore-=1+consecdraw
+        #~ echo "new bs ",basescore
+        #~ consecdraw=0
+        #~ pv=z.cumtime
+echo sc4
+sc4=sc4.sorted
+echo sc4
+var fr:int=0
+for ix,v in sc4:
+  fr += v*(mid+1-ix)
+#~ echo "part 3 : ",fr
+#~ 6507019 bonne longueur bon premier symbole reste a gérer les exaequo finaux
+echo sc4
+echo sc4.reversed
+var pv=0
+var cd=0
+fr=0
+for i,v in sc4.reversed:
+  if pv==0:
+    pv=v
+    echo i+1," ",v
+    fr+=v*(i+1)
+  else:
+    if v==pv:
+      cd+=1
+      echo 1+i-cd," ",v
+      fr+=v*(1+i-cd)
+    else:
+      echo i+1, " ",v
+      fr+=v*(i+1)
+      pv=v
+      cd=0
+echo "part 3 : ",fr
