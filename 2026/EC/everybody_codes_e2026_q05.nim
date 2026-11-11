@@ -112,3 +112,4 @@ for rrr in 1..2:
         toadd.add(pos)
   for pos in toadd:G[pos]='@'
 echo "part 3: ",countit(G.values, it=='@')
+printGrid(G,R,C)
