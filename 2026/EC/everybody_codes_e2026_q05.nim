@@ -13,19 +13,13 @@ import hashes
 
 let nfs = currentSourcePath.extractFilename.splitFile.name
 
-let da1 = nfs & "_p1.txt"
-let da2 = nfs & "_p2.txt"
-let ex1="""010100100100001101000
-111101001000001110000
-101111011000101010011
-001000101010000100000
-000110100110011001100
-000001110111111000000
-101100010101011110000
-001101100000001010011
-001001001111010001001
-100011011110011010101
-001100101110010010000"""
+proc rp(p:int):string=
+  let fn= nfs & "_p" & $p & ".txt"
+  readfile(fn).strip
+
+proc rex(p:int):string=
+  let fn= nfs & "_ex.txt"
+  readfile(fn).strip.split("\n\n")[p-1]
 
 proc createGrid(al: seq[string]): tuple[grid: Table[Complex64, char], sp: Complex64, rows: int, cols: int] =
   var g = initTable[Complex64, char]()
@@ -41,13 +35,20 @@ proc createGrid(al: seq[string]): tuple[grid: Table[Complex64, char], sp: Comple
   g[startPos] = '#'
   return (g, startPos, rows, cols)
 
-var al=ex1.splitlines
-var (G, sp, R, C) = createGrid(al)
+let al=rp(3)
+#~ let al=rex(1)
+var (G, sp, R, C) = createGrid(al.splitlines)
 
 const directions = [
   complex(-1.0, -1.0), complex(0.0, -1.0), complex(1.0, -1.0),
   complex(-1.0,  0.0),                     complex(1.0,  0.0),
   complex(-1.0,  1.0), complex(0.0,  1.0), complex(1.0,  1.0) ]
+const disk = [
+complex(-1.0, -2.0), complex(0.0, -2.0), complex(1.0, -2.0),
+complex(-2.0, -1.0), complex(-1.0, -1.0), complex(0.0, -1.0), complex(1.0, -1.0), complex(2.0, -1.0),
+complex(-2.0, 0.0),  complex(-1.0, 0.0),                      complex(1.0, 0.0),  complex(2.0, 0.0),
+complex(-2.0, 1.0),  complex(-1.0, 1.0),  complex(0.0, 1.0),  complex(1.0, 1.0),  complex(2.0, 1.0),
+complex(-1.0,  2.0), complex(0.0,  2.0), complex(1.0,  2.0) ]
 iterator around(pos: Complex64): Complex64 =
   for dir in directions:
     let voisinPos = pos + dir
@@ -70,20 +71,20 @@ proc printGrid(grid: Table[Complex64, char], rows, cols: int) =
   for row in 0 ..< rows:
     for col in 0 ..< cols:
       let pos = complex(col.float, row.float)
-      # On affiche le caractère s'il existe, sinon un espace vide
       stdout.write grid.getOrDefault(pos, ' ')
-    echo "" # Retour à la ligne à la fin de chaque rangée
-#~ printGrid(G,R,C)
+    echo "" 
 for pos,s in G: 
   if s!='#':G[pos]='.'
-#~ printGrid(G,R,C)  
 iterator sandaround(pos: Complex64): char =
   for dir in directions:
     let voisinPos = pos + dir
     if voisinPos in G:
       yield G[voisinPos]
     else: yield '.'
-    
+iterator treesaround(pos: Complex64): char =    
+  for dir in disk:
+    let np =pos+dir
+    yield G.getOrDefault(np, '.')
 while true:
   toadd= @[]
   for pos,s in G:
@@ -91,10 +92,23 @@ while true:
       if countIt(sandaround(pos), it in {'.'})>=1:toadd.add(pos)
       elif countIt(sandaround(pos), it in {'.', '='})>=5:
         toadd.add(pos)
-  dump(toadd.len)
   if toadd.len>0:
     for pos in toadd:
       G[pos]='='
   else:break
-  #~ printGrid(G,R,C)
 echo "part 2: ",countit(G.values, it=='=')
+toadd = @[]
+for pos,s in G:
+  if s=='#':
+    if allIt(toseq(treesaround(pos)),it=='#'):
+      toadd.add(pos)
+for pos in toadd:G[pos]='@'
+for rrr in 1..2:
+  toadd = @[]
+  for pos,s in G:
+    if s=='#':
+      let ar=toseq(sandaround(pos))
+      if ar.countit(it=='@')>=4 and ar.countit(it=='=')==0:
+        toadd.add(pos)
+  for pos in toadd:G[pos]='@'
+echo "part 3: ",countit(G.values, it=='@')
