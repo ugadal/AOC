@@ -29,34 +29,17 @@ for l in da.splitlines:
   rcps[tg]=ing.split(',')
 dump(rcps)
 var Ing = initHashSet[string]()
-for v in rcps["NULL"]:
+var totreat: seq[string] = @[]
+for v in rcps["NULL"]: totreat.add(v)
+while totreat.len>0:
+  var v=totreat.pop()
+  if v in Ing:continue
   Ing.incl(v)
-echo Ing.len
-#~ var pl=Ing.len
-var justadded = Ing
-var toadd = Ing
-while justadded.len>1:
-  dump(justadded)
-  echo justadded.len
-  toadd.clear()
-  for k in justadded:
-    dump(k)
-    if k in rcps:
-      dump((k,rcps[k]))
-      for v in rcps[k]:
-        dump(v)
-        toadd.incl(v)
-        dump(toadd)
-    else: 
-      toadd.incl(k)
-      echo k," basic ingred"
-  dump(toadd)
-  justadded=toadd-Ing
-  dump(justadded)
-  Ing=Ing+toadd
-  dump(Ing)
+  if v in rcps:
+    for k in rcps[v]:
+     if k in Ing:continue
+     totreat.add(k)
 if "NULL" in Ing:Ing.excl("NULL")
-dump(Ing)
 echo Ing.len  
 
 
