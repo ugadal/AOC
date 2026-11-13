@@ -1,45 +1,57 @@
 import std/os
-import sequtils
+#~ import sequtils
 import strutils
 import math
-import algorithm
+#~ import algorithm
 #~ import regex
 import tables
 import sugar
-import strscans
+#~ import strscans
 import sets
-import complex
+#~ import complex
 import hashes
 import strmisc
 let nfs = currentSourcePath.extractFilename.splitFile.name
 
-proc rp(p:int):string=
-  let fn= nfs & "_p" & $p & ".txt"
+proc rp(p: int): string =
+  let fn = nfs & "_p" & $p & ".txt"
   readfile(fn).strip
 
-proc rex(p:int):string=
-  let fn= nfs & "_ex.txt"
+proc rex(p: int): string =
+  let fn = nfs & "_ex.txt"
   readfile(fn).strip.split("\n\n")[p-1]
 
-#~ let da=rex(1)
-let da=rp(1)
-var rcps = initTable[string, seq[string]]()
-for l in da.splitlines:
-  let (tg,_,ing) = l.partition(":")
-  rcps[tg]=ing.split(',')
-dump(rcps)
-var Ing = initHashSet[string]()
-var totreat: seq[string] = @[]
-for v in rcps["NULL"]: totreat.add(v)
-while totreat.len>0:
-  var v=totreat.pop()
-  if v in Ing:continue
-  Ing.incl(v)
-  if v in rcps:
-    for k in rcps[v]:
-     if k in Ing:continue
-     totreat.add(k)
-if "NULL" in Ing:Ing.excl("NULL")
-echo Ing.len  
+proc mkdic (intxt : string) : Table[string, seq[string]] =
+  for l in intxt.splitlines:
+    let (tg, _, ing) = l.partition(":")
+    result[tg] = ing.split(',')
 
+proc reachables(g: Table[string, seq[string]], start: string): HashSet[string] =
+  var stack = @[start]
+  while stack.len > 0:
+    let v = stack.pop
+    if v in result: continue
+    result.incl v
+    for k in g.getordefault(v):
+      if k notin result: stack.add k
 
+var rcps=mkdic(rp(1))    
+echo "p1: ",reachables(rcps, "NULL").len - 1
+
+proc involved(g: Table[string, seq[string]], start: string): HashSet[string] =
+  var stack = @[start]
+  while stack.len>0:
+    let ti = stack.pop
+    for k,v in rcps:
+      if ti in v:
+        if k notin result:stack.add k
+    result.incl ti 
+
+rcps=mkdic(rp(2))
+echo "p2: ",involved(rcps,"NULL").len-1
+
+rcps=mkdic(rp(3))
+var sa=involved(rcps,"NULLv1")
+var sb=involved(rcps,"NULLv2")
+var sc=involved(rcps,"NULLv3")
+echo ((sa*sb)+(sa*sc)+(sb*sc)).len
