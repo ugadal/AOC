@@ -33,7 +33,8 @@ proc reachables(g: Table[string, seq[string]], start: string): HashSet[string] =
     if v in result: continue
     result.incl v
     for k in g.getordefault(v):
-      if k notin result: stack.add k
+      #~ if k notin result: stack.add k
+      stack.add k
 
 var rcps=mkdic(rp(1))    
 echo "p1: ",reachables(rcps, "NULL").len - 1
