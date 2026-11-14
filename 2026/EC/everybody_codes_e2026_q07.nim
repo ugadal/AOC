@@ -53,33 +53,49 @@ proc ndfs(pp:problem,recid:int,power:int):problem=
     if t.en==1:continue
     for c in lpp[t.id].conn:
       stack.add((c,t.en-1))
-    #~ dump(lpp)
   return lpp
-proc bfs(pp:problem,recid:int,power:int):problem=
-  var lpp=pp
-  var justexploded,exploded : seq[int] = @[]
-  var stack,newstack = initDeque[tuple[id:int,en:int]]()
-  stack.addLast((recid,power))
-  while stack.len>0:
-    newstack.clear
-    #~ dump(stack)
-    for t in stack:
-      lpp[t.id].energy+=t.en
-      #~ dump((t.id,lpp[t.id]))
-      if t.en==1:continue
-      for c in lpp[t.id].conn:
-        newstack.addLast((c,t.en-1))
-    justexploded = @[]
-    for k,v in lpp:
-      if v.energy>=1000000:
-        justexploded.add(k)
+
+import std/[tables, sets]
+
+proc nbfs(pp: problem, recid: int, power: int): problem =
+  var lpp = pp
+  var exploded = initHashSet[int]()
+  var justexploded: seq[int] = @[]
+  
+  var stack, newstack: Table[int, CountTable[int]]
+  stack[recid] = toCountTable([power])
+
+  while stack.len > 0:
+    newstack.clear()
+    justexploded.setLen(0)
+
+    for tid, counts in stack:
+      if tid in exploded: continue
+      
+      var totalAdded = 0
+      for p, qty in counts:
+        totalAdded += p * qty
+      lpp[tid].energy += totalAdded
+
+      for p, qty in counts:
+        if p > 1:
+          for c in lpp[tid].conn:
+            newstack.mgetOrPut(c, initCountTable[int]()).inc(p - 1, qty)
+
+      if lpp[tid].energy >= 1000000:
+        justexploded.add(tid)
+
     for k in justexploded:
       for c in lpp[k].conn:
-        newstack.addLast((c,10))
-      exploded.add(k)
-      lpp.del(k)    
-    stack=newstack.filterit(it.id notin exploded).todeque
+        newstack.mgetOrPut(c, initCountTable[int]()).inc(10, 1)
+      exploded.incl(k)
+      lpp.del(k)
+
+    swap(stack, newstack)
+
   return lpp
+
+  
 proc getE(pp:problem):int=
   result=pp.values.toseq.mapit(it.energy).sum
 var rules:problem
@@ -90,11 +106,13 @@ rules=getrules(rex(nfs,2))
 echo "ex2p2: ",dfs(rules,10).getE
 rules=getrules(rp(nfs,1))
 echo "p1: ",dfs(rules,5).getE
+rules=getrules(rp(nfs,2))
+echo "p2: ",dfs(rules,10).getE
 rules=getrules(rp(nfs,3))
 var tr=0;
 for k in rules.keys:
-  let v=rules.bfs(k,10).getE
+  let v=rules.nbfs(k,10).getE
   if v>tr:
     tr=v
-    echo k," ",v
+    #~ echo k," ",v
 echo "p3: ",tr
