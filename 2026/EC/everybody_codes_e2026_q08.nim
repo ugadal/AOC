@@ -15,42 +15,39 @@ let nfs = currentSourcePath.extractFilename.splitFile.name
 import utils
 #~ import deques
 var dex1=rex(nfs,1)
-type coord = tuple [row:int,col:int]
-type map = Table[coord, int]
+type 
+  coord = tuple [row:int,col:int]
+  map = Table[coord, int]
 
-proc getmap(da:string):map=
-  var v:int
-  var pos:coord
-  for r,row in da.splitlines.toseq:
-    for col,s in row:
-      pos=(r,col)
-      if s=='.':continue
-      else:v=parseInt($s)
-      result[pos]=v
+proc getmap(da: string): map =
+  for r, row in da.splitlines.toseq:
+    for col, c in row:
+      if c != '.':
+        result[(r, col)] = parseInt($c)
+
       
-proc mv(a:coord,b:coord):coord=
-  result.row=a.row+b.row
-  result.col=a.col+b.col
-proc shade(m:map,d:coord):map=
-  #~ var lm=m
-  var s:int
-  var lp:coord
-  for pos,v in m:
-    result[pos]=0
-  for pos,v in m:
-    if v>1:
-      s=v
-      lp=pos
-      while s>1:
-        lp=lp.mv(d)
-        if lp notin m:break
-        s-=1
-        result[lp]=max(result[lp],s)
+proc `+=`(a: var coord, b: coord) =
+  a.row += b.row
+  a.col += b.col
+        
+proc shade(m: map, d: coord): map =
+  for pos in m.keys:
+    result[pos] = 0
+  for pos, v in m:
+    if v > 1:
+      var s = v
+      var lp = pos
+      while s > 1:
+        lp += d
+        if lp notin m: break
+        s -= 1
+        result[lp] = max(result[lp], s)
+        
+        
 proc printmap(m:map) =
   var mr=m.keys.toseq.mapit(it.row).max
   var mc=m.keys.toseq.mapit(it.col).max
-  #~ dump((mr,mc))
-  var pos:coord
+  #~ var pos:coord
   for row in 0 .. mr:
     for col in 0 .. mc:
       let pos: coord = (row, col)
@@ -70,10 +67,9 @@ proc printmap(m:map) =
 proc printunshaded(m:map,dir:coord) =
   var mr=m.keys.toseq.mapit(it.row).max
   var mc=m.keys.toseq.mapit(it.col).max
-  #~ dump((mr,mc))
   var shade : map = m.shade(dir)
   
-  var pos:coord
+  #~ var pos:coord
   for row in 0 .. mr:
     for col in 0 .. mc:
       let pos: coord = (row, col)
@@ -83,14 +79,15 @@ proc printunshaded(m:map,dir:coord) =
         stdout.write '.'
     echo ""
   echo "======================"
-proc growing(m:map,dir:coord):map =
-  var shade : map = m.shade(dir)
-  var P=m.keys.toseq
-  for p in P:
-    if m[p]>shade[p]:
-      result[p]=m[p]
+
+proc growing(m: map, dir: coord): map =
+  let sh = m.shade(dir)
+  for pos, v in m:
+    if v > sh[pos]:
+      result[pos] = v
+
 proc countgrowing(m:map,dir:coord):int =
-  return m.growing(dir).len
+  m.growing(dir).len
 
 var M=getmap(dex1)
 echo "ex1: ",M.countgrowing((1,1))
@@ -99,13 +96,7 @@ var dp2=rp(nfs,2)
 var dp3=rp(nfs,3)
 M=getmap(dp1)
 echo "p1: ",M.countgrowing((1,1))
-var DD : seq[coord]
-DD.add((1,1))
-DD.add((1,-1))
-DD.add((0,-2))
-DD.add((-1,-1))
-DD.add((-1,1))
-DD.add((0,2))
+const DD: array[6, coord] = [(1, 1), (1, -1), (0, -2), (-1, -1), (-1, 1), (0, 2)]
 M=getmap(dex1)
 echo "ex1p2: ",DD.mapit(M.countgrowing(it)).sum
 M=getmap(dp2)
@@ -114,46 +105,37 @@ iterator dd():coord {.closure.} =
   while true:
     for dir in DD:
       yield dir
-proc newshade(m:map,d:coord) : tuple[nm:map,sold:int,ene:int] =
-  var lm=m
-  var G = m.growing(d)
-  result.ene=G.len
-  result.sold=G.values.toseq.filterit(it==9).len
-  for pos,v in lm:
-    if v<=0:
-      lm[pos]+=1
-  for pos,v in G:
-    if v==9:
-      lm[pos]= -2
+
+proc newshade(m: map, d: coord): tuple[nm: map, sold, ene: int] =
+  result.nm = m
+  let g = m.growing(d)
+  result.ene = g.len
+  for v in result.nm.mvalues:
+    if v <= 0:
+      v += 1
+  for pos, v in g:
+    if v == 9:
+      result.sold += 1
+      result.nm[pos] = -2
     else:
-      lm[pos] += 1
-  
-  result.nm = lm
+      result.nm[pos] += 1
+
 M=getmap(dex1)
 var z=dd
 var (nm, warriors, energy) = M.newshade(z())
-echo "warriors: ",warriors," energy: ",energy
-nm.printmap
 
 var sol, ene: int
 while warriors<100000:
   (nm, sol, ene) = nm.newshade(z())
   warriors+=sol
   energy+=ene
-  echo "warriors: ",sol," energy: ",ene
-  #~ nm.printmap
-echo "warriors: ",warriors," energy: ",energy
+echo "ex1p3: warriors: ",warriors," energy: ",energy
 M=getmap(dp3)
 z=dd
 (nm, warriors, energy) = M.newshade(z())
-echo "warriors: ",warriors," energy: ",energy
-nm.printmap
 
-#~ var sol, ene: int
 while warriors<100000:
   (nm, sol, ene) = nm.newshade(z())
   warriors+=sol
   energy+=ene
-  echo "warriors: ",sol," energy: ",ene
-  nm.printmap
-echo "warriors: ",warriors," energy: ",energy
+echo "p3: warriors: ",warriors," energy: ",energy
