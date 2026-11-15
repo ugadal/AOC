@@ -14,9 +14,9 @@ import strmisc
 let nfs = currentSourcePath.extractFilename.splitFile.name
 import utils
 #~ import deques
-var dex1=rex(nfs,1)
-type 
-  coord = tuple [row:int,col:int]
+var dex1 = rex(nfs, 1)
+type
+  coord = tuple [row: int, col: int]
   map = Table[coord, int]
 
 proc getmap(da: string): map =
@@ -25,11 +25,11 @@ proc getmap(da: string): map =
       if c != '.':
         result[(r, col)] = parseInt($c)
 
-      
+
 proc `+=`(a: var coord, b: coord) =
   a.row += b.row
   a.col += b.col
-        
+
 proc shade(m: map, d: coord): map =
   for pos in m.keys:
     result[pos] = 0
@@ -42,21 +42,21 @@ proc shade(m: map, d: coord): map =
         if lp notin m: break
         s -= 1
         result[lp] = max(result[lp], s)
-        
-        
-proc printmap(m:map) =
-  var mr=m.keys.toseq.mapit(it.row).max
-  var mc=m.keys.toseq.mapit(it.col).max
+
+
+proc printmap(m: map) =
+  var mr = m.keys.toseq.mapit(it.row).max
+  var mc = m.keys.toseq.mapit(it.col).max
   #~ var pos:coord
   for row in 0 .. mr:
     for col in 0 .. mc:
       let pos: coord = (row, col)
       if pos in m:
-        if m[pos]== -2:
+        if m[pos] == -2:
           stdout.write 'a'
-        elif m[pos]== -1:
+        elif m[pos] == -1:
           stdout.write 'b'
-        elif m[pos]== 0:
+        elif m[pos] == 0:
           stdout.write 'c'
         else:
           stdout.write m[pos]
@@ -64,16 +64,16 @@ proc printmap(m:map) =
         stdout.write '.'
     echo ""
   echo "==================="
-proc printunshaded(m:map,dir:coord) =
-  var mr=m.keys.toseq.mapit(it.row).max
-  var mc=m.keys.toseq.mapit(it.col).max
-  var shade : map = m.shade(dir)
-  
+proc printunshaded(m: map, dir: coord) =
+  var mr = m.keys.toseq.mapit(it.row).max
+  var mc = m.keys.toseq.mapit(it.col).max
+  var shade: map = m.shade(dir)
+
   #~ var pos:coord
   for row in 0 .. mr:
     for col in 0 .. mc:
       let pos: coord = (row, col)
-      if pos in m and m[pos]>shade[pos]:
+      if pos in m and m[pos] > shade[pos]:
         stdout.write m[pos]
       else:
         stdout.write '.'
@@ -86,22 +86,22 @@ proc growing(m: map, dir: coord): map =
     if v > sh[pos]:
       result[pos] = v
 
-proc countgrowing(m:map,dir:coord):int =
+proc countgrowing(m: map, dir: coord): int =
   m.growing(dir).len
 
-var M=getmap(dex1)
-echo "ex1: ",M.countgrowing((1,1))
-var dp1=rp(nfs,1)
-var dp2=rp(nfs,2)
-var dp3=rp(nfs,3)
-M=getmap(dp1)
-echo "p1: ",M.countgrowing((1,1))
+var M = getmap(dex1)
+echo "ex1: ", M.countgrowing((1, 1))
+var dp1 = rp(nfs, 1)
+var dp2 = rp(nfs, 2)
+var dp3 = rp(nfs, 3)
+M = getmap(dp1)
+echo "p1: ", M.countgrowing((1, 1))
 const DD: array[6, coord] = [(1, 1), (1, -1), (0, -2), (-1, -1), (-1, 1), (0, 2)]
-M=getmap(dex1)
-echo "ex1p2: ",DD.mapit(M.countgrowing(it)).sum
-M=getmap(dp2)
-echo "p2: ",DD.mapit(M.countgrowing(it)).sum
-iterator dd():coord {.closure.} =
+M = getmap(dex1)
+echo "ex1p2: ", DD.mapit(M.countgrowing(it)).sum
+M = getmap(dp2)
+echo "p2: ", DD.mapit(M.countgrowing(it)).sum
+iterator dd(): coord {.closure.} =
   while true:
     for dir in DD:
       yield dir
@@ -120,22 +120,22 @@ proc newshade(m: map, d: coord): tuple[nm: map, sold, ene: int] =
     else:
       result.nm[pos] += 1
 
-M=getmap(dex1)
-var z=dd
+M = getmap(dex1)
+var z = dd
 var (nm, warriors, energy) = M.newshade(z())
 
 var sol, ene: int
-while warriors<100000:
+while warriors < 100000:
   (nm, sol, ene) = nm.newshade(z())
   warriors+=sol
   energy+=ene
-echo "ex1p3: warriors: ",warriors," energy: ",energy
-M=getmap(dp3)
-z=dd
+echo "ex1p3: warriors: ", warriors, " energy: ", energy
+M = getmap(dp3)
+z = dd
 (nm, warriors, energy) = M.newshade(z())
 
-while warriors<100000:
+while warriors < 100000:
   (nm, sol, ene) = nm.newshade(z())
   warriors+=sol
   energy+=ene
-echo "p3: warriors: ",warriors," energy: ",energy
+echo "p3: warriors: ", warriors, " energy: ", energy
