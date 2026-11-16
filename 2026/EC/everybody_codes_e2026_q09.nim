@@ -37,7 +37,6 @@ proc sumthem(q:deq):int=
       result+=p*v
 proc analyse(p:plant):int=
   var q = initdeque[int]()
-  #~ var q = deq
   var tg = (p.growth-1) div 2
   for x in 0 .. p.growth:
     q.addLast(0)
@@ -56,7 +55,5 @@ proc analyse(p:plant):int=
       q[^1]=0
     
 var P=readplants(dex1)
-for p in P:
-  echo p," ",p.analyse
 echo "exp1: ",P.mapit(it.analyse).sum
 echo "p1: ",readplants(dp1).mapit(it.analyse).sum
