@@ -59,6 +59,7 @@ proc nst(f,nf:deq):int=
   #~ for p,v in nf.pairs:
     #~ result+= (p+1)*v
 proc p2(p:plant):int=
+  echo p
   var forks=0
   let tg = (p.growth-3) div 2
   var F=initdeque[int]()
@@ -67,34 +68,27 @@ proc p2(p:plant):int=
     F.addLast(0)
   NF=F
   F[0]=1
+  result=1
   while nst(F,NF) < p.limit:
-    dump(F)
-    dump(NF)
-    dump(forks)
+    result+=1
     F.addfirst(F.poplast())  
     NF.addfirst(NF.poplast())  
-    dump(("pre",F))
-    dump(("pre",NF))
     if F[^1]>0:
       F[tg]+=F[^1]
       NF[tg]+=F[^1]
       F[0]+=F[^1]
       forks+=1
       F[^1]=0
-    dump(("curr",F))
-    dump(("curr",NF))
     if NF[^1]>0:
       F[0]+=NF[^1]
       NF[tg]+=2*NF[^1]
       forks+=1
       NF[^1]=0
-    dump(("post",F))
-    dump(("post",NF))
-    dump((nst(F,NF),forks))
-  return nst(F,NF)
+    #~ dump(F)
+    #~ dump(NF)
 var P=readplants(dex1)
 echo "exp1: ",P.mapit(it.analyse).sum
 echo "p1: ",readplants(dp1).mapit(it.analyse).sum
-#~ for p in P:
-  #~ echo p.p2
-echo P[2].p2
+echo "exp2: ",readplants(dex1).mapit(it.p2).sum
+echo "p2: ",readplants(dp2).mapit(it.p2).sum
+echo "p3: ",readplants(dp3).mapit(it.p2).sum
