@@ -16,8 +16,9 @@ import utils
 #~ import deques
 var dex1 = rex(nfs, 1)
 var dp1 = rp(nfs, 1)
-#~ var dp2 = rp(nfs, 2)
-#~ var dp3 = rp(nfs, 3)
+var dp2 = rp(nfs, 2)
+var dp3 = rp(nfs, 3)
 
 echo dex1
 echo dp1
+dump(dp2)
