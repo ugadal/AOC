@@ -23,8 +23,17 @@ type
   map = Table[Complex64, char]
   pos = Complex64
   ghost = tuple [p:pos,d:pos,col:int]
+  GhostSig = tuple[px, py, dx, dy: int]
 proc mkghost(p,d:pos;col: int=0):ghost=
   (p:p,d:d,col:col)
+proc getSignature(LG: seq[ghost]): seq[GhostSig] =
+  LG.mapIt((
+    it.p.re.round.int,
+    it.p.im.round.int,
+    it.d.re.round.int,
+    it.d.im.round.int
+  ))
+
 const 
   left =  complex(-1.0, 0.0)
   right =  complex(1.0, 0.0)
@@ -69,6 +78,8 @@ proc p1(R : map, G : seq[ghost]):int=
             g.d*=up*up
 proc p2(R : map, G : seq[ghost]):int=
   var LG=G
+  #~ var vus = initHashSet[seq[GhostSig]]()
+  var vus = initTable[seq[GhostSig], int]()
   while LG.len>0:
     result+=1
     for g in LG.mitems:
@@ -86,7 +97,11 @@ proc p2(R : map, G : seq[ghost]):int=
             g.d*=up*up
             g.col+=1
     LG.keepItIf(it.col<10000)
-    
+    let sig = getSignature(LG)
+    #~ if vus.containsOrIncl(sig):
+    if vus.hasKeyOrPut(sig, result):
+      echo "Cycle détecté à l'étape : ", result," fts ",vus[sig]
+      #~ break
 var Grid=getmap(dex1)
 var Ghosts=getghosts(dex1)
 echo "exp1: ",p1(Grid,Ghosts)
