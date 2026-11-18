@@ -22,6 +22,8 @@ type
   plant = tuple [id: int, growth: int, limit: int]
   plants = seq[plant]
   deq = Deque[int]
+  branch = tuple [size: int, count: int]
+  branches = seq[branch]
 proc mkd(t:string):plant=
   let vals = t.split(", ").mapit(it.split("=")[1].parseint)
   result = (id: vals[0], growth: vals[1], limit: vals[2])
@@ -56,36 +58,40 @@ proc analyse(p:plant):int=
 proc nst(f,nf:deq):int=
   for p,v in f.pairs:
     result+=v
-  #~ for p,v in nf.pairs:
-    #~ result+= (p+1)*v
+    
 proc p2(p:plant):int=
-  echo p
-  var forks=0
-  let tg = (p.growth-3) div 2
-  var F=initdeque[int]()
-  var NF=initdeque[int]()
-  for x in 0 ..< p.growth:
-    F.addLast(0)
-  NF=F
-  F[0]=1
-  result=1
-  while nst(F,NF) < p.limit:
-    result+=1
-    F.addfirst(F.poplast())  
-    NF.addfirst(NF.poplast())  
-    if F[^1]>0:
-      F[tg]+=F[^1]
-      NF[tg]+=F[^1]
-      F[0]+=F[^1]
-      forks+=1
-      F[^1]=0
-    if NF[^1]>0:
-      F[0]+=NF[^1]
-      NF[tg]+=2*NF[^1]
-      forks+=1
-      NF[^1]=0
-    #~ dump(F)
-    #~ dump(NF)
+  if p.limit==1:return 1
+  let tg=(p.growth-1) div 2
+  var NF,F = inittable[int,int]()
+  var time=p.growth
+  if tg!=1:
+    F[tg]=1  
+    NF[tg]=1  
+    F[1]=1
+  else:
+    F[1]=2
+    NF[1]=1
+  while F.values.toseq.sum < p.limit :
+    let nt= @[p.growth - F.keys.toseq.max,p.growth-NF.keys.toseq.max].min
+    time+=nt
+    F=collect(inittable()):
+      for k,v in F:
+        {k+nt : v}
+    NF=collect(inittable()):
+      for k,v in NF:
+        {k+nt : v}
+    if p.growth in F:  
+      var g=F[p.growth]
+      F.mgetOrPut(tg, 0)+=g
+      F.mgetOrPut(1, 0)+=g
+      NF.mgetOrPut(tg, 0)+=g
+      F.del(p.growth)
+    if p.growth in NF:
+      var g=NF[p.growth]
+      F.mgetOrPut(1, 0)+=g
+      NF.mgetOrPut(tg, 0)+=2*g
+    NF.del(p.growth)
+  time
 var P=readplants(dex1)
 echo "exp1: ",P.mapit(it.analyse).sum
 echo "p1: ",readplants(dp1).mapit(it.analyse).sum
