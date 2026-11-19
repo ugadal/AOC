@@ -59,23 +59,6 @@ proc getghosts(txt: string): seq[ghost] =
         of 'v': result.add(mkghost(pos,down))
         of '^': result.add(mkghost(pos,up))
         else: continue
-proc p1(R : map, G : seq[ghost]):int=
-  var LG=G
-  for rep in 1..10:
-    for g in LG.mitems:
-      let np=g.p+g.d
-      if np in R.keys.toseq:
-        g.d*=down
-        result+=1
-      else:
-        g.p+=g.d
-    let GP=LG.mapit(it.p).toseq
-    for k,v in toCountTable(GP):
-      if v!=1:
-        result+=v
-        for g in LG.mitems:
-          if g.p==k:
-            g.d*=up*up
 proc uponce(R : map, G : var seq[ghost],limit=10000) =
     for g in G.mitems:
       let np=g.p+g.d
@@ -132,7 +115,8 @@ proc nextvanish(R : map, G : seq[ghost], limit : int = 10000): (seq[ghost],int)=
 var x:int
 var Grid=getmap(dp1)
 var Ghosts=getghosts(dp1)
-echo "p1: ",p1(Grid,Ghosts)
+for t in 1..10: uponce(Grid,Ghosts)
+echo "p1: ",Ghosts.mapit(it.col).sum
 
 Grid=getmap(dp2)
 Ghosts=getghosts(dp2)
