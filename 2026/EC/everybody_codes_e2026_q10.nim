@@ -170,24 +170,24 @@ proc nextvanish(R : map, G : seq[ghost], limit : int = 10000): (seq[ghost],int)=
     #~ EL.rep
     return (EL,iter)
 var x:int
-var Grid=getmap(dex1)
-var Ghosts=getghosts(dex1)
-echo "exp1: ",p1(Grid,Ghosts)
-echo "exp2: ",p2(Grid,Ghosts)
+#~ var Grid=getmap(dex1)
+#~ var Ghosts=getghosts(dex1)
+#~ echo "exp1: ",p1(Grid,Ghosts)
+#~ echo "exp2: ",p2(Grid,Ghosts)
 #~ echo "test: ",nextvanish(Grid,Ghosts)
 #~ while Ghosts.len>0:
   #~ Ghosts.rep
   #~ (Ghosts,x)=nextvanish(Grid,Ghosts)
   #~ echo x
-Grid=getmap(dp2)
-Ghosts=getghosts(dp2)
+#~ Grid=getmap(dp2)
+#~ Ghosts=getghosts(dp2)
 var ttl=0
-while Ghosts.len>0:
-  Ghosts.rep
-  (Ghosts,x)=nextvanish(Grid,Ghosts)
-  echo x
-  ttl+=x
-echo ttl
+#~ while Ghosts.len>0:
+  #~ Ghosts.rep
+  #~ (Ghosts,x)=nextvanish(Grid,Ghosts)
+  #~ echo x
+  #~ ttl+=x
+#~ echo ttl
 
 Grid=getmap(dp3)
 Ghosts=getghosts(dp3)
