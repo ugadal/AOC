@@ -1,34 +1,132 @@
-import std/[strutils, algorithm]
+import std/[enumerate, math, os, sequtils, sets, strutils, tables]
+import utils 
 
-#~ let d = "4<3 2<5 3>1 1>2 1<5 4<1 3>2 4<2 3>5 4<5"
-##
-### 1. On extrait la liste de tous les caractères uniques présents (ex: ['1', '2', '3', '4', '5'])
-##var elements: seq[char] = @['1', '2', '3', '4', '5']
-##
-### 2. On trie notre liste avec une fonction de comparaison personnalisée
-##elements.sort(proc (x, y: char): int =
-##  # Si dans la chaîne 'd' on trouve que x est plus petit que y (ex: "x<y" ou "y>x")
-##  if ($x & "<" & $y) in d or ($y & ">" & $x) in d:
-##    return -1 # x doit être avant y
-##  elif ($y & "<" & $x) in d or ($x & ">" & $y) in d:
-##    return 1  # y doit être avant x
-##  else:
-##    return 0
-##)
-##
-##echo elements # Affichera l'ordre exact directement !
+type
+  Vec = tuple[x, y: int]
+  Ghost = object
+    pos, dir: Vec
+    hits: int
+  Signature = seq[tuple[pos, dir: Vec]]
 
-proc comparerRegles(x, y: char, regles: string): int =
-  if ($x & "<" & $y) in regles or ($y & ">" & $x) in regles:
-    return -1
-  elif ($y & "<" & $x) in regles or ($x & ">" & $y) in regles:
-    return 1
-  else:
-    return 0
-let d = "4<3 2<5 3>1 1>2 1<5 4<1 3>2 4<2 3>5 4<5"
-var elements = @['1', '2', '3', '4', '5']
+const
+  left: Vec = (-1, 0)
+  right: Vec = (1, 0)
+  up: Vec = (0, -1)
+  down: Vec = (0, 1)
+  defaultLimit = 10_000
+  hugeLimit = int(1_000_000_000_000) 
 
-# 2. On utilise une fonction anonyme/sucre syntaxique pour injecter la ligne actuelle 'd'
-elements.sort(proc (x, y: char): int = comparerRegles(x, y, d))
+func `+`(a, b: Vec): Vec = (a.x + b.x, a.y + b.y)
+func turnRight(d: Vec): Vec = (-d.y, d.x) 
+func reverse(d: Vec): Vec = (-d.x, -d.y)
 
-echo elements
+func signature(ghosts: seq[Ghost]): Signature =
+  ghosts.mapIt((pos: it.pos, dir: it.dir))
+
+proc parseWalls(txt: string): HashSet[Vec] =
+  for row, line in enumerate(txt.splitLines):
+    for col, ch in line:
+      if ch == '#':
+        result.incl((col, row))
+
+proc parseGhosts(txt: string): seq[Ghost] =
+  for row, line in enumerate(txt.splitLines):
+    for col, ch in line:
+      case ch
+      of '<': result.add Ghost(pos: (col, row), dir: left)
+      of '>': result.add Ghost(pos: (col, row), dir: right)
+      of 'v': result.add Ghost(pos: (col, row), dir: down)
+      of '^': result.add Ghost(pos: (col, row), dir: up)
+      else: discard
+
+proc step(walls: HashSet[Vec], ghosts: var seq[Ghost], limit: int) =
+  for g in ghosts.mitems:
+    let next = g.pos + g.dir
+    if next in walls:
+      g.dir = g.dir.turnRight
+      inc g.hits
+    else:
+      g.pos = next
+
+  # collisions : plusieurs fantômes sur la même case -> demi-tour
+  #~ var occupancy = initCountTable[Vec]()
+  var occupancy : CountTable[Vec]
+  for g in ghosts:
+    occupancy.inc g.pos
+  for g in ghosts.mitems:
+    if occupancy[g.pos] > 1:
+      g.dir = g.dir.reverse
+      inc g.hits
+
+  ghosts.keepItIf(it.hits < limit)
+
+proc nextVanish(walls: HashSet[Vec], start: seq[Ghost], limit: int):
+    tuple[ghosts: seq[Ghost], elapsed: int] =
+  if start.len == 0:
+    return
+  var
+    seen = initTable[Signature, int]() # état -> instant où on l'a vu
+    ghosts = start
+    iter = 0
+    sig = signature(ghosts)
+  while not seen.hasKeyOrPut(sig, iter):
+    inc iter
+    step(walls, ghosts, limit)
+    if ghosts.len != start.len: # disparition avant même d'avoir bouclé
+      return (ghosts, iter)
+    sig = signature(ghosts)
+
+  let
+    cycleStart = seen[sig]
+    cycleLen = iter - cycleStart
+
+  # état au début du cycle, pour comparer les hits
+  var atStart = start
+  for _ in 1 .. cycleStart:
+    step(walls, atStart, limit)
+  var atEnd = ghosts
+
+  # 2. combien de cycles complets peut-on sauter sans qu'un fantôme disparaisse ?
+  var cycles = high(int)
+  for (s, e) in zip(atStart, atEnd):
+    let gain = e.hits - s.hits
+    if gain > 0:
+      cycles = min(cycles, (limit - e.hits) div gain)
+  if cycles == high(int):
+    raise newException(ValueError, "aucun fantôme n'atteindra jamais la limite")
+
+  # 3. saut (on garde un cycle de marge, pas à pas ensuite)
+  let skip = max(cycles - 1, 0)
+  for i in 0 ..< atEnd.len:
+    atEnd[i].hits += (atEnd[i].hits - atStart[i].hits) * skip
+  iter += cycleLen * skip
+
+  # 4. fin de course
+  let count = atEnd.len
+  while atEnd.len == count:
+    step(walls, atEnd, limit)
+    inc iter
+  (atEnd, iter)
+
+proc part1(txt: string): int =
+  let walls = parseWalls(txt)
+  var ghosts = parseGhosts(txt)
+  for _ in 1 .. 10:
+    step(walls, ghosts, defaultLimit)
+  ghosts.mapIt(it.hits).sum
+
+proc totalVanishTime(txt: string, limit: int): int =
+  ## Parties 2 et 3 : temps cumulé jusqu'à la disparition de tous les fantômes.
+  let walls = parseWalls(txt)
+  var ghosts = parseGhosts(txt)
+  while ghosts.len > 0:
+    let (remaining, elapsed) = nextVanish(walls, ghosts, limit)
+    ghosts = remaining
+    result += elapsed
+
+when isMainModule:
+  #~ let nfs = splitFile(currentSourcePath).name
+  let nfs = "everybody_codes_e2026_q10"
+  echo "p1: ", part1(rp(nfs, 1))
+  echo "p2: ", totalVanishTime(rp(nfs, 2), defaultLimit)
+  echo "p3: ", totalVanishTime(rp(nfs, 3), hugeLimit)

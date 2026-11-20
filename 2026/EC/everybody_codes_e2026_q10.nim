@@ -14,6 +14,7 @@ import strmisc
 let nfs = currentSourcePath.extractFilename.splitFile.name
 import utils
 import deques
+import std/enumerate
 var dex1 = rex(nfs, 1)
 var dex2 = rex(nfs, 2)
 var dp1 = rp(nfs, 1)
@@ -43,7 +44,7 @@ const
 proc `*=`(a: var Complex[float], b: Complex[float]) =
   a = a * b  
 proc getmap(txt: string): map =
-  for row,line in txt.splitlines.toseq:
+  for row,line in enumerate(txt.splitlines):
     for c,s in line:
       if s!='#':
         continue
@@ -60,21 +61,21 @@ proc getghosts(txt: string): seq[ghost] =
         of '^': result.add(mkghost(pos,up))
         else: continue
 proc uponce(R : map, G : var seq[ghost],limit=10000) =
-    for g in G.mitems:
-      let np=g.p+g.d
-      if np in R.keys.toseq:
-        g.d*=down
-        g.col+=1
-      else:
-        g.p+=g.d
-    let GP=G.mapit(it.p).toseq
-    for k,v in toCountTable(GP):
-      if v!=1:
-        for g in G.mitems:
-          if g.p==k:
-            g.d*=up*up
-            g.col+=1
-    G.keepItIf(it.col<limit)
+  for g in G.mitems:
+    let np=g.p+g.d
+    if np in R:
+      g.d*=down
+      g.col+=1
+    else:
+      g.p=np
+  let GP=G.mapit(it.p).toseq
+  for k,v in toCountTable(GP):
+    if v!=1:
+      for g in G.mitems:
+        if g.p==k:
+          g.d*=up*up
+          g.col+=1
+  G.keepItIf(it.col<limit)
 proc rep(G:seq[ghost])=
   echo ""
   for k in G: echo k
