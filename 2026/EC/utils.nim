@@ -12,3 +12,5 @@ proc rp*(nfs: string, p: int): string =
 
 proc rex*(nfs: string, p: int): string =
   readFile(nfs & "_ex.txt").strip.split("\n\n")[p-1]
+proc rps*(nfs: string, p: int,sub:int): string =
+  readFile(nfs & "_p" & $p & ".txt").strip.split("\n\n")[sub-1]
