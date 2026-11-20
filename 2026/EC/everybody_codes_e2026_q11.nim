@@ -162,6 +162,4 @@ when isMainModule:
   let nfs = splitFile(currentSourcePath).name
   let portals = rps(nfs, 1,1).split(": ")[1].parseint
   let shortcuts = rps(nfs,1,2)
-  dump(portals)
-  dump(shortcuts)
   echo "p1: ",p1(portals,shortcuts)
