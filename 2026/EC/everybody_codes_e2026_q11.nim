@@ -43,6 +43,12 @@ proc gsf(n:Net,start:int): int =
     tovisit = newstack-visited
     step+=1
     
+proc oneline(l:string):Net=
+  let v=line.split(" ")
+  let a=v[0].parseint
+  let b=v[1].parseint
+  result.add((a,b))
+  result.add((b,a))
 
 
 proc np1(portals: int, shortcuts: string, dn: int = 1): int =
@@ -50,11 +56,12 @@ proc np1(portals: int, shortcuts: string, dn: int = 1): int =
   let long = (1..portals).toseq.mapit(MN.gsf(it)).sum
   var extra:Net
   for line in shortcuts.splitlines:
-    let v=line.split(" ")
-    let a=v[0].parseint
-    let b=v[1].parseint
-    extra.add((a,b))
-    extra.add((b,a))
+    extra &= oneline(line)
+    #~ let v=line.split(" ")
+    #~ let a=v[0].parseint
+    #~ let b=v[1].parseint
+    #~ extra.add((a,b))
+    #~ extra.add((b,a))
   var full=MN&extra
   let short = (1..portals).toseq.mapit(full.gsf(it)).sum
   long-short
