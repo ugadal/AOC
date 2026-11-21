@@ -101,6 +101,11 @@ when isMainModule:
   shortcuts = rex(nfs, 4)
   var M=mknet(portals,3)
   echo M.totalstrain(portals)
+  for line in shortcuts.splitlines: M &= oneline(line)
+  let step=portals div 8
+  for try in 1..step:
+    var TM=M
+    for   
   portals = rex(nfs, 5).split(": ")[1].parseint
   shortcuts = rex(nfs, 6)
   M=mknet(portals,3)
