@@ -101,6 +101,10 @@ when isMainModule:
   shortcuts = rex(nfs, 4)
   var M=mknet(portals,3)
   echo M.totalstrain(portals)
+  portals = rex(nfs, 5).split(": ")[1].parseint
+  shortcuts = rex(nfs, 6)
+  M=mknet(portals,3)
+  echo M.totalstrain(portals)
   #~ echo "exp31: ", resonance(portals, shortcuts, 1)
   #~ echo "exp2: ", np1(portals, shortcuts, 3)
   #~ echo MN
