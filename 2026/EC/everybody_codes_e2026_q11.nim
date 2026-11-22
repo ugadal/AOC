@@ -79,7 +79,15 @@ proc np2(portals: int, shortcuts: string, dn: int = 1): int =
       let T = BN & cr
       let tv = (1..portals).toseq.mapit(T.strain(it)).sum
       result = max(result, long-tv)
-
+iterator crystals(p:int) : Net =
+  let s = p div 8
+  for offset in 1 .. s:
+    var c: Net = @[]
+    for x in 0 .. 3:
+      let base = offset + x * s
+      c &= oneline(base,base+4*s)
+    yield c
+      
 when isMainModule:
   echo "Main:\n"
   let nfs = splitFile(currentSourcePath).name
@@ -100,16 +108,27 @@ when isMainModule:
   portals = rex(nfs, 3).split(": ")[1].parseint
   shortcuts = rex(nfs, 4)
   var M=mknet(portals,3)
-  echo M.totalstrain(portals)
+  var long=M.totalstrain(portals)
   for line in shortcuts.splitlines: M &= oneline(line)
-  let step=portals div 8
-  for try in 1..step:
-    var TM=M
-    for   
+  var p3=low(int)
+  for n in crystals(portals):
+    let z=M&n
+    p3=max(p3,long-z.totalstrain(portals))
+  echo "exp3: ",p3
+  
   portals = rex(nfs, 5).split(": ")[1].parseint
   shortcuts = rex(nfs, 6)
   M=mknet(portals,3)
-  echo M.totalstrain(portals)
+  long=M.totalstrain(portals)
+  dump(long)
+  for line in shortcuts.splitlines: M &= oneline(line)
+  p3=low(int)
+  for n in crystals(portals):
+    let z=M&n
+    p3=max(p3,long-z.totalstrain(portals))
+  echo "exp3bis: ",p3  
   #~ echo "exp31: ", resonance(portals, shortcuts, 1)
   #~ echo "exp2: ", np1(portals, shortcuts, 3)
   #~ echo MN
+  #~ for n in crystals(88):
+    #~ echo n

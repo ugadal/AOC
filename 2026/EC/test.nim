@@ -1,132 +1,32 @@
-import std/[enumerate, math, os, sequtils, sets, strutils, tables]
-import utils 
+import sequtils
 
 type
-  Vec = tuple[x, y: int]
-  Ghost = object
-    pos, dir: Vec
-    hits: int
-  Signature = seq[tuple[pos, dir: Vec]]
+  Match = (int, int)
+  Journee = seq[Match]
 
-const
-  left: Vec = (-1, 0)
-  right: Vec = (1, 0)
-  up: Vec = (0, -1)
-  down: Vec = (0, 1)
-  defaultLimit = 10_000
-  hugeLimit = int(1_000_000_000_000) 
+# Itérateur closure permettant la récursion
+iterator toutesLesJournees(equipes: seq[int]): Journee {.closure.} =
+  if equipes.len == 0:
+    yield @[]
+  else:
+    let premier = equipes[0]
+    let reste = equipes[1 .. ^1]
+    
+    for i, adversaire in reste:
+      let match: Match = (premier, adversaire)
+      var restantes = reste
+      restantes.delete(i)
+      
+      for sousJournee in toutesLesJournees(restantes):
+        yield @[match] & sousJournee
 
-func `+`(a, b: Vec): Vec = (a.x + b.x, a.y + b.y)
-func turnRight(d: Vec): Vec = (-d.y, d.x) 
-func reverse(d: Vec): Vec = (-d.x, -d.y)
+# Exemple d'utilisation pour 8 équipes (0 à 7)
+let equipes = toSeq(0 .. 7)
+var compteur = 0
 
-func signature(ghosts: seq[Ghost]): Signature =
-  ghosts.mapIt((pos: it.pos, dir: it.dir))
+for journee in toutesLesJournees(equipes):
+  inc compteur
+  #~ if compteur <= 5:
+  echo "Journée #", compteur, " : ", journee
 
-proc parseWalls(txt: string): HashSet[Vec] =
-  for row, line in enumerate(txt.splitLines):
-    for col, ch in line:
-      if ch == '#':
-        result.incl((col, row))
-
-proc parseGhosts(txt: string): seq[Ghost] =
-  for row, line in enumerate(txt.splitLines):
-    for col, ch in line:
-      case ch
-      of '<': result.add Ghost(pos: (col, row), dir: left)
-      of '>': result.add Ghost(pos: (col, row), dir: right)
-      of 'v': result.add Ghost(pos: (col, row), dir: down)
-      of '^': result.add Ghost(pos: (col, row), dir: up)
-      else: discard
-
-proc step(walls: HashSet[Vec], ghosts: var seq[Ghost], limit: int) =
-  for g in ghosts.mitems:
-    let next = g.pos + g.dir
-    if next in walls:
-      g.dir = g.dir.turnRight
-      inc g.hits
-    else:
-      g.pos = next
-
-  # collisions : plusieurs fantômes sur la même case -> demi-tour
-  #~ var occupancy = initCountTable[Vec]()
-  var occupancy : CountTable[Vec]
-  for g in ghosts:
-    occupancy.inc g.pos
-  for g in ghosts.mitems:
-    if occupancy[g.pos] > 1:
-      g.dir = g.dir.reverse
-      inc g.hits
-
-  ghosts.keepItIf(it.hits < limit)
-
-proc nextVanish(walls: HashSet[Vec], start: seq[Ghost], limit: int):
-    tuple[ghosts: seq[Ghost], elapsed: int] =
-  if start.len == 0:
-    return
-  var
-    seen = initTable[Signature, int]() # état -> instant où on l'a vu
-    ghosts = start
-    iter = 0
-    sig = signature(ghosts)
-  while not seen.hasKeyOrPut(sig, iter):
-    inc iter
-    step(walls, ghosts, limit)
-    if ghosts.len != start.len: # disparition avant même d'avoir bouclé
-      return (ghosts, iter)
-    sig = signature(ghosts)
-
-  let
-    cycleStart = seen[sig]
-    cycleLen = iter - cycleStart
-
-  # état au début du cycle, pour comparer les hits
-  var atStart = start
-  for _ in 1 .. cycleStart:
-    step(walls, atStart, limit)
-  var atEnd = ghosts
-
-  # 2. combien de cycles complets peut-on sauter sans qu'un fantôme disparaisse ?
-  var cycles = high(int)
-  for (s, e) in zip(atStart, atEnd):
-    let gain = e.hits - s.hits
-    if gain > 0:
-      cycles = min(cycles, (limit - e.hits) div gain)
-  if cycles == high(int):
-    raise newException(ValueError, "aucun fantôme n'atteindra jamais la limite")
-
-  # 3. saut (on garde un cycle de marge, pas à pas ensuite)
-  let skip = max(cycles - 1, 0)
-  for i in 0 ..< atEnd.len:
-    atEnd[i].hits += (atEnd[i].hits - atStart[i].hits) * skip
-  iter += cycleLen * skip
-
-  # 4. fin de course
-  let count = atEnd.len
-  while atEnd.len == count:
-    step(walls, atEnd, limit)
-    inc iter
-  (atEnd, iter)
-
-proc part1(txt: string): int =
-  let walls = parseWalls(txt)
-  var ghosts = parseGhosts(txt)
-  for _ in 1 .. 10:
-    step(walls, ghosts, defaultLimit)
-  ghosts.mapIt(it.hits).sum
-
-proc totalVanishTime(txt: string, limit: int): int =
-  ## Parties 2 et 3 : temps cumulé jusqu'à la disparition de tous les fantômes.
-  let walls = parseWalls(txt)
-  var ghosts = parseGhosts(txt)
-  while ghosts.len > 0:
-    let (remaining, elapsed) = nextVanish(walls, ghosts, limit)
-    ghosts = remaining
-    result += elapsed
-
-when isMainModule:
-  #~ let nfs = splitFile(currentSourcePath).name
-  let nfs = "everybody_codes_e2026_q10"
-  echo "p1: ", part1(rp(nfs, 1))
-  echo "p2: ", totalVanishTime(rp(nfs, 2), defaultLimit)
-  echo "p3: ", totalVanishTime(rp(nfs, 3), hugeLimit)
+echo "Nombre total de journées distinctes : ", compteur # Affiche 105
