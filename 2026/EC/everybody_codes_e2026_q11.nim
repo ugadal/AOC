@@ -43,9 +43,9 @@ proc strain(n: Net, start: int): int =
     tovisit = newstack-visited
     step+=1
 
-proc totalstrain(n: Net, portals:int):int=
+proc totalstrain(n: Net, portals: int): int =
   (1..portals).toseq.mapit(n.strain(it)).sum
-  
+
 proc oneline(a, b: int): Net =
   result.add((a, b))
   result.add((b, a))
@@ -79,15 +79,34 @@ proc np2(portals: int, shortcuts: string, dn: int = 1): int =
       let T = BN & cr
       let tv = (1..portals).toseq.mapit(T.strain(it)).sum
       result = max(result, long-tv)
-iterator crystals(p:int) : Net =
+iterator crystals(p: int): seq[int] =
   let s = p div 8
   for offset in 1 .. s:
-    var c: Net = @[]
-    for x in 0 .. 3:
-      let base = offset + x * s
-      c &= oneline(base,base+4*s)
-    yield c
-      
+    yield countup(offset,p,s).toseq
+    #~ var c: Net = @[]
+    #~ for x in 0 .. 3:
+      #~ let base = offset + x * s
+      #~ c &= oneline(base, base+4*s)
+    #~ yield c
+
+type
+  Pool = set[int8]
+  pairs = (int,int)
+
+import memo
+proc journee(pool: Pool): seq[seq[pairs]] {.memoized.} =
+  if pool.len==2:
+    let tp=pool.toseq
+    let tm:pairs=(tp[0].int,tp[1].int)
+    return @[@[ tm ]]
+  let a=pool.first()
+  let targets=pool-{a}
+  for b in targets:
+    let match: pairs = (int(a), int(b))
+    let cj: seq[pairs] = @[match]
+    for ssJ in journee(targets-{b}):
+      result.add(cj & ssJ)
+
 when isMainModule:
   echo "Main:\n"
   let nfs = splitFile(currentSourcePath).name
@@ -107,28 +126,39 @@ when isMainModule:
   echo "exp2: ", np2(portals, shortcuts, 3)
   portals = rex(nfs, 3).split(": ")[1].parseint
   shortcuts = rex(nfs, 4)
-  var M=mknet(portals,3)
-  var long=M.totalstrain(portals)
+  var M = mknet(portals, 3)
+  var long = M.totalstrain(portals)
   for line in shortcuts.splitlines: M &= oneline(line)
-  var p3=low(int)
-  for n in crystals(portals):
-    let z=M&n
-    p3=max(p3,long-z.totalstrain(portals))
-  echo "exp3: ",p3
-  
+  var p3 = low(int)
+  #~ for n in crystals(portals):
+    #~ let z = M&n
+    #~ p3 = max(p3, long-z.totalstrain(portals))
+  #~ echo "exp3: ", p3
+
   portals = rex(nfs, 5).split(": ")[1].parseint
   shortcuts = rex(nfs, 6)
-  M=mknet(portals,3)
-  long=M.totalstrain(portals)
+  M = mknet(portals, 3)
+  long = M.totalstrain(portals)
   dump(long)
   for line in shortcuts.splitlines: M &= oneline(line)
-  p3=low(int)
+  p3 = low(int)
   for n in crystals(portals):
-    let z=M&n
-    p3=max(p3,long-z.totalstrain(portals))
-  echo "exp3bis: ",p3  
+    echo n
+    var z:Pool={}
+    for it in n:
+      z.incl(it.int8)
+    #~ let z=n.mapit(it.uint8).toset()
+    echo z
+    for j in journee(z):
+      echo j
+      #~ let z=n.mapit(it.uint8).toset
+      #~ echo z
+    #~ let z = M&n
+    #~ p3 = max(p3, long-z.totalstrain(portals))
+  #~ echo "exp3bis: ", p3
   #~ echo "exp31: ", resonance(portals, shortcuts, 1)
   #~ echo "exp2: ", np1(portals, shortcuts, 3)
   #~ echo MN
   #~ for n in crystals(88):
     #~ echo n
+  

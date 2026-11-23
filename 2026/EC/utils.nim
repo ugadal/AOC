@@ -14,3 +14,13 @@ proc rex*(nfs: string, p: int): string =
   readFile(nfs & "_ex.txt").strip.split("\n\n")[p-1]
 proc rps*(nfs: string, p: int,sub:int): string =
   readFile(nfs & "_p" & $p & ".txt").strip.split("\n\n")[sub-1]
+
+#~ template first[T](s: set[T]): T =
+  #~ var res: T
+  #~ for x in s:
+    #~ res = x
+    #~ break
+  #~ res
+proc first*[T](s: set[T]): T {.inline.} =
+  for x in s:
+    return x
