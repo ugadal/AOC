@@ -4,8 +4,6 @@ import sugar
 import memo
 import algorithm
 type
-  Node = string
-  Graph = Table[Node, HashSet[Node]]
   link = tuple [o, d: int]
   Net = seq[link]
   Pool = set[int8]
@@ -23,28 +21,11 @@ proc mknet(portals: int, directn: int = 1): Net =
       result.add((nx, ny))
       result.add((ny, nx))
 
-proc mknet(portals: int): Net =
-  mknet(portals, 1)
-
-proc mknet(portals: int, shortcuts: string, directn: int = 1): Net =
-  result = mknet(portals, directn)
-  if shortcuts.len > 0:
-    for line in shortcuts.splitlines:
-      let od = line.split(" ")
-      result.add((od[0].parseint, od[1].parseint))
-      result.add((od[1].parseint, od[0].parseint))
 
 proc toadj(n:Net,portals:int):Adj=
   result = newSeq[seq[int]](portals+1)
   for l in n:result[l.o].add l.d
 
-proc parseShortcuts(s: string): Net =
-  for line in s.splitLines:
-    let v = line.splitWhitespace
-    let a = v[0].parseInt
-    let b = v[1].parseInt
-    result.add (a, b)
-    result.add (b, a)
 
 proc bfs(adj: Adj, s: int, dist, queue: var seq[int]) =
   dist.fill(-1)
@@ -76,7 +57,6 @@ proc totalstrain(n: Net, portals: int): int =
   (1..portals).toseq.mapit(n.strain(it)).sum
 
 proc ntotalstrain(adj: Adj): int =
-  ## Somme des distances entre toutes les paires ordonnées (u, v).
   var dist = newSeq[int](adj.len)
   var queue = newSeq[int](adj.len)
   for s in 1 ..< adj.len:
