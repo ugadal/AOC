@@ -1,7 +1,7 @@
 # utils.nim
 import std/[os, strutils]
 
-let nfs* = getAppFilename().extractFilename.splitFile.name
+#~ let nfs* = getAppFilename().extractFilename.splitFile.name
 
 proc rp*(nfs: string, p: int): string =
   let chemin=nfs & "_p" & $p & ".txt"
