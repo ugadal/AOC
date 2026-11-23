@@ -2,6 +2,7 @@ import std/[enumerate, math, os, sequtils, sets, strutils, tables]
 import utils
 import sugar
 import memo
+import algorithm
 type
   Node = string
   Graph = Table[Node, HashSet[Node]]
@@ -9,6 +10,7 @@ type
   Net = seq[link]
   Pool = set[int8]
   pairs = (int,int)
+  Adj = seq[seq[int]]
 
 
 proc mknet(portals: int, directn: int = 1): Net =
@@ -32,6 +34,30 @@ proc mknet(portals: int, shortcuts: string, directn: int = 1): Net =
       result.add((od[0].parseint, od[1].parseint))
       result.add((od[1].parseint, od[0].parseint))
 
+proc toadj(n:Net,portals:int):Adj=
+  result = newSeq[seq[int]](portals+1)
+  for l in n:result[l.o].add l.d
+
+proc parseShortcuts(s: string): Net =
+  for line in s.splitLines:
+    let v = line.splitWhitespace
+    let a = v[0].parseInt
+    let b = v[1].parseInt
+    result.add (a, b)
+    result.add (b, a)
+
+proc bfs(adj: Adj, s: int, dist, queue: var seq[int]) =
+  dist.fill(-1)
+  dist[s] = 0
+  var head, tail = 0
+  queue[tail] = s; inc tail
+  while head < tail:
+    let u = queue[head]; inc head
+    for v in adj[u]:
+      if dist[v] < 0:
+        dist[v] = dist[u] + 1
+        queue[tail] = v; inc tail
+
 proc strain(n: Net, start: int): int =
   var visited = initHashSet[int]()
   var tovisit = [start].toHashSet
@@ -49,6 +75,15 @@ proc strain(n: Net, start: int): int =
 proc totalstrain(n: Net, portals: int): int =
   (1..portals).toseq.mapit(n.strain(it)).sum
 
+proc ntotalstrain(adj: Adj): int =
+  ## Somme des distances entre toutes les paires ordonnées (u, v).
+  var dist = newSeq[int](adj.len)
+  var queue = newSeq[int](adj.len)
+  for s in 1 ..< adj.len:
+    bfs(adj, s, dist, queue)
+    for d in dist:
+      if d > 0: result += d
+      
 proc oneline(a, b: int): Net =
   result.add((a, b))
   result.add((b, a))
@@ -63,16 +98,16 @@ proc oneline(line: string): Net =
 
 proc resonance(portals: int, shortcuts: string, dn: int = 1): int =
   let MN = mknet(portals, dn)
-  let long = (1..portals).toseq.mapit(MN.strain(it)).sum
+  let long=ntotalstrain(MN.toadj(portals))
   var extra: Net
   for line in shortcuts.splitlines: extra &= oneline(line)
   var full = MN & extra
-  let short = (1..portals).toseq.mapit(full.strain(it)).sum
+  let short =full.toadj(portals).ntotalstrain
   long-short
 
 proc np2(portals: int, shortcuts: string, dn: int = 1): int =
   var BN = mknet(portals, dn)
-  let long = (1..portals).toseq.mapit(BN.strain(it)).sum
+  let long=ntotalstrain(BN.toadj(portals))
   var extra: Net
   for line in shortcuts.splitlines: extra &= oneline(line)
   BN &= extra
@@ -81,7 +116,7 @@ proc np2(portals: int, shortcuts: string, dn: int = 1): int =
     for y in x+1 .. portals:
       let cr = oneline(x, y)
       let T = BN & cr
-      let tv = (1..portals).toseq.mapit(T.strain(it)).sum
+      let tv=T.toadj(portals).ntotalstrain
       result = max(result, long-tv)
 iterator crystals(p: int): seq[int] =
   let s = p div 8
@@ -112,7 +147,8 @@ proc fp3(portals: int, shortcuts: string, dn: int = 1): int =
       var T=M
       for mat in j:
         T&=oneline(mat)
-      p3 = max(p3, long-T.totalstrain(portals))
+      #~ p3 = max(p3, long-T.totalstrain(portals))
+      p3 = max(p3, long-T.toadj(portals).ntotalstrain)
   return p3
 when isMainModule:
 

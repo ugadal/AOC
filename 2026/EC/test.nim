@@ -71,3 +71,9 @@ echo X
 for x in X:echo x
 import utils
 echo X.first()
+
+import std/algorithm
+
+proc toAdj(n: Net, portals: int): seq[seq[int]] =
+  result = newSeq[seq[int]](portals + 1)
+  for l in n: result[l.o].add l.d
