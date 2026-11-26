@@ -64,53 +64,49 @@ proc locateblocks(G: var Grille) =
           thisblock.incl(nxt)
           stack.add(nxt)
     G.blocks.add thisblock      
-proc isrect(b:pack):int=
-  let top=b.mapit(it[0]).min
-  let bot=b.mapit(it[0]).max
-  let lef=b.mapit(it[1]).min
-  let rig=b.mapit(it[1]).max
-  if (bot-top+1)*(rig-lef+1)==b.len:
-    return min(bot-top+1,rig-lef+1)
-  0
-proc rotateright(b:pack):pack=
-  for x in b:
-    result.incl((x[1],-x[0]))
-    
-proc lshaped(b:pack):int=
-  let top=b.mapit(it[0]).min
-  let bot=b.mapit(it[0]).max
-  let lef=b.mapit(it[1]).min
-  let rig=b.mapit(it[1]).max
-  dump((top,bot,lef,rig))
-  for g in b: 
-    #~ echo g," ",g.right,g.right in b
-    #~ echo g," ",g.down,g.down in b
-    #~ echo g," ",g.down.right,g.down.right in b
-    if g.right in b and g.down in b and g.down.right notin b:
-      echo g," top left angle"
-      return 1
-  0
-  
+
 proc anablock(b:pack):int=
- if b.len==1:
-   echo "single block"
-   return 1
- if b.isrect>0:
-   echo "rectangle simple"
-   return b.isrect
- return b.lshaped
- return 0
+  if b.len==1:   return 1
+  let top=b.mapit(it[0]).min
+  let bot=b.mapit(it[0]).max
+  let lef=b.mapit(it[1]).min
+  let rig=b.mapit(it[1]).max
+  if (bot-top+1)*(rig-lef+1)==b.len: return min(bot-top+1,rig-lef+1)
+  if (bot,rig) notin b:
+    var pos=(bot,rig)
+    while pos.up notin b:pos=pos.up
+    while pos.left notin b:pos=pos.left
+    return min([pos[0]+pos[1]-top-lef,bot-top+1,rig-lef+1])
+  if (top,rig) notin b: #ok
+    var pos=(top,rig)
+    while pos.down notin b:pos=pos.down
+    while pos.left notin b:pos=pos.left
+    return min([bot-pos[0]+pos[1]-lef,bot-top+1,rig-lef+1])
+  if (top,lef) notin b:
+    var pos=(top,lef)
+    while pos.down notin b:pos=pos.down
+    while pos.right notin b:pos=pos.right
+    return min([bot-pos[0]+rig-pos[1],bot-top+1,rig-lef+1])
+  if (bot,lef) notin b: 
+    var pos=(bot,lef)
+    while pos.up notin b:pos=pos.up
+    while pos.right notin b:pos=pos.right
+    return min([rig-pos[1]+pos[0]-top,bot-top+1,rig-lef+1])
+#~ si coin vide en bas la composante verticale
+#~ sera pos[0]-top
+#~ si coin vide en haut la composante verticale
+#~ sera bot-pos[0]
 proc p2(txt:string)=
   var M=readmap(txt)
   M.locateblocks
   for b in M.blocks:
-    echo b," : ",b.anablock
+    echo b.len," : ",b.anablock
   
   
 
 
 when isMainModule:
-
+  #~ echo min(5,6,7)
   echo "examples\n"
   echo "exp1: ", p1(dex1)
   p2(dex2)
