@@ -17,6 +17,9 @@ let nfs = currentSourcePath.extractFilename.splitFile.name
 var dex1 = rex(nfs, 1)
 var dex2 = rex(nfs, 2)
 var dex3 = rex(nfs, 3)
+var dex4 = rex(nfs, 4)
+var dex5 = rex(nfs, 5)
+var dex6 = rex(nfs, 6)
 var dp1 = rp(nfs, 1)
 var dp2 = rp(nfs, 2)
 var dp3 = rp(nfs, 3)
@@ -71,35 +74,40 @@ proc anablock(b:pack):int=
   let bot=b.mapit(it[0]).max
   let lef=b.mapit(it[1]).min
   let rig=b.mapit(it[1]).max
+  let h=bot-top+1
+  let w=rig-lef+1
   if (bot-top+1)*(rig-lef+1)==b.len: return min(bot-top+1,rig-lef+1)
-  if (bot,rig) notin b:
-    var pos=(bot,rig)
-    while pos.up notin b:pos=pos.up
-    while pos.left notin b:pos=pos.left
-    return min([pos[0]+pos[1]-top-lef,bot-top+1,rig-lef+1])
-  if (top,rig) notin b: #ok
-    var pos=(top,rig)
-    while pos.down notin b:pos=pos.down
-    while pos.left notin b:pos=pos.left
-    return min([bot-pos[0]+pos[1]-lef,bot-top+1,rig-lef+1])
-  if (top,lef) notin b:
-    var pos=(top,lef)
-    while pos.down notin b:pos=pos.down
-    while pos.right notin b:pos=pos.right
-    return min([bot-pos[0]+rig-pos[1],bot-top+1,rig-lef+1])
-  if (bot,lef) notin b: 
-    var pos=(bot,lef)
-    while pos.up notin b:pos=pos.up
-    while pos.right notin b:pos=pos.right
-    return min([rig-pos[1]+pos[0]-top,bot-top+1,rig-lef+1])
-#~ si coin vide en bas la composante verticale
-#~ sera pos[0]-top
-#~ si coin vide en haut la composante verticale
-#~ sera bot-pos[0]
-#~ si coin vide a droite la composante horizontale
-#~ sera pos[1]-lef
-#~ si coin vide a gauche la composante horizontale
-#~ sera rig-pos[1]
+  for (coin, vert, horiz) in [((top, lef), down, right),
+                              ((top, rig), down, left),
+                              ((bot, lef), up,   right),
+                              ((bot, rig), up,   left)]:
+    if coin notin b:
+      var p = coin
+      var nh = 0
+      while p notin b: 
+        p=p.vert    
+        inc nh
+      p = coin
+      var nw = 0
+      while p notin b: 
+        p = p.horiz
+        inc nw
+      return min([h, w, (h - nh) + (w - nw)])  
+  echo "hole in a box ",b.len
+  var tl:pos
+  block found:
+    for r in top .. bot:
+      for c in lef .. rig:
+        if (r,c) notin b:
+          tl=(r,c)
+          break found
+  var br=tl
+  while br.right notin b :br=br.right
+  while br.down notin b :br=br.down
+  dump((top,lef,tl," ",bot,rig,br))
+  #~ echo tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
+  #~ return tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
+
 proc p2(txt:string):int=
   var M=readmap(txt)
   M.locateblocks
@@ -108,11 +116,12 @@ proc p2(txt:string):int=
 
 
 when isMainModule:
-  #~ echo min(5,6,7)
   echo "examples\n"
   echo "exp1: ", p1(dex1)
   echo "exp2_1: ",p2(dex2)
   echo "exp2_2: ",p2(dex3)
+  echo "exp3_1: ",p2(dex4)
+  echo "exp3_2: ",p2(dex5)
 
   echo "Main:\n"
   echo "p1: ", p1(dp1)
