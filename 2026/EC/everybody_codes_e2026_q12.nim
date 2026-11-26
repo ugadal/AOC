@@ -96,12 +96,14 @@ proc anablock(b:pack):int=
 #~ sera pos[0]-top
 #~ si coin vide en haut la composante verticale
 #~ sera bot-pos[0]
-proc p2(txt:string)=
+#~ si coin vide a droite la composante horizontale
+#~ sera pos[1]-lef
+#~ si coin vide a gauche la composante horizontale
+#~ sera rig-pos[1]
+proc p2(txt:string):int=
   var M=readmap(txt)
   M.locateblocks
-  for b in M.blocks:
-    echo b.len," : ",b.anablock
-  
+  return M.blocks.mapit(it.anablock).sum
   
 
 
@@ -109,8 +111,9 @@ when isMainModule:
   #~ echo min(5,6,7)
   echo "examples\n"
   echo "exp1: ", p1(dex1)
-  p2(dex2)
-  p2(dex3)
+  echo "exp2_1: ",p2(dex2)
+  echo "exp2_2: ",p2(dex3)
 
   echo "Main:\n"
   echo "p1: ", p1(dp1)
+  echo "p2: ", p2(dp2)
