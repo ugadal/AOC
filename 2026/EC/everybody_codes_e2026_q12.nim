@@ -20,6 +20,7 @@ var dex3 = rex(nfs, 3)
 var dex4 = rex(nfs, 4)
 var dex5 = rex(nfs, 5)
 var dex6 = rex(nfs, 6)
+var dex7 = rex(nfs, 7)
 var dp1 = rp(nfs, 1)
 var dp2 = rp(nfs, 2)
 var dp3 = rp(nfs, 3)
@@ -67,60 +68,38 @@ proc locateblocks(G: var Grille) =
           thisblock.incl(nxt)
           stack.add(nxt)
     G.blocks.add thisblock      
-
-proc anablock(b:pack):int=
-  if b.len==1:   return 1
-  let top=b.mapit(it[0]).min
-  let bot=b.mapit(it[0]).max
-  let lef=b.mapit(it[1]).min
-  let rig=b.mapit(it[1]).max
-  let h=bot-top+1
-  let w=rig-lef+1
-  if (bot-top+1)*(rig-lef+1)==b.len: return min(bot-top+1,rig-lef+1)
-  for (coin, vert, horiz) in [((top, lef), down, right),
-                              ((top, rig), down, left),
-                              ((bot, lef), up,   right),
-                              ((bot, rig), up,   left)]:
-    if coin notin b:
-      var p = coin
-      var nh = 0
-      while p notin b: 
-        p=p.vert    
-        inc nh
-      p = coin
-      var nw = 0
-      while p notin b: 
-        p = p.horiz
-        inc nw
-      return min([h, w, (h - nh) + (w - nw)])  
-  echo "hole in a box ",b.len
-  var tl:pos
-  block found:
-    for r in top .. bot:
-      for c in lef .. rig:
-        if (r,c) notin b:
-          tl=(r,c)
-          break found
-  var br=tl
-  while br.right notin b : br=br.right
-  while br.down notin b : br=br.down
-  dump((top,lef,tl," ",bot,rig,br))
-  var TLB = b
-  dump(TLB.len)
-  for r in top .. br[0]:
-    for c in lef .. tl[1]:
-      if (r,c) in b:TLB.excl((r,c))
-  #~ dump(TLB.len)
-  dump(TLB.len)
-  #~ TLB.keepitif( it[0]<tl[0])
-  #~ dump(TLB.len)
-  #~ echo tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
-  #~ return tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
-
+  
+proc cover(b: pack): int =
+  var hid, vid: Table[pos, int]
+  var nh, nv = 0
+  for p in b:
+    if p.left notin b:
+      var q = p
+      while q in b: hid[q] = nh; q = q.right
+      inc nh
+    if p.up notin b:
+      var q = p
+      while q in b: vid[q] = nv; q = q.down
+      inc nv
+  var adj = newSeq[seq[int]](nh)
+  for p in b: adj[hid[p]].add vid[p]
+  var matchV = newSeqWith(nv, -1)
+  proc tryK(u: int, seen: var seq[bool]): bool =
+    for v in adj[u]:
+      if seen[v]: continue
+      seen[v] = true
+      if matchV[v] < 0 or tryK(matchV[v], seen):
+        matchV[v] = u
+        return true
+    false
+  for u in 0 ..< nh:
+    var seen = newSeq[bool](nv)
+    if tryK(u, seen): inc result
+  
 proc p2(txt:string):int=
   var M=readmap(txt)
   M.locateblocks
-  return M.blocks.mapit(it.anablock).sum
+  return M.blocks.mapit(it.cover).sum
   
 
 
@@ -131,7 +110,10 @@ when isMainModule:
   echo "exp2_2: ",p2(dex3)
   echo "exp3_1: ",p2(dex4)
   echo "exp3_2: ",p2(dex5)
+  echo "exp3_3: ",p2(dex6)
+  #~ echo "exp3_t: ",p2(dex7)
 
   echo "Main:\n"
   echo "p1: ", p1(dp1)
   echo "p2: ", p2(dp2)
+  echo "p3: ", p2(dp3)
