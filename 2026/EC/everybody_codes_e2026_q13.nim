@@ -8,47 +8,40 @@ import strscans
   #~ pos = (int, int)
   #~ stack = (pos, pos)
   #~ pack = HashSet[pos]
-type aiguille = object
+type Aiguille = object
   angle: int
   move: int
-  speed:int= 360
+  speed: int
 
 let nfs = currentSourcePath.extractFilename.splitFile.name
 var dex1 = rex(nfs, 1)
 var dex2 = rex(nfs, 2)
 var dex3 = rex(nfs, 3)
-#~ var dex4 = rex(nfs, 4)
-#~ var dex5 = rex(nfs, 5)
-#~ var dex6 = rex(nfs, 6)
-#~ var dex7 = rex(nfs, 7)
+  #~ var dex4 = rex(nfs, 4)
+  #~ var dex5 = rex(nfs, 5)
+  #~ var dex6 = rex(nfs, 6)
+  #~ var dex7 = rex(nfs, 7)
 var dp1 = rp(nfs, 1)
-#~ var dp2 = rp(nfs, 2)
-#~ var dp3 = rp(nfs, 3)
+  #~ var dp2 = rp(nfs, 2)
+  #~ var dp3 = rp(nfs, 3)
 
-proc initaiguilles(t:string):seq[aiguille]=
-  let tl=t.splitlines
-  var a,b,c:aiguille
-  var i,j,k:int
-  var ca,cb,cc:string
-  for l in tl:
-    if l.scanf("hands $i:$i:$i",i,j,k):
-      a.speed = 360 div i
-      b.speed = 360 div j
-      c.speed = 360 div k
-    elif l.scanf("direction $w:$w:$w",ca,cb,cc):
-      dump((ca,cb,cc))
-      if ca=="CCW":a.speed *= -1
-      if cb=="CCW":b.speed *= -1
-      if cc=="CCW":c.speed *= -1
-    elif l.scanf("current $i:$i:$i",i,j,k):
-      a.angle=(i*a.speed).floormod 360
-      b.angle=(j*b.speed).floormod 360
-      c.angle=(k*c.speed).floormod 360
-    elif l.scanf("move $i:$i:$i",i,j,k):
-      a.move=i
-      b.move=j
-      c.move=k
-  result = @[a,b,c]
+proc initAiguilles(t: string): seq[Aiguille] =
+  for l in t.splitlines:
+    let parts = l.split(" ")
+    let items = parts[1].split(":")
+    case parts[0]:
+    of "hands":
+      result = items.mapit(Aiguille(speed: 360 div it.parseint))
+    of "direction":
+      for i, d in items:
+        if d == "CCW": result[i].speed *= -1
+    of "current":
+      for i, v in items:
+        result[i].angle = v.parseint * result[i].speed.abs
+    of "move":
+      for i, v in items:
+        result[i].move = v.parseint
+    else: discard
 
 when isMainModule:
   echo "examples\n"
