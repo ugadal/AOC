@@ -102,9 +102,18 @@ proc anablock(b:pack):int=
           tl=(r,c)
           break found
   var br=tl
-  while br.right notin b :br=br.right
-  while br.down notin b :br=br.down
+  while br.right notin b : br=br.right
+  while br.down notin b : br=br.down
   dump((top,lef,tl," ",bot,rig,br))
+  var TLB = b
+  dump(TLB.len)
+  for r in top .. br[0]:
+    for c in lef .. tl[1]:
+      if (r,c) in b:TLB.excl((r,c))
+  #~ dump(TLB.len)
+  dump(TLB.len)
+  #~ TLB.keepitif( it[0]<tl[0])
+  #~ dump(TLB.len)
   #~ echo tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
   #~ return tl[0]-top+tl[1]-lef+bot-br[0]+rig-br[1]
 
